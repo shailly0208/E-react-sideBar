@@ -52,6 +52,8 @@ import PatientBookTime from './screens/Calendar/PatientBookTime';
 import TimeSegmentDetail from './screens/Calendar/TimeSegmentDetail';
 import ServicesHomePage from './components/services/ServicesHomePage';
 import ServicesPage from './components/services/ServicePage';
+import HealthServices from './components/services/HealthServices';
+
 
 
 
@@ -123,6 +125,8 @@ class App extends Component {
           <Route path="/LabApp" element={<LabApp />} />
           <Route path="/specialities" element={<Specialities />} />
           <Route path="/services" element={<ServicesHomePage/>} />
+          <Route path="/HealthServices" element={<HealthServices/>} />
+
           <Route path="/servicepage/:param" element={<ServicesPage/>} />
           <Route path="/emergencyLocations" element={<EmergencyLocations />} />
           <Route path="/liverdiseaseML" element={<Liver_disease_ML />} />

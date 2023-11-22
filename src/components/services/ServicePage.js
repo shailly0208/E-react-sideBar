@@ -2,6 +2,7 @@ import React from 'react';
 import './ServicePage.css'; // Import your CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faPhone, faCalendar, faAmbulance, faVideo, faStethoscope, faHospital } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 
@@ -67,6 +68,8 @@ const ServicesPage = () => {
         <br></br>
         <button className="service-button">Learn More</button>
       </section>
+       
+      <Link to="/services" >
       <section className="service-section1">
         <FontAwesomeIcon icon={faStethoscope} className="service-icon" size="2x" />
         <h2>Diagnostic Services</h2>
@@ -76,6 +79,9 @@ const ServicesPage = () => {
         <br></br>
         <button className="service-button">Learn More</button>
       </section>
+      </Link>
+
+
       <section className="service-section1">
         <FontAwesomeIcon icon={faHospital} className="service-icon" size="2x" />
         <h2>Find a Hospital or Pharmacist</h2>
