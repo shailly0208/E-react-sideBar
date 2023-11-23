@@ -84,7 +84,7 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleSendMessage();
-            event.preventDefault(); // 防止默认行为
+            event.preventDefault(); 
         }
     };
 
