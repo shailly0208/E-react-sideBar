@@ -10,6 +10,7 @@ import axios from 'axios';
 const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState("");
+    const messagesEndRef = useRef(null);
     const ws = useRef(null);
     let C_ID = null;
     let otherSideId = null;
@@ -69,17 +70,28 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
 
     }, []);
 
+    useEffect(() => {
+        const chatHistoryDiv = document.querySelector('.chat-history');
+        if (chatHistoryDiv) {
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+        }
+    }, [chatHistory]);
 
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage();
+            event.preventDefault(); // 防止默认行为
+        }
+    };
 
-
-    const  handleSendMessage = async() => {
+    const handleSendMessage = async () => {
         if (C_IDENTITY === 'doctor') {
             C_ID = doctorId;
             otherSideId = patientId;
         } else if (C_IDENTITY === 'patient') {
             C_ID = patientId;
-            
+
             await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/getDoctorIDByPatientID?patientId=${C_ID}`)
                 .then(response => {
                     // Ensure that you have a valid response here
@@ -91,7 +103,7 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
                     // Set otherSideId to a default or null
                     otherSideId = null;
                 });
-                alert(otherSideId);
+            alert(otherSideId);
         } else {
             // Handle the case where C_IDENTITY is not 'doctor' or 'patient'
             console.error("Invalid C_IDENTITY value:", C_IDENTITY);
@@ -137,12 +149,15 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
                                 {chatMessage.message}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="chat-input">
-                        <input type="text" placeholder="Send a message..." value={inputMessage} onChange={e => setInputMessage(e.target.value)} />
+                        <input type="text" placeholder="Send a message..." value={inputMessage} onChange={e => setInputMessage(e.target.value)} onKeyDown={handleKeyDown} />
                         <button onClick={handleSendMessage}>Send</button>
                     </div>
+
                 </div>
+
                 {/* <button onClick={closeChat}>Close Chat</button> */}
             </div>
         </div>
