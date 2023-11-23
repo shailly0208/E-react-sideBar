@@ -17,51 +17,54 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
     let otherSideIdentity = identity == 'doctor' ? 'patient' : 'doctor';
 
 
-
-
-
-    useEffect(async () => {
-        if (C_IDENTITY === 'doctor') {
-            C_ID = doctorId;
-            otherSideId = patientId;
-        } else if (C_IDENTITY === 'patient') {
-            C_ID = patientId;
-            await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/getDoctorIDByPatientID?patientId=${patientId}`)
-                .then(response => {
-                    // Ensure that you have a valid response here
-                    otherSideId = response.doctorId; // Assuming the ID is in the data object of the response
-                })
-                .catch(error => {
-                    // Handle the error here
-                    console.error("An error occurred while fetching the patient info:", error);
-                    // Set otherSideId to a default or null
-                    otherSideId = null;
-                });
-        } else {
-            // Handle the case where C_IDENTITY is not 'doctor' or 'patient'
-            console.error("Invalid C_IDENTITY value:", C_IDENTITY);
-        }
-
-        ws.current = new WebSocket('wss://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/sendMessage');
-
-        ws.current.onopen = () => {
-            console.log("WebSocket connection opened");
-        };
-
-        ws.current.onmessage = (event) => {
-            const parsedMessage = JSON.parse(event.data);
-            console.log(parsedMessage);
-            if (C_ID === parsedMessage.chatMessage.receiver && C_IDENTITY === parsedMessage.chatMessage.receiverIdentity) {
-                setChatHistory(prevHistory => parsedMessage.chatMessage.message && [...prevHistory, parsedMessage.chatMessage]);
+    useEffect(() => {
+        async function fetchData() {
+            if (C_IDENTITY === 'doctor') {
+                C_ID = doctorId;
+                otherSideId = patientId;
+            } else if (C_IDENTITY === 'patient') {
+                C_ID = patientId;
+                await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/getDoctorIDByPatientID?patientId=${patientId}`)
+                    .then(response => {
+                        // Ensure that you have a valid response here
+                        otherSideId = response.doctorId; // Assuming the ID is in the data object of the response
+                    })
+                    .catch(error => {
+                        // Handle the error here
+                        console.error("An error occurred while fetching the patient info:", error);
+                        // Set otherSideId to a default or null
+                        otherSideId = null;
+                    });
+            } else {
+                // Handle the case where C_IDENTITY is not 'doctor' or 'patient'
+                console.error("Invalid C_IDENTITY value:", C_IDENTITY);
             }
 
-        };
+            ws.current = new WebSocket('wss://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/sendMessage');
 
-        ws.current.onclose = () => {
-            console.log("WebSocket connection closed");
-        };
+            ws.current.onopen = () => {
+                console.log("WebSocket connection opened");
+            };
 
 
+
+
+            ws.current.onmessage = (event) => {
+                const parsedMessage = JSON.parse(event.data);
+                console.log(parsedMessage);
+                if (C_ID === parsedMessage.chatMessage.receiver && C_IDENTITY === parsedMessage.chatMessage.receiverIdentity) {
+                    setChatHistory(prevHistory => parsedMessage.chatMessage.message && [...prevHistory, parsedMessage.chatMessage]);
+                }
+
+            };
+
+            ws.current.onclose = () => {
+                console.log("WebSocket connection closed");
+            };
+        }
+
+
+        fetchData();
 
         // return () => {
         //     if (ws.current) ws.current.close();
@@ -73,13 +76,13 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
 
 
 
-    const  handleSendMessage = async() => {
+    const handleSendMessage = async () => {
         if (C_IDENTITY === 'doctor') {
             C_ID = doctorId;
             otherSideId = patientId;
         } else if (C_IDENTITY === 'patient') {
             C_ID = patientId;
-            
+
             await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/chat/getDoctorIDByPatientID?patientId=${C_ID}`)
                 .then(response => {
                     // Ensure that you have a valid response here
@@ -91,7 +94,6 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
                     // Set otherSideId to a default or null
                     otherSideId = null;
                 });
-                alert(otherSideId);
         } else {
             // Handle the case where C_IDENTITY is not 'doctor' or 'patient'
             console.error("Invalid C_IDENTITY value:", C_IDENTITY);
@@ -143,7 +145,6 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
                         <button onClick={handleSendMessage}>Send</button>
                     </div>
                 </div>
-                {/* <button onClick={closeChat}>Close Chat</button> */}
             </div>
         </div>
     );
