@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Typography,
   Button,
@@ -11,8 +11,9 @@ import {
   ListItemText,
   Divider,
   Avatar,
-} from "@mui/material";
+} from '@mui/material';
 import { readLoginData } from '../../loginData';
+import FloatingChatWindow from '../../components/FloatingChatWindow';
 
 const handleOpenNewTab = (path) => {
   const url = window.location.origin + path;
@@ -21,16 +22,22 @@ const handleOpenNewTab = (path) => {
 
 export function PatientPortal() {
   const loginData = readLoginData();
+  const [windowOpen, setwindowOpen] = React.useState(false);
+
+  const toggleChatWindow = () => {
+    setwindowOpen(!windowOpen);
+  };
+
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant='h4' gutterBottom>
         Patient Portal Page
       </Typography>
 
       <Grid container spacing={3}>
         <Grid item xs={6}>
-          <Paper elevation={3} style={{ padding: "20px" }}>
-            <Typography variant="body1" gutterBottom>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <Typography variant='body1' gutterBottom>
               Welcome to the patient portal. Here you can access your medical
               information and more.
             </Typography>
@@ -38,17 +45,17 @@ export function PatientPortal() {
             <List>
               <ListItem>
                 <Avatar>1</Avatar>
-                <ListItemText primary="View Medical Records" />
+                <ListItemText primary='View Medical Records' />
               </ListItem>
               <Divider />
               <ListItem>
                 <Avatar>2</Avatar>
-                <ListItemText primary="Schedule Appointments" />
+                <ListItemText primary='Schedule Appointments' />
               </ListItem>
               <Divider />
               <ListItem>
                 <Avatar>3</Avatar>
-                <ListItemText primary="Prescription Refills" />
+                <ListItemText primary='Prescription Refills' />
               </ListItem>
             </List>
           </Paper>
@@ -57,27 +64,27 @@ export function PatientPortal() {
         <Grid item xs={6}>
           <Card>
             <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
+              <Typography variant='h5' component='div' gutterBottom>
                 Upcoming Appointments
               </Typography>
 
               <List>
                 <ListItem>
                   <ListItemText
-                    primary="Cardiology Appointment"
-                    secondary="Monday, 15th Nov 2023, 10:00 AM"
+                    primary='Cardiology Appointment'
+                    secondary='Monday, 15th Nov 2023, 10:00 AM'
                   />
                 </ListItem>
                 <Divider />
                 <ListItem>
                   <ListItemText
-                    primary="Dermatology Check-up"
-                    secondary="Wednesday, 17th Nov 2023, 02:30 PM"
+                    primary='Dermatology Check-up'
+                    secondary='Wednesday, 17th Nov 2023, 02:30 PM'
                   />
                 </ListItem>
               </List>
 
-              <Button variant="contained" color="primary" fullWidth>
+              <Button variant='contained' color='primary' fullWidth>
                 View All Appointments
               </Button>
             </CardContent>
@@ -87,18 +94,44 @@ export function PatientPortal() {
         <Grid item xs={6}>
           <Card>
             <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
+              <Typography variant='h5' component='div' gutterBottom>
                 Live Actions
               </Typography>
-
-              <Button variant="contained" color="primary" fullWidth  sx={{ mt: 2 }}>
-                Live Text Chat
-              </Button>
+              <div>
+                <Button
+                  variant='contained'
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  onClick={toggleChatWindow}
+                >
+                  Live Text Chat
+                </Button>
+                {windowOpen && (
+                  <FloatingChatWindow
+                    patientId={loginData.id}
+                    closeChat={toggleChatWindow}
+                    identity='patient'
+                  />
+                )}
+              </div>
               {/* should pass doctor ID and patient ID here */}
-              <Button variant="contained" color="primary" fullWidth  sx={{ mt: 2 }} onClick={() => handleOpenNewTab(`/DoctorVideo?patientID=${loginData.id}`)}>
+              <Button
+                variant='contained'
+                color='primary'
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={() =>
+                  handleOpenNewTab(`/DoctorVideo?patientID=${loginData.id}`)
+                }
+              >
                 Video Call
               </Button>
-              <Button variant="contained" color="primary" fullWidth  sx={{ mt: 2 }}>
+              <Button
+                variant='contained'
+                color='primary'
+                fullWidth
+                sx={{ mt: 2 }}
+              >
                 Medical Chatbot
               </Button>
               {/* Add more action buttons as needed */}
@@ -107,25 +140,25 @@ export function PatientPortal() {
         </Grid>
 
         <Grid item xs={6}>
-          <Paper elevation={3} style={{ padding: "20px" }}>
-            <Typography variant="h5" gutterBottom>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <Typography variant='h5' gutterBottom>
               Extra
             </Typography>
 
             <List>
               <ListItem>
                 <Avatar>A</Avatar>
-                <ListItemText primary="Lab Work Results" />
+                <ListItemText primary='Lab Work Results' />
               </ListItem>
               <Divider />
               <ListItem>
                 <Avatar>B</Avatar>
-                <ListItemText primary="Health Education Resources" />
+                <ListItemText primary='Health Education Resources' />
               </ListItem>
               <Divider />
               <ListItem>
                 <Avatar>C</Avatar>
-                <ListItemText primary="Referrals" />
+                <ListItemText primary='Referrals' />
               </ListItem>
               {/* Add more extra features as needed */}
             </List>
