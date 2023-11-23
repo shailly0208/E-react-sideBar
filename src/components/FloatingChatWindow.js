@@ -10,6 +10,7 @@ import axios from 'axios';
 const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState("");
+    const messagesEndRef = useRef(null);
     const ws = useRef(null);
     let C_ID = null;
     let otherSideId = null;
@@ -72,9 +73,20 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
 
     }, []);
 
+    useEffect(() => {
+        const chatHistoryDiv = document.querySelector('.chat-history');
+        if (chatHistoryDiv) {
+            chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+        }
+    }, [chatHistory]);
 
 
-
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage();
+            event.preventDefault(); // 防止默认行为
+        }
+    };
 
     const handleSendMessage = async () => {
         if (C_IDENTITY === 'doctor') {
@@ -139,11 +151,13 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
                                 {chatMessage.message}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="chat-input">
-                        <input type="text" placeholder="Send a message..." value={inputMessage} onChange={e => setInputMessage(e.target.value)} />
+                        <input type="text" placeholder="Send a message..." value={inputMessage} onChange={e => setInputMessage(e.target.value)} onKeyDown={handleKeyDown} />
                         <button onClick={handleSendMessage}>Send</button>
                     </div>
+
                 </div>
             </div>
         </div>
