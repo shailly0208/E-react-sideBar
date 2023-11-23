@@ -38,7 +38,7 @@
     "webrtc-adapter": "^8.2.3"
   },
   "engines": {
-    "node": "16.x",
+    "node": "18.x",
     "npm": "7.x",
     "yarn": "1.x"
   },
