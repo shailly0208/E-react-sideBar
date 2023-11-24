@@ -11,10 +11,6 @@
     overflow: hidden;
     transition: width 0.3s ease; /* Smooth transition for width change */
   }
-  
-#videos.chat-open {
-width: 80%; /* Reduced width when chat is open */
-}
 
 .video-player{
     background-color: black;

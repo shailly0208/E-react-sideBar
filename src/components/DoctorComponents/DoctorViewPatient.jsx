@@ -224,7 +224,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         sx={{ mt: 2 }}
                         onClick={() =>
                           handleOpenNewTab(
-                            `/DoctorVideo?patientID=${patientId}`
+                            `/DoctorVideo?doctorID=${doctorId}&patientID=${patientId}`
                           )
                         }
                       >
@@ -251,7 +251,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                             doctorId={doctorId}
                             identity='doctor'
                             closeChat={toggleChatWindow}
-                            isVideoCallPage={false}
                           />
                         )}
                       </div>
