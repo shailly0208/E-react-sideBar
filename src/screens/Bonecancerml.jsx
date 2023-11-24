@@ -27,8 +27,7 @@ function Boneml() {
     }
   }, [patientInfo]);
 
- x
-   async function predict(base64Image) {
+  async function predict(base64Image) {
     setPredictionLoader(true);
     try {
       console.log('Before FormData creation');
@@ -50,7 +49,7 @@ function Boneml() {
       console.log('After FormData creation', formData);
 
       if (blob instanceof Blob) {
-        formData.append("file", blob, "image.jpg"); // Updated field name to "file"
+        formData.append("image", blob, "image.jpg");
         console.log('Before axios.post');
         const { data } = await axios.post(
           "https://bonecancerml-2307992bf352.herokuapp.com/predict",
@@ -64,12 +63,12 @@ function Boneml() {
       }
     } catch (error) {
       console.error("Error during prediction:", error);
+      // Set prediction to null or handle differently based on your needs
       setPrediction(null);
     } finally {
       setPredictionLoader(false);
     }
   }
-
 
   function renderPredictionCell() {
     if (predictionLoader) {
