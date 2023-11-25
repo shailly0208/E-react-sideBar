@@ -44,19 +44,20 @@ export default function DocRecentPatients({doctorId}){
 
   const columns= [
 
-    {field: 'id', headerName: 'ID', width: 90 },
-    {field: 'PatientFName',headerName: 'First Name',width: 160},
-    {field: 'PatientLName',headerName: 'Last Name',width: 160},
+    {field: 'id', headerName: 'ID',  width: 90, flex: 0.5},
+    {field: 'PatientFName',headerName: 'First Name',flex: 1 },
+    {field: 'PatientLName',headerName: 'Last Name',flex: 1 },
     {
       field: 'service_date',
       headerName: 'Visit Date',
-      width: 160, 
+      flex: 1 , 
       valueFormatter: params=>new Date(params?.value).toDateString()
     },
    {
       field: "action",
       headerName: "Action",
       sortable: false,
+      flex: 1,
       renderCell: (params) => {
         const onClick = (e) => {
           e.stopPropagation();
