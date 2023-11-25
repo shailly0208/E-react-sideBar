@@ -104,13 +104,13 @@ function Searchresult() {
       <div class="service">
         <MedicalServicesOutlinedIcon sx={{fontSize: 50}} />
         <h3>Kidney Stone Diagnosis</h3>
-        <p>94% accuracy ~ Convolutional Neural Networks</p>
+        <p>96% accuracy ~ Convolutional Neural Networks</p>
         <button class="button button5" onClick={goTokidneystoneml}>Go</button>
       </div>
       <div class="service">
         <MedicalServicesOutlinedIcon sx={{fontSize: 50}} />
         <h3>Chronic Kidney Disease Diagnosis</h3>
-        <p>93% accuracy~ Decision Tree</p>
+        <p>95% accuracy~ Decision Tree</p>
         <button class="button button5" onClick={goToCkdML}>Go</button>
       </div>
     </div>  
