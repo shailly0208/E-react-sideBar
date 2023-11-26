@@ -12,6 +12,7 @@ function Tasks() {
     LName: "",
     Age: "",
     Plan: "",
+    appointmentTime: "", // Added appointmentTime state
     tasks: [],
   });
 
@@ -27,6 +28,8 @@ function Tasks() {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+  //https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add
+  //http://localhost:8080/api/users/tasks/${id}
   const findTask = (id) => {
     axios
       .get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${id}`)
@@ -41,6 +44,7 @@ function Tasks() {
             LName: response.data.LName,
             Age: response.data.Age,
             Plan: response.data.Plan,
+            appointmentTime: response.data.appointmentTime, // Added appointmentTime state
           });
         } else {
           setState({
@@ -51,6 +55,7 @@ function Tasks() {
             LName: "",
             Age: "",
             Plan: "",
+            appointmentTime: "", // Added appointmentTime state
           });
         }
       })
@@ -61,13 +66,14 @@ function Tasks() {
 
   const createTask = () => {
     axios
-      .post(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add`, {
+      .post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add', {
         DoctorName: state.DoctorName,
         FName: state.FName,
         MName: state.MName,
         LName: state.LName,
         Age: state.Age,
         Plan: state.Plan,
+        appointmentTime: state.appointmentTime, // Set appointmentTime to current date and time
       })
       .then((response) => {
         setState({
@@ -78,6 +84,7 @@ function Tasks() {
           LName: response.data.LName,
           Age: response.data.Age,
           Plan: response.data.Plan,
+          appointmentTime: response.data.appointmentTime, // Added appointmentTime state
         });
         alert("Task added successfully!");
       })
@@ -95,6 +102,7 @@ function Tasks() {
         LName: state.LName,
         Age: state.Age,
         Plan: state.Plan,
+        appointmentTime: state.appointmentTime, // Added appointmentTime state
       })
       .then(() => {
         setState({
@@ -105,6 +113,7 @@ function Tasks() {
           LName: "",
           Age: "",
           Plan: "",
+          appointmentTime: "", // Added appointmentTime state
         });
         alert("Task updated successfully!");
       })
@@ -125,6 +134,7 @@ function Tasks() {
           LName: "",
           Age: "",
           Plan: "",
+          appointmentTime: "", // Added appointmentTime state
         });
         alert("Task deleted successfully!");
       })
@@ -149,15 +159,6 @@ function Tasks() {
         <h1 style={{ textAlign: "center" }}>Doctor Tasks Management System</h1>
         <div style={{ border: "1px solid #ccc", padding: "10px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>id:</label>
-            <input
-              type="number"
-              name="id"
-              placeholder="id"
-              value={state.id}
-              onChange={handleInputChange}
-              style={{ marginBottom: "10px", padding: "5px" }}
-            />
             <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Doctor Name:</label>
             <input
               type="text"
@@ -212,13 +213,24 @@ function Tasks() {
               onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Appointment Time:</label> 
+            <input
+              type="text"
+              name="appointmentTime"
+              placeholder="Appointment Time"
+              value={state.appointmentTime}
+              onChange={handleInputChange}
+              style={{ marginBottom: "10px", padding: "5px" }}
+            /> 
           </div>
           <button onClick={createTask} style={{ marginTop: "10px", padding: "5px" }}>
-            Add Task
+            Create Task
           </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <button onClick={updateTask} style={{ marginTop: "10px", padding: "5px" }}>
-            Update Task
+            Edit Task
           </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <button onClick={deleteTask} style={{ marginTop: "10px", padding: "5px" }}>
             Delete Task
           </button>

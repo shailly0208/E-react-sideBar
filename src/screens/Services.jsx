@@ -8,12 +8,13 @@ const { Meta } = Card;
 
 const Services = () => {
   const services = [
-    { name: 'Tasks', link: '/TasksList', description: "All Tasks of the Doctor" },
+    
   ];
 
   const userType = readLoginData().type;
   if(userType==='Doctor'){
     services.push({ name: 'Calendar', link: '/calendar', description: "Doctors and Patients Calendar" });
+    services.push({ name: 'Tasks', link: '/TasksList', description: "All Tasks of the Doctor" });
   }else if(userType==='Patient'){
     services.push({ name: 'BookTime', link: '/calendar/booktime', description: "For patients to book doctors' time" });
     services.push({ name: 'Calendar', link: '/calendar', description: "Doctors and Patients Calendar" });
