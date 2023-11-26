@@ -21,7 +21,7 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
     useEffect(() => {
         async function fetchData() {
             if (C_IDENTITY === 'doctor') {
-                C_ID = doctorId;
+                C_ID = doctorId; 
                 otherSideId = patientId;
             } else if (C_IDENTITY === 'patient') {
                 C_ID = patientId;
@@ -48,12 +48,13 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
             };
 
 
-
-
             ws.current.onmessage = (event) => {
                 const parsedMessage = JSON.parse(event.data);
                 console.log(parsedMessage);
-                if (C_ID === parsedMessage.chatMessage.receiver && C_IDENTITY === parsedMessage.chatMessage.receiverIdentity) {
+                console.log(typeof parsedMessage.chatMessage.receiver);
+                console.log(typeof C_ID);
+
+                if (String(C_ID) === String(parsedMessage.chatMessage.receiver) && C_IDENTITY === parsedMessage.chatMessage.receiverIdentity) {
                     setChatHistory(prevHistory => parsedMessage.chatMessage.message && [...prevHistory, parsedMessage.chatMessage]);
                 }
 
@@ -66,10 +67,6 @@ const FloatingChatWindow = ({ patientId, doctorId, closeChat, identity }) => {
 
 
         fetchData();
-
-        // return () => {
-        //     if (ws.current) ws.current.close();
-        // };
 
     }, []);
 

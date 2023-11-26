@@ -34,7 +34,20 @@ function DoctorVideo() {
     const APP_ID = "8310514e8aff413b87abb9d0bdb095bb";
 
     const query = useQuery();
-    const roomId = query.get('patientID');
+    const doctorId = query.get('doctorID');
+    const patientId = query.get('patientID');
+    const roomId = patientId;
+    let C_IDENTITY = null;
+    if (patientId && !doctorId)
+    {
+        C_IDENTITY = 'patient';
+    }
+
+    if (doctorId && patientId) 
+    {
+        C_IDENTITY = 'doctor';
+    }
+    
 
     function uuidv4() {
         return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
@@ -183,9 +196,10 @@ function DoctorVideo() {
                 </Button>
                 {windowOpen && (
                     <FloatingChatWindow
-                    patientId={roomId}
-                    closeChat={toggleChatWindow}
-                    isVideoCallPage={true}
+                        doctorId={doctorId}
+                        patientId={patientId}
+                        identity = {C_IDENTITY}
+                        closeChat={toggleChatWindow}
                     />
                 )}
             </div>
