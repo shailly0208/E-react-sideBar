@@ -46,6 +46,7 @@ import { DoctorMessages } from './screens/DoctorPanel/DoctorMessages';
 import { DoctorServices } from './screens/DoctorPanel/DoctorServices';
 import DoctorHelp from './screens/DoctorPanel/DoctorHelp';
 import HeartStroke from './screens/HeartStroke';
+import PsychologyPrediction from './screens/PsychologyPrediction';
 import Tasks from './screens/Tasks';
 import TasksList from './screens/TasksList';
 import TestimonialsPage from './screens/TestimonialsPage'; // Import TestimonialsPage
@@ -224,6 +225,7 @@ class App extends Component {
           <Route path="/Bonecancerml" element={<Bonecancerml />} />
           <Route path="/heartdiseaseml" element={<Heartdiseaseml />} />
           <Route path="/heartstroke" element={<HeartStroke />} />
+          <Route path="/PsychologyPrediction" element={<PsychologyPrediction />} />
           <Route path="/PatientRegistration" element={<PatientRegistration loadUser={this.loadUser} />} />
           <Route path="/DoctorRegistration" element={<DoctorRegistration loadUser={this.loadUser} />} />
           <Route path="/HospitalAdminRegistration" element={<HospitalAdminRegistration loadUser={this.loadUser} />} />
