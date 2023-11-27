@@ -28,7 +28,7 @@ function BreastCancerPredictionML() {
           console.log(data)
           const responsePrediction = await axios.post(`https://breastcancer-ml-0d80f6d56d1f.herokuapp.com/predict`, data, {
             headers: {
-              'Content-Type': 'multipart/form-data', // Important: Set the content type to form data
+              'Content-Type': 'application/json', // Important: Set the content type to form data
             },
           });
           console.log(responsePrediction.data)
@@ -44,7 +44,7 @@ function BreastCancerPredictionML() {
 
   return (
     <>
-      {prediction}
+      {JSON.stringify(prediction)}
     </>
   )
 }
