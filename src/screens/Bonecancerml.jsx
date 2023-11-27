@@ -18,7 +18,7 @@ function Boneml() {
         const { data } = await axios.get(`${BASE_URL}/boneData/${id}`);
         setBoneData(data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching bone data:", err);
       }
     }
 
@@ -30,7 +30,6 @@ function Boneml() {
   async function predict(base64Image) {
     setPredictionLoader(true);
     try {
-      console.log('Before FormData creation');
       const formData = new FormData();
       const blob = await (async () => {
         return new Promise((resolve) => {
@@ -46,16 +45,13 @@ function Boneml() {
           resolve(blob);
         });
       })();
-      console.log('After FormData creation', formData);
 
       if (blob instanceof Blob) {
         formData.append("image", blob, "image.jpg");
-        console.log('Before axios.post');
         const { data } = await axios.post(
           "https://bonecancerml-2307992bf352.herokuapp.com/predict",
           formData
         );
-        console.log('After axios.post', data);
         setPrediction(data.prediction);
       } else {
         console.error("Invalid blob type");
@@ -63,13 +59,13 @@ function Boneml() {
       }
     } catch (error) {
       console.error("Error during prediction:", error);
-      // Set prediction to null or handle differently based on your needs
       setPrediction(null);
     } finally {
       setPredictionLoader(false);
     }
   }
 
+  // Renders the prediction cell based on various conditions
   function renderPredictionCell() {
     if (predictionLoader) {
       return <div>Loading...</div>;
@@ -91,9 +87,10 @@ function Boneml() {
       return <div>{prediction}</div>;
     }
 
-    return null; // Return null if none of the conditions are met
+    return null;
   }
 
+  // Saves the prediction to the backend
   async function savePrediction() {
     try {
       const url = `${BASE_URL}/boneData/${patientInfo.id}`;
@@ -108,12 +105,9 @@ function Boneml() {
       };
 
       const response = await axios.post(url, requestData, config);
-      // Handle the response if needed
       console.log("Prediction saved successfully:", response.data);
     } catch (error) {
       console.error("Error saving prediction:", error);
-      // Display an error message to the user
-      // For example: alert("Failed to save prediction. Please try again.")
     }
   }
 
