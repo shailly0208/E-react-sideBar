@@ -110,7 +110,7 @@ const PsychologyPrediction = () => {
         {Psychology && (
           <div className="result-display">
             <span className="result-text">
-              {Psychology.Result === 0 ? "Does not need psychiatric treatment" : "Needs psychiatric treatment"}
+              {Psychology.Result[0] === 0 ? "Does not need psychiatric treatment" : "Needs psychiatric treatment"}
             </span>
           </div>
         )}
