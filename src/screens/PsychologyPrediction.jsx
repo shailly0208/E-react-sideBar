@@ -40,8 +40,8 @@ const PsychologyPrediction = () => {
   const [Psychology, setPsychology] = useState();
 
   const columnGroups = [
-    ["Gender", "self_employed", "family_history", "work_interfere"],
-    ["no_employees", "remote_work", "tech_company", "benefits"],
+    ["patient_id", "Gender", "Age", "self_employed", "family_history"],
+    ["no_employees", "remote_work", "tech_company", "benefits", "work_interfere"],
     ["care_options", "wellness_program", "seek_help", "anonymity"],
     ["leave", "mental_health_consequence", "phys_health_consequence", "coworkers"],
     ["supervisor", "mental_health_interview", "phys_health_interview", "mental_vs_physical", "obs_consequence"]
