@@ -35,12 +35,6 @@ export default function Dashboard() {
             <DoctorTasksList doctorId={doctorId}/>
           </Paper>
         </Grid>
-
-       
-
-
-  
-
       </Grid>
     </Container>
   );

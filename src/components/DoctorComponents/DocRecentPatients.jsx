@@ -20,7 +20,7 @@ export default function DocRecentPatients({doctorId}){
     const getData= async () => {
       try {
         //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
-        const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/TopFiveRecentPatients', {
+        const response = await axios.post('http://localhost:8080/TopFiveRecentPatients', {
           doctorId
         });
   

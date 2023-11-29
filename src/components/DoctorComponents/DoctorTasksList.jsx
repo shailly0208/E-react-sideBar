@@ -1,24 +1,49 @@
-// DoctorTasksList.jsx
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Paper, List, ListItem, ListItemText, Checkbox, TextField, Button } from '@mui/material';
 
 const DoctorTasksList = ({ doctorId }) => {
-  // Example tasks data
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'Follow up with patient John Doe', completed: false },
-    { id: 2, text: 'Review lab results for Jane Smith', completed: false },
-    // Add more tasks here
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [newReminder, setNewReminder] = useState('');
 
-  // Handle checkbox toggle
+  useEffect(() => {
+    const fetchReminders = async () => {
+      try {
+        const response = await axios.post('http://localhost:8080/getDoctorReminders', { doctorId });
+        setTasks(response.data.map((reminder, index) => ({
+          id: index,
+          text: reminder.reminder_description,
+          completed: false // Assuming reminders don't have a 'completed' state initially
+        })));
+      } catch (error) {
+        console.error('Error fetching reminders:', error);
+      }
+    };
+
+    fetchReminders();
+  }, [doctorId]);
+
   const handleToggle = (taskId) => {
     setTasks(tasks.map(task => 
       task.id === taskId ? { ...task, completed: !task.completed } : task
     ));
+  };
+
+  const handleNewReminderChange = (e) => {
+    setNewReminder(e.target.value);
+  };
+
+  const addReminder = async () => {
+    try {
+      await axios.post('http://localhost:8080/saveDoctorReminder', {
+        doctorId,
+        reminderDescription: newReminder
+      });
+      setTasks([...tasks, { id: tasks.length, text: newReminder, completed: false }]);
+      setNewReminder('');
+    } catch (error) {
+      console.error('Error adding new reminder:', error);
+    }
   };
 
   return (
@@ -37,6 +62,22 @@ const DoctorTasksList = ({ doctorId }) => {
           </ListItem>
         ))}
       </List>
+      <TextField
+        label="New Reminder"
+        value={newReminder}
+        onChange={handleNewReminderChange}
+        fullWidth
+        margin="normal"
+        sx={{mb:2, mt:2}}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={addReminder}
+        fullWidth
+      >
+        Add Reminder
+      </Button>
     </Paper>
   );
 };
