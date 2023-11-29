@@ -131,6 +131,9 @@ export function PatientPortal() {
                 color='primary'
                 fullWidth
                 sx={{ mt: 2 }}
+                onClick={() =>
+                  handleOpenNewTab(`/Chatbot`)
+                }
               >
                 Medical Chatbot
               </Button>
