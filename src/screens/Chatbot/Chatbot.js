@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, Link } from "react-router-dom";
 import './Chatbot.css';
 
-const ChatComponent = ({ patientInfo }) => {
+const ChatComponent = ({ userInfo }) => {
+  const location = useLocation();
+  const patientData = location.state;
   const [messages, setMessages] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const chatOutputRef = useRef(null);
@@ -143,18 +146,21 @@ const ChatComponent = ({ patientInfo }) => {
 
       userInput.value = '';
       try {
-        const response = await fetch(`http://52.42.37.187:8000/${patientInfo.id}`, {
+        let url;
+        if (patientData) {
+          url = `http://99.79.170.114:8000/doctor/${userInfo.id}/${patientData.id}/`
+        }
+        else {
+          url = `http://99.79.170.114:8000/patient/${userInfo.id}`
+        }
+        console.log("URL", url);
+          const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            messages:requestData,
-            stream:true,
-          }),
+          body: JSON.stringify(requestData),
         });
-
-
           
         const reader = response.body.getReader();
         let partialText = '';
@@ -167,13 +173,17 @@ const ChatComponent = ({ patientInfo }) => {
           }
           const newChunk = new TextDecoder('utf-8').decode(value);
           partialText += newChunk;
-          speechText = partialText.split(/[,;.-]+/);
+          speechText = partialText.split(/[,;:.]+/);
           console.log(i, speechText);
 
           if(i < speechText.length) {
+            console.log("SPEAKING")
             // console.log(speechText[i]);
             speak(speechText[i-1]);
             i += 1;
+          }
+          if(speechText[i-1].includes('.')) {
+            speak(speechText[i-1])
           }
           appendMessage(partialText, 'Bot');
         }
@@ -228,7 +238,7 @@ const ChatComponent = ({ patientInfo }) => {
     }
   };
 
-  if (!patientInfo || !patientInfo.name) {
+  if (!userInfo || !userInfo.name) {
     alert('Please Login First');
     // TODO: Redirect to Login Page
   }
