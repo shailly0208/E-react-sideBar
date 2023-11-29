@@ -12,25 +12,27 @@ const VoiceRecognition = () => {
  
   const fetchFiles = async (patientId) => {
     try {
-      const response = await fetch('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files', {
-        method: 'POST',
+      //local backend api link (http://localhost:8080/files/${patientId}
+      const response = await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/${patientId}`, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ patientId }),
       });
  
-      if (response.ok) {
-        console.log('Data sent to backend successfully');
+     
+      if (response.status === 200) {
+        const responseData = response.data;
+        console.log('Data sent to backend successfully:', responseData);
         // Handle the response or update the UI as needed
       } else {
-        console.error('Failed to send data to backend');
+        console.error('Failed to send data to backend. HTTP status:', response.status);
+        // Log the error response for debugging
+        console.error('Error Response:', response.data);
       }
     } catch (error) {
       console.error('Error sending data to backend:', error);
     }
   };
- 
  
   const speak = (message) => {
     console.log('Speaking:', message);
@@ -61,91 +63,96 @@ const VoiceRecognition = () => {
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
         },
+ 
         'open echo report': () => {
           const finalText = 'Opening echo report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/echocardiogram/${patientId}`);
-         
+          //openFile(`http://localhost:8080/files/echocardiogram/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com//files/echocardiogram/${patientId}`);
         },
        
         'open ultrasound scan': () => {
           const finalText = 'Opening ultrasound scan';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/ultrasoundabdomen/${patientId}`);
+         // openFile(`http://localhost:8080/files/ultrasoundabdomen/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/ultrasoundabdomen/${patientId}`);
  
         },
         'open ct scan': () => {
           const finalText = 'Opening CT scan';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/ctscan/${patientId}`);
-         
+         // openFile(`http://localhost:8080/files/ctscan/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/ctscan/${patientId}`);
         },
         'open ecg report': () => {
           const finalText = 'Opening ECG report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/ecgreport/${patientId}`);
-         
+          //openFile(`http://localhost:8080/files/ecgreport/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/ecgreport/${patientId}`);
    
         },
         'open blood test report': () => {
           const finalText = 'Opening blood test report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/bloodtest/${patientId}`);
-         
+         // openFile(`http://localhost:8080/files/bloodtest/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/bloodtest/${patientId}`);
         },
         'open x-ray report': () => {
           const finalText = 'Opening X-ray report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/xrayreport/${patientId}`);
+         // openFile(`http://localhost:8080/files/xrayreport/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/xrayreport/${patientId}`);
  
-        },
+         },
         'open mri report': () => {
           const finalText = 'Opening MRI report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/mrireport/${patientId}`);
- 
+          //openFile(`http://localhost:8080/files/mrireport/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/mrireport/${patientId}`);
         },
         'open endoscope report': () => {
           const finalText = 'Opening endoscope report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/endoscope/${patientId}`);
- 
+          //openFile(`http://localhost:8080/files/endoscope/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/endoscope/${patientId}`);
         },
         'open cell images': () => {
           const finalText = 'Opening cellimages';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/cellimages/${patientId}`);
+          //openFile(`http://localhost:8080/files/cellimages/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/cellimages/${patientId}`);
  
         },
         'open template': () => {
           const finalText = 'Opening template';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/template/${patientId}`);
- 
+         // openFile(`http://localhost:8080/files/template/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/template/${patientId}`);
         },
         'open skinimages': () => {
           const finalText = 'Opening skinimages';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/skinimages/${patientId}`);
+         // openFile(`http://localhost:8080/files/skinimages/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/skinimages/${patientId}`);
  
         },
         'open skindiseases': () => {
           const finalText = 'Opening skindiseases';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile(`http://localhost:8080/files/skindiseases/${patientId}`);
- 
+          //openFile(`http://localhost:8080/files/skindiseases/${patientId}`);
+          openFile(`https://voicerecognition-ehosp-3172f0a3d3dd.herokuapp.com/files/skindiseases/${patientId}`);
         },
       });
  
