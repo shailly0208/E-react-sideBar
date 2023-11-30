@@ -28,9 +28,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
   const toggleMedicalHistoryModal = () => {
     setShowMedicalHistoryModal(!showMedicalHistoryModal);
 };
-
-
-
   const columns = [
     { field: 'date', headerName: 'Date', flex:1 },
     { field: 'reason_for_visit', headerName: 'Reason', flex: 1 },
