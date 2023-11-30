@@ -383,6 +383,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         sx={{ mt: 2 }}
                         component={Link}
                         to='/Chatbot'
+                        state={patientData}
                       >
                         Chatbot
                       </Button>
