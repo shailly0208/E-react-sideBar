@@ -15,9 +15,9 @@ export default function Dashboard() {
     <Container maxWidth="xl" >
       <Grid container spacing={3}> {/* Adjusted spacing */}
         {/* Recent Patients */}
-        <Grid item xs={12} md={12}> {/* Adjusted grid size */}
+        <Grid item xs={12} md={12} lg={12}> {/* Adjusted grid size */}
           <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 440 }}>
-            <h3>Recent Patients</h3>
+            <h3>Top Ten Recent Patients</h3>
             <DocRecentPatients doctorId={doctorId}/>
           </Paper>
         </Grid>

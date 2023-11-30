@@ -69,6 +69,7 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
+import { DoctorViewPatient } from './components/DoctorComponents/DoctorViewPatient.jsx';
 
 class App extends Component {
   constructor() {

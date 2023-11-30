@@ -11,10 +11,6 @@ export default function DocRecordsAuth({doctorId}){
   const [open, setOpen] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null);
 
-
-
-  
-
   function viewPatientHandler(patientID) {
     setOpen(!open);
     setSelectedPatientId(patientID);

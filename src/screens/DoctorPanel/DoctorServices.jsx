@@ -10,8 +10,6 @@ import {
   MenuItem, 
   InputLabel 
 } from "@mui/material";
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import HealingIcon from '@mui/icons-material/Healing';
 import { Modal, Button, TextField} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -27,7 +25,7 @@ export function DoctorServices() {
 
     const fetchAuthorizedPatients = async () => {
         try {
-          const response = await axios.post('http://localhost:8080/DoctorPatientsAuthorized', { doctorId });
+          const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorPatientsAuthorized', { doctorId });
           setAuthorizedPatients(response.data);
           if (response.data.length > 0) {
             setSelectedPatient(response.data[0].id); // Set to the first patient's id
@@ -81,7 +79,7 @@ export function DoctorServices() {
         let patientId=selectedPatient;
         if (patientId) {
           try {
-            const response = await axios.post('http://localhost:8080/saveSurgeryPlan', {
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveSurgeryPlan', {
               doctorId,
               patientId,
               surgeryType, 
@@ -105,7 +103,7 @@ export function DoctorServices() {
     const [selectedPlan, setSelectedPlan] = useState(null);
     const viewSurgeryPlanDetails = async (plan) => {
       try {
-        const patientResponse = await axios.post('http://localhost:8080/patientOverview', { patientId: plan.patient_id });
+        const patientResponse = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientOverview', { patientId: plan.patient_id });
         if (patientResponse.data && patientResponse.data.patient_data) {
           setSelectedPlan({
             ...plan,
@@ -124,7 +122,7 @@ export function DoctorServices() {
     const fetchSurgeryPlans = async () => {
         try {
           console.log("Fetching surgery plans for doctor ID:", doctorId);
-          const response = await axios.post('http://localhost:8080/getSurgeryPlan', { doctorId });
+          const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getSurgeryPlan', { doctorId });
           setSurgeryPlans(response.data);
         } catch (error) {
           console.error('Error fetching surgery plans:', error);

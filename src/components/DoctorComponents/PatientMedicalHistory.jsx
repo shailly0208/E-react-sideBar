@@ -21,7 +21,7 @@ export function PatientMedicalHistory({ patientId }) {
     useEffect(() => {
         const fetchMedicalHistory = async () => {
             try {
-                const response = await axios.post('http://localhost:8080/patientMedicalHistory', { patientId });
+                const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientMedicalHistory', { patientId });
                 setMedicalHistory(response.data);
             } catch (error) {
                 console.error('Error fetching medical history:', error);

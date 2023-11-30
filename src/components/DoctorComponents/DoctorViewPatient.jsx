@@ -8,8 +8,9 @@ import { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid'
 import { PatientMedicalHistory } from './PatientMedicalHistory';
 
-
 export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
+
+
   // State Initialization
   const [patientData, setPatientData] = React.useState({});
   const [treatments, setTreatments] = React.useState([]);
@@ -40,7 +41,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     // Function to fetch past visits
     const fetchPastVisits = async () => {
       try {
-        const response = await axios.post('http://localhost:8080/patientVisits', { doctorId, patientId });
+        const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientVisits', { doctorId, patientId });
         console.log(response)
         //const { data } = response;
         //setPastVisits(data)
@@ -134,7 +135,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
 
     const saveTreatment = async () => {
       try {
-          const response = await axios.post('http://localhost:8080/saveTreatment', {
+          const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveTreatment', {
               ...treatmentDetails,
               patientId,
               doctorId
@@ -167,7 +168,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     try {
        //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
         //http://localhost:8080/
-      const response = await axios.post('http://localhost:8080/saveVisit', visitDetails);
+      const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveVisit', visitDetails);
       console.log(response.data);
       setSnackbarMessage('Visit logged successfully!');
       setSnackbarOpen(true);

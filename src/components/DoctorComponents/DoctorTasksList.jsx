@@ -9,7 +9,7 @@ const DoctorTasksList = ({ doctorId }) => {
   useEffect(() => {
     const fetchReminders = async () => {
       try {
-        const response = await axios.post('http://localhost:8080/getDoctorReminders', { doctorId });
+        const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorReminders', { doctorId });
         setTasks(response.data.map((reminder, index) => ({
           id: index,
           text: reminder.reminder_description,

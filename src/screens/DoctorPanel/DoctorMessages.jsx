@@ -19,7 +19,7 @@ export function DoctorMessages() {
 
     const fetchDoctorInfo = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/DoctorProfileInfo', { doctorId });
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorProfileInfo', { doctorId });
             // Assuming the response structure as { FName, LName, ... }
             setDoctorInfo(response.data); // Store doctor's info in state
         } catch (error) {
@@ -32,7 +32,7 @@ export function DoctorMessages() {
 
     const fetchPatients = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/DoctorPatientsAuthorized', { doctorId });
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorPatientsAuthorized', { doctorId });
             setPatients(response.data);
         } catch (error) {
             console.error('Error fetching patients:', error);
@@ -41,7 +41,7 @@ export function DoctorMessages() {
 
     const fetchMessages = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/getDoctorPatientMessages', { doctorId, patientId: selectedPatient });
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorPatientMessages', { doctorId, patientId: selectedPatient });
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error);
@@ -71,7 +71,7 @@ export function DoctorMessages() {
                 const patientLName = selectedPatientData.LName;
     
                 try {
-                    await axios.post('http://localhost:8080/sendDoctorPatientMessage', {
+                    await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/sendDoctorPatientMessage', {
                         doctorId,
                         patientId: selectedPatient,
                         doctorFName: doctorInfo.FName, 
