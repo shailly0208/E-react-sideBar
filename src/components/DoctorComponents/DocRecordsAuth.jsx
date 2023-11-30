@@ -13,13 +13,6 @@ export default function DocRecordsAuth({doctorId}){
 
 
 
-  
-
-  function viewPatientHandler(patientID) {
-    setOpen(!open);
-    setSelectedPatientId(patientID);
-  }
-
   const columns = [
     { field: 'id', headerName: 'ID', width: 90, flex: 0.5 },
     { field: 'FName', headerName: 'First Name', flex: 1 },
@@ -49,6 +42,50 @@ export default function DocRecordsAuth({doctorId}){
       },
     },
   ];
+  function viewPatientHandler(patientID) {
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('patientId', patientID);
+    window.history.pushState({}, '', newUrl);
+    setOpen(true);
+    setSelectedPatientId(patientID);
+  }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientIdFromUrl = urlParams.get('patientId');
+
+    if (patientIdFromUrl) {
+        setOpen(true);
+        setSelectedPatientId(patientIdFromUrl);
+    }
+  const handlePopState = () => {
+    
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientIdFromUrl = urlParams.get('patientId');
+
+        if (patientIdFromUrl) {
+            setOpen(true);
+            setSelectedPatientId(patientIdFromUrl);
+        } else {
+            setOpen(false);
+            setSelectedPatientId(null);
+        }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+        window.removeEventListener('popstate', handlePopState);
+    };
+}, []);
+function closeModal() {
+  const newUrl = new URL(window.location);
+  newUrl.searchParams.delete('patientId');
+  window.history.pushState({}, '', newUrl);
+
+  setOpen(false);
+  setSelectedPatientId(null);
+}
+
  
   useEffect(() => {
     const getData= async () => {
@@ -96,7 +133,7 @@ export default function DocRecordsAuth({doctorId}){
         disableDensitySelector={true}
   
       />
-      <DoctorViewPatient open={open} onClose={viewPatientHandler} patientId={selectedPatientId} doctorId={doctorId} />
+      <DoctorViewPatient open={open} onClose={closeModal} patientId={selectedPatientId} doctorId={doctorId} />
       </div>
   )
 

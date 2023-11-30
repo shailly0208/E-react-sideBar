@@ -1,10 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button, Card, CardContent, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
-
+import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 export function DoctorMessages() {
+    const doctorId = useOutletContext();
     const [selectedPatient, setSelectedPatient] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [patients, setPatients] = useState([]);
+
+
+
+    // Inside DoctorMessages component
+    useEffect(() => {
+        fetchDoctorInfo();
+        fetchPatients();
+    }, []);
+
+    const fetchDoctorInfo = async () => {
+        try {
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorProfileInfo', { doctorId });
+            // Assuming the response structure as { FName, LName, ... }
+            setDoctorInfo(response.data); // Store doctor's info in state
+        } catch (error) {
+            console.error('Error fetching doctor info:', error);
+        }
+    };
+
+    const [doctorInfo, setDoctorInfo] = useState(null); // Add this state
+
+
+    const fetchPatients = async () => {
+        try {
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorPatientsAuthorized', { doctorId });
+            setPatients(response.data);
+        } catch (error) {
+            console.error('Error fetching patients:', error);
+        }
+    };
+
+    const fetchMessages = async () => {
+        try {
+            const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorPatientMessages', { doctorId, patientId: selectedPatient });
+            setMessages(response.data);
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedPatient) {
+            fetchMessages();
+        }
+    }, [selectedPatient]);
 
     const handlePatientChange = (event) => {
         setSelectedPatient(event.target.value);
@@ -14,20 +62,34 @@ export function DoctorMessages() {
         setMessage(event.target.value);
     };
 
-    const sendMessage = () => {
-        if (message.trim() !== '') {
-            setMessages([...messages, { patientId: selectedPatient, text: message }]);
-            setMessage('');
+    const sendMessage = async () => {
+        if (message.trim() !== '' && selectedPatient && doctorInfo) {
+            const selectedPatientData = patients.find(p => p.id === selectedPatient);
+    
+            if (selectedPatientData) {
+                const patientFName = selectedPatientData.FName;
+                const patientLName = selectedPatientData.LName;
+    
+                try {
+                    await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/sendDoctorPatientMessage', {
+                        doctorId,
+                        patientId: selectedPatient,
+                        doctorFName: doctorInfo.FName, 
+                        doctorLName: doctorInfo.LName,
+                        patientFName, 
+                        patientLName, 
+                        message: "Dr. "+  doctorInfo.LName+" : " +message,
+                        time: new Date().toISOString()
+                    });
+                    setMessage('');
+                    fetchMessages(); // Refresh the conversation
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            }
         }
     };
-
-    // Dummy patient list for example purposes
-    const patients = [
-        { id: '1', name: 'John Doe' },
-        { id: '2', name: 'Jane Smith' },
-        // Add more patients here
-    ];
-
+    
     return (
         <Box sx={{ p: 3 }}>
             <Typography variant="h4" gutterBottom>
@@ -44,7 +106,7 @@ export function DoctorMessages() {
                 >
                     {patients.map((patient) => (
                         <MenuItem key={patient.id} value={patient.id}>
-                            {patient.name}
+                            {`${patient.FName} ${patient.LName}`}
                         </MenuItem>
                     ))}
                 </Select>
@@ -67,13 +129,19 @@ export function DoctorMessages() {
 
             <Box sx={{ mt: 3 }}>
                 <Typography variant="h6">Previous Messages:</Typography>
-                <Card variant="outlined" sx={{ mt: 1 }}>
+                <Card variant="outlined" sx={{ mt: 1,  overflowY:"auto", maxHeight:200}}>
                     <CardContent>
-                        {messages.map((msg, index) => (
-                            <Typography key={index} sx={{ mb: 1 }}>
-                                {msg.text}
+                    {messages.map((msg, index) => (
+                        <Box key={index} sx={{ mb: 2 }}>
+                            <Typography variant="subtitle2">
+                                {new Date(msg.time_stamp).toLocaleString()}
+                                {/* Converts the 'timestamp' field to a readable format */}
                             </Typography>
-                        ))}
+                            <Typography>
+                                {msg.message}
+                            </Typography>
+                        </Box>
+                    ))}
                     </CardContent>
                 </Card>
             </Box>
