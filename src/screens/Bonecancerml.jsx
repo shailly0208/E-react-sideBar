@@ -47,7 +47,7 @@ function Boneml() {
       })();
 
       if (blob instanceof Blob) {
-        formData.append("image", blob, "image.jpg");
+        formData.append("file", blob, "image.jpg");
         const { data } = await axios.post(
           "https://bonecancerml-2307992bf352.herokuapp.com/predict",
           formData
