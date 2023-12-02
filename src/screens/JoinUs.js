@@ -80,8 +80,17 @@ const JoinUs = () => {
     <div className='contact-container'>
       <div className='row'>
         <div className='col-12 text-center'>
+          <div class='contact-heading-two'><h2>Joining Process</h2></div>
+          <div class='contact-heading-four'><h4>1. Submit the form on the website, and feel free to leave a note if you have any questions.</h4></div>
+          <div class='contact-heading-four'><h4>2. Our staff will contact you to book an in-person verification for privacy reason.</h4></div>
+          <div class='contact-heading-four'><h4>3. After meeting with you in-person, we will process your application in 7 days.</h4></div>
+          <div class='contact-heading-four'><h4>4. You will recieve updates and result of your application through email.</h4></div>
+          <div class='contact-heading-four'><h4>5. After approved, we will send you a link to setup your account.</h4></div>
+          <div class='contact-heading-four'><h4>6. Welcome to join our platform!  :）</h4></div>
+          
           <div class='contact-heading-one'><h1>Join Us Today!</h1></div>
           <div class='contact-heading-three'><h3>Let's build smart healthcare together.</h3></div>
+
 
           <form onSubmit={handleSubmit}>
             <div>

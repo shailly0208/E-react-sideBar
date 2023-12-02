@@ -8,8 +8,11 @@ import JoinUs from './screens/JoinUs';
 import AdminLayout from './layout/AdminLayout';
 import AdminDashboard from './screens/AdminPanel/AdminDashboard';
 import ContactAdmin from './screens/AdminPanel/ContactAdmin';
-import HelpAdmin from './screens/AdminPanel/HelpAdmin';
+import DocHelpAdmin from './screens/AdminPanel/DocHelpAdmin';
+import ClinicHelpAdmin from './screens/AdminPanel/ClinicHelpAdmin';
 import ReviewAdmin from './screens/AdminPanel/ReviewAdmin';
+import ClinicalStaffLayout from './layout/ClinicalStaffLayout';
+import ClinicalStaffDashboard from './screens/ClinicalStaffPanel/ClinicalStaffDashboard';
 import AboutUs from './screens/AboutUs';
 import Searchpatient from './screens/searchpatient';
 import Searchresult from './screens/searchresult';
@@ -208,9 +211,16 @@ class App extends Component {
           <Route path="/Admin" element={<AdminLayout adminInfo={this.state.user} />}>
             <Route index element={<AdminDashboard />} />
             <Route path="/Admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/Admin/help" element={<HelpAdmin />} />
+            <Route path="/Admin/dochelp" element={<DocHelpAdmin />} />
+            <Route path="/Admin/clnichelp" element={<ClinicHelpAdmin />} />
             <Route path="/Admin/contact" element={<ContactAdmin />} />
             <Route path="/Admin/review" element={<ReviewAdmin />} />
+          </Route>
+          <Route path="/ClinicalStaff" element={<ClinicalStaffLayout adminInfo={this.state.user} />}>
+            <Route index element={<ClinicalStaffDashboard />} />
+            <Route path="/ClinicalStaff/dashboard" element={<ClinicalStaffDashboard />} />
+            <Route path="/ClinicalStaff/NewPatient" element={<PatientRegistration />} />
+            <Route path="/ClinicalStaff/calendar" element={<DoctorCalendar />} />
           </Route>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/terms" element={<Terms />} />
