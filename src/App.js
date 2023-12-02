@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './screens/LandingPage';
 import DBConnection from './screens/DBConnection';
 import Contact from './screens/Contact';
+import JoinUs from './screens/JoinUs';
 import AdminLayout from './layout/AdminLayout';
 import AdminDashboard from './screens/AdminPanel/AdminDashboard';
 import ContactAdmin from './screens/AdminPanel/ContactAdmin';
@@ -202,6 +203,7 @@ class App extends Component {
           <Route path="/DBConnection" element={<DBConnection />} />
           <Route path="/testimonial" element={<TestimonialsPage />} /> {/* Use TestimonialsPage */}
           <Route path="/contact" element={<Contact />} />
+          <Route path="/JoinUs" element={<JoinUs />} />
           <Route path="/Admin" element={<AdminLayout adminInfo={this.state.user} />}>
             <Route index element={<AdminDashboard />} />
             <Route path="/Admin/dashboard" element={<AdminDashboard />} />

@@ -77,7 +77,7 @@ const DoctorHelp = () => {
             <div>
               <input
                 type="text"
-                name="helptName"
+                name="helpName"
                 placeholder='Full Name'
                 autoComplete='off'
                 onChange={handleChange}

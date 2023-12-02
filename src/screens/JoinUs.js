@@ -3,7 +3,7 @@ import '../styles/screens/Contact.css';
 import axios from "axios";
 
 
-const Contact = () => {
+const JoinUs = () => {
 
 
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const Contact = () => {
     contactName: '',
     contactEmail: '',
     contactPhone: '',
+    License: '',
     contactMessage: ''
   })
 
@@ -53,12 +54,17 @@ const Contact = () => {
     } else if (formData.contactPhone.length < 10) {
       validationErrors.contactPhone = "Phone should be at least 10 digits"
     }
+    if (!formData.License.trim()) {
+      validationErrors.contactPhone = "Phone is required"
+    } else if (formData.contactPhone.length < 10) {
+      validationErrors.contactPhone = "Phone should be at least 10 digits"
+    }
 
     if (!formData.contactMessage.trim()) {
-      validationErrors.contactMessage = "Message is required"
-    } else if (formData.contactMessage.length > 10) {
+      if (formData.contactMessage.length > 10) {
       validationErrors.contactMessage = "Max length is 20 characters"
     }
+  }
 
     setErrors(validationErrors)
 
@@ -74,38 +80,15 @@ const Contact = () => {
     <div className='contact-container'>
       <div className='row'>
         <div className='col-12 text-center'>
-          <div class='contact-heading-one'><h1>How can we help you?</h1></div>
-          <div class='contact-heading-three'><h3 >We’ll get back to you within 7 working days.</h3></div>
+          <div class='contact-heading-one'><h1>Join Us Today!</h1></div>
+          <div class='contact-heading-three'><h3>Let's build smart healthcare together.</h3></div>
 
           <form onSubmit={handleSubmit}>
-            <select name="contactTopic" class="bg-gray-2 border border-gray-1  
-                                        text-gray-10 text-sm rounded-lg  
-                                        focus:border-blue-5 w-full p-2.5" onChange={handleChange} >
-
-              <option value="0">
-                Choose Topic
-
-              </option>
-
-              <option value="1">
-                Doctor Related Queries
-              </option>
-              <option value="2">
-                Suggestions
-              </option>
-              <option value="3">
-                Feedback
-              </option>
-              <option value="4">
-                Technical Issue Reports
-              </option>
-
-            </select>
             <div>
               <input
                 type="text"
                 name="contactName"
-                placeholder='Full Name'
+                placeholder='Contact Name'
                 autoComplete='off'
                 onChange={handleChange}
               />
@@ -115,7 +98,7 @@ const Contact = () => {
               <input
                 type="email"
                 name="contactEmail"
-                placeholder='Email address'
+                placeholder='Contact Email'
                 autoComplete='off'
                 onChange={handleChange}
               />
@@ -125,19 +108,30 @@ const Contact = () => {
               <input
                 type="text"
                 name="contactPhone"
-                placeholder='Phone number'
+                placeholder='Contact Phone'
                 autoComplete='off'
                 onChange={handleChange}
               />
               {errors.contactPhone && <span class='spancolor'>{errors.contactPhone}</span>}
             </div>
             <div>
+              <input
+                type="text"
+                name="License"
+                placeholder='License Number'
+                autoComplete='off'
+                onChange={handleChange}
+              />
+              {errors.contactPhone && <span class='spancolor'>{errors.contactPhone}</span>}
+            </div>
+
+            <div>
               <textarea
                 name="contactMessage"
                 className='form-control formInput'
-                placeholder='Max Allowed Characters: 6000'
+                placeholder='Note (Optional)'
                 autoComplete='off'
-                rows="12"
+                rows="6"
                 onChange={handleChange}
               />
               {errors.contactMessage && <span class='spancolor'>{errors.contactMessage}</span>}
@@ -146,11 +140,10 @@ const Contact = () => {
               Submit
             </button>
           </form>
-          <a href="/JoinUs">JoinUs</a>
         </div>
       </div>
     </div>
   );
 };
 
-export default Contact;
+export default JoinUs;
