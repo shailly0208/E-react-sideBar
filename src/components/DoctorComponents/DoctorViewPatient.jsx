@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, Box, Button, Typography, Card, CardContent, TextField, Grid, List, ListItem, ListItemIcon, Paper, Snackbar  } from '@mui/material';
-import MedicationIcon from '@mui/icons-material/Medication';
 import FloatingChatWindow from '../FloatingChatWindow';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid'
 import { PatientMedicalHistory } from './PatientMedicalHistory';
-
+import MedicationLiquidTwoToneIcon from '@mui/icons-material/MedicationLiquidTwoTone';
 export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
-
-
   // State Initialization
   const [patientData, setPatientData] = React.useState({});
   const [treatments, setTreatments] = React.useState([]);
@@ -23,6 +20,12 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
 
   const [showPastVisitsModal, setShowPastVisitsModal] = useState(false);
   const [pastVisits, setPastVisits] = useState([]);
+
+  const [showCreatePrescriptionModal, setShowCreatePrescriptionModal] = useState(false);
+
+  const [showViewPrescriptionsModal, setShowViewPrescriptionsModal] = useState(false);
+
+  const [showContactStaffModal, setShowContactStaffModal] = useState(false);
 
   const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
   const toggleMedicalHistoryModal = () => {
@@ -67,18 +70,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     boxShadow: 24,
     pt: 2,
     px: 4,
-    pb: 3,
-    overflowY: 'auto',
-  };
-  const style1 = {
-    position: 'relative',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    minHeight: '100%',
-    boxShadow: 24,
-    pt: 2,
     pb: 3,
     overflowY: 'auto',
   };
@@ -297,29 +288,26 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                   <Typography variant='body1'>
                     Weight: <em>{patientData.weight} kg </em>
                   </Typography>
-                  <Typography variant='body1'>
-                    Race: <em> {patientData.race} </em>
-                  </Typography>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <Card>
                     <CardContent>
-                      <Typography variant='h6'>Records</Typography>
-                      <Button fullWidth onClick={toggleMedicalHistoryModal}>
+                      <Button fullWidth onClick={toggleMedicalHistoryModal} variant='outlined'>
                         View Medical History 
                       </Button>
                         {/* Nested Modal for Medical History */}
                         <Modal open={showMedicalHistoryModal} onClose={toggleMedicalHistoryModal}>
-                          <Box sx={style1}>
-                            <Card sx={{width:'100%'}}>
+                          <Box sx={ styleMini}>
+                            <Card>
                                {/* Your modal content here */}
+                               <Button color='secondary' variant='contained'
+                                onClick={toggleMedicalHistoryModal} fullWidth sx={{mt:4}}>Exit</Button>
                                <PatientMedicalHistory patientId={patientId} />
-                               <Button variant='outlined' onClick={toggleMedicalHistoryModal} sx={{ position: 'absolute', top: '80%', right: '50%'} }>Exit</Button>
                             </Card>
                           </Box>
                       </Modal>
-                      <Typography variant='h6'>Visits</Typography>
-                      <Button fullWidth onClick={() =>handlePastVisits() }>View Logged Visits</Button>
+                      <Button fullWidth onClick={() =>handlePastVisits() } variant='outlined' >View Logged Visits</Button>
+                      <Button fullWidth  variant='outlined' onClick={() => setShowViewPrescriptionsModal(true)}>View Prescriptions</Button>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -331,7 +319,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3 }}
                         component={Link}
                         to='/searchresult'
                         state={patientData}
@@ -341,7 +329,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3 }}
                         onClick={() =>
                           handleOpenNewTab(
                             `/DoctorVideo?doctorID=${doctorId}&patientID=${patientId}`
@@ -351,21 +339,21 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         Video Call
                       </Button>
                       <Button variant='contained' 
-                      fullWidth sx={{ mt: 2 }}
+                      fullWidth sx={{ mt: 3 }}
                        onClick={() =>
                         handleOpenNewTab(`/VoiceRecoginition?patientID=${patientId}`)
                       }
                       >
                         Voice Recognition
                       </Button>
-                      <Button variant='contained' fullWidth sx={{ mt: 2 }}>
+                      <Button variant='contained' fullWidth sx={{ mt: 3 }}>
                         Send Message
                       </Button>
                       <div>
                         <Button
                           variant='contained'
                           fullWidth
-                          sx={{ mt: 2 }}
+                          sx={{ mt: 3 }}
                           onClick={toggleChatWindow}
                         >
                           Live Text Chat
@@ -382,22 +370,14 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth={true}
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3, mb:1 }}
                         component={Link}
                         to='/Chatbot'
                         state={patientData}
                       >
                         Chatbot
                       </Button>
-                      <Button
-                        variant='contained'
-                        fullWidth={true}
-                        sx={{ mt: 2 }}
-                        component={Link}
-                        to='/contact'
-                      >
-                        Contact Staff
-                      </Button>
+                 
                     </CardContent>
                   </Card>
                 </Grid>
@@ -485,8 +465,8 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                 <Grid item xs={12} md={4}>
                   <Card>
                     <CardContent>
-                      <Typography variant='h6'>Latest Treatments</Typography>
-                      <Button fullWidth  onClick={() => setShowAddTreatmentModal(true)}> Add Treatment</Button>
+                      <Typography variant='h6'>Treatments</Typography>
+                      <Button fullWidth  onClick={() => setShowAddTreatmentModal(true)} variant='outlined'> Add Treatment</Button>
                       {/* Add Treatment Modal */}
                       <Modal  open={showAddTreatmentModal} onClose={() => setShowAddTreatmentModal(false)}>
                           <Box sx={styleMini}>
@@ -499,6 +479,9 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.treatment}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          rows={3}
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <TextField
@@ -508,6 +491,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.date}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          variant='standard'
                                           InputLabelProps={{ shrink: true }}
                                           sx={{ mt: 2 }}
                                       />
@@ -517,6 +501,8 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.diseaseType}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <TextField
@@ -525,26 +511,36 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.diseaseId}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <Button
                                           variant='contained'
                                           color='primary'
                                           onClick={saveTreatment}
-                                          sx={{ mt: 2 }}
+                                          sx={{ mt: 2, mx:2, width:'45%' }}
                                       >
                                           Save Treatment
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='secondary'
+                                          onClick={() => setShowAddTreatmentModal(false)}
+                                          sx={{ mt: 2, mx: 2, width:'45%' }}
+                                      >
+                                          Exit
                                       </Button>
                                   </CardContent>
                               </Card>
                           </Box>
                       </Modal>
                       {treatments.length > 0 ? (
-                        <List style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                        <List style={{ maxHeight: 150, overflowY: 'auto' }}>
                           {treatments.map((treatment, index) => (
                             <ListItem key={index}>
                               <ListItemIcon>
-                                <MedicationIcon />
+                                <MedicationLiquidTwoToneIcon color='primary' />
                               </ListItemIcon>
                               <Typography variant='body1'>
                                 {treatment.treatment} - {formatDateForDisplay(treatment.RecordDate)}
@@ -559,11 +555,161 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       )}
                     </CardContent>
                   </Card>
+                  <Card sx={{mt:2}}>
+                    <CardContent>
+                    <Button fullWidth variant='outlined' onClick={() => setShowCreatePrescriptionModal(true)}> Create Prescription</Button>
+                    <Modal open={showCreatePrescriptionModal} onClose={()=>setShowCreatePrescriptionModal(false)} >
+                          <Box sx={styleMini}>
+                              <Card>
+                                  <CardContent>
+                                      <Typography variant='h6'>Create Prescription</Typography>
+                                      <TextField 
+                                        label="Patient Name:"
+                                        name="patientName"
+                                        value={patientData.FName+" "+patientData.MName+" "+patientData.LName}
+                                        disabled
+                                        variant="standard" 
+                                        fullWidth
+                                      />
+                                        <TextField 
+                                        label="Patient Address:"
+                                        name="patientAddress"
+                                        value={patientData.Address}
+                                        disabled
+                                        variant="standard"
+                                        fullWidth 
+                                      />
+                                      <TextField 
+                                        label="Patient's Phone:"
+                                        name="patientPhone"
+                                        value={patientData.MobileNumber}
+                                        disabled
+                                        variant="standard" 
+                                      />
+                                      <TextField 
+                                        label="Doctor:"
+                                        name="doctor"
+                                        fullWidth
+                                        disabled
+                                        variant="standard" 
+                                      />
+                                      <TextField 
+                                        label="Doctor Office Address:"
+                                        name="doctorOfficeAddress"
+                                       fullWidth
+                                        disabled
+                                        variant="standard" 
+                                      />
+                                        <TextField 
+                                        label="Doctor's Phone:"
+                                        name="doctorPhone"
+                                       fullWidth
+                                        disabled
+                                        variant="standard" 
+                                      />
+                                      <TextField
+                                          label="Prescription"
+                                          name="prescription"
+                            
+                                          fullWidth
+                                          multiline
+                                          rows={4}
+                                          sx={{ mt: 2 }}
+                                      />
+                                      <TextField
+                                          label="Date of Treatment"
+                                          name="date"
+                                          type="date"
+                                         
+                                          fullWidth
+                                          InputLabelProps={{ shrink: true }}
+                                          sx={{ mt: 2 }}
+                                      />
+                    
+                                      <Button
+                                          variant='contained'
+                                          color='success'
+                                         
+                                          sx={{ mt: 2, mx:2, width:'25%' }}
+                                      >
+                                          Save
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='primary'
+                                    
+                                          sx={{ mt: 2, mx:2 , width:'35%' }}
+                                      >
+                                          Print
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='secondary'
+                                          onClick={()=>setShowCreatePrescriptionModal(false)}
+                                          sx={{ mt: 2, mx:2 , width:'25%' }}
+                                      >
+                                          Exit
+                                      </Button>
+                                  </CardContent>
+                              </Card>
+                          </Box>
+                      </Modal>
+                    </CardContent>
+                  </Card>
+                  <Card sx={{mt:2}}>
+          <CardContent>
+          <Button fullWidth variant='outlined'  onClick={()=>setShowContactStaffModal(true)}> Contact Staff</Button>
+          <Modal open={showContactStaffModal} onClose={()=>setShowContactStaffModal(false)} >
+          <Box sx={styleMini}>
+              <Card>
+                  <CardContent>
+                      <Typography variant='h6'>Contact Staff</Typography>
+                      <TextField
+                          label="Message"
+                          name="message"
+                          fullWidth
+                          multiline
+                          rows={4}
+                          sx={{ mt: 2 }}
+                      />
+                      <TextField
+                          label="Date of Message"
+                          name="date"
+                          type="date"
+                          fullWidth
+                          InputLabelProps={{ shrink: true }}
+                          sx={{ mt: 2 }}
+                      />
+    
+                      <Button
+                          variant='contained'
+                          color='primary'   
+                          sx={{ mt: 2, mx:2, width:'45%' }}
+                      >
+                          Send
+                      </Button>
+              
+                      <Button
+                          variant='contained'
+                          color='secondary'
+                          onClick={()=>setShowContactStaffModal(false)}
+                          sx={{ mt: 2, mx:2 , width:'45%' }}
+                      >
+                          Exit
+                      </Button>
+                  </CardContent>
+              </Card>
+          </Box>
+      </Modal>
+          </CardContent>
+        </Card>
                 </Grid>
               </Grid>
             </Paper>
           </CardContent>
         </Card>
+        {/* Contact Staf */}
+
            {/* Past Visits Modal */}
       <Modal open={showPastVisitsModal} onClose={() => setShowPastVisitsModal(false)}>
         <Box sx={styleMini}>
@@ -582,8 +728,42 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
           </Card>
         </Box>
       </Modal>
+      
+      {/* Past Visits Modal */}
+      <Modal open={showPastVisitsModal} onClose={() => setShowPastVisitsModal(false)}>
+        <Box sx={styleMini}>
+          <Card>
+            <CardContent>
+              <Typography variant='h6'>Past Visits</Typography>
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                  rows={pastVisits}
+                  columns={columns}
+                  pageSize={5}
+                />
+              </div>
+              <Button variant='contained' onClick={() => setShowPastVisitsModal(false)}>Close</Button>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
+    
+      {/* View Prescription */}
+        {/* Past Visits Modal */}
+        <Modal open={showViewPrescriptionsModal} onClose={() => setShowViewPrescriptionsModal(false)}>
+        <Box sx={styleMini}>
+          <Card>
+            <CardContent>
+              <Typography variant='h6'>Prescriptions</Typography>
+              <div style={{ height: 400, width: '100%' }}>
+                {/*Data grid to show prescriptions*/}
+              </div>
+              <Button variant='contained' onClick={() => setShowViewPrescriptionsModal(false)}>Close</Button>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
       </Box>
-   
       
     </Modal>
   );
