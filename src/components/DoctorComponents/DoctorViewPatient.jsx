@@ -338,7 +338,12 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       >
                         Video Call
                       </Button>
-                      <Button variant='contained' fullWidth sx={{ mt: 3 }}>
+                      <Button variant='contained' 
+                      fullWidth sx={{ mt: 3 }}
+                       onClick={() =>
+                        handleOpenNewTab(`/VoiceRecoginition?patientID=${patientId}`)
+                      }
+                      >
                         Voice Recognition
                       </Button>
                       <Button variant='contained' fullWidth sx={{ mt: 3 }}>

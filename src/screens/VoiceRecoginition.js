@@ -1,18 +1,49 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import annyang from 'annyang';
 import axios from 'axios';
 import "../styles/screens/VoiceRecoginition.css";
  
-function VoiceRecognition() {
+const VoiceRecognition = () => {
+  const location = useLocation();
+  const patientId = new URLSearchParams(location.search).get('patientID');
   const [transcript, setTranscript] = useState('Start speaking...');
   const [recordImage, setRecordImage] = useState({});
-  const speak = (sentence) => {
-  const text_speak = new SpeechSynthesisUtterance(sentence);
-  text_speak.rate = 1;
-  text_speak.pitch = 1;
-  window.speechSynthesis.speak(text_speak);
-};
  
+  const fetchFiles = async (patientId) => {
+    try {
+      //local backend api link (http://localhost:8080/files/${patientId}
+      const response = await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/${patientId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+ 
+     
+      if (response.status === 200) {
+        const responseData = response.data;
+        console.log('Data sent to backend successfully:', responseData);
+        // Handle the response or update the UI as needed
+      } else {
+        console.error('Failed to send data to backend. HTTP status:', response.status);
+        // Log the error response for debugging
+        console.error('Error Response:', response.data);
+      }
+    } catch (error) {
+      console.error('Error sending data to backend:', error);
+    }
+  };
+ 
+  const speak = (message) => {
+    console.log('Speaking:', message);
+    if ('speechSynthesis' in window) {
+      const speech = new SpeechSynthesisUtterance(message);
+      speech.volume = 1;
+      speech.pitch = 1;
+      speech.rate = 1;
+      window.speechSynthesis.speak(speech);
+    }
+  };
  
   const setupAnnyang = () => {
     if (annyang) {
@@ -32,55 +63,96 @@ function VoiceRecognition() {
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
         },
-        'open medical records': () => {
-          const finalText = 'Opening medical records';
-          setTranscript(finalText);
-          setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/medicalhistory');
-        },
+ 
         'open echo report': () => {
           const finalText = 'Opening echo report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/echocardiogram');
+          //openFile(`http://localhost:8080/files/echocardiogram/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/echocardiogram/${patientId}`);
         },
        
         'open ultrasound scan': () => {
           const finalText = 'Opening ultrasound scan';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/ultrasoundabdomen');
+         // openFile(`http://localhost:8080/files/ultrasoundabdomen/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ultrasoundabdomen/${patientId}`);
+ 
         },
         'open ct scan': () => {
           const finalText = 'Opening CT scan';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/ctscanbrain');
+         // openFile(`http://localhost:8080/files/ctscan/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ctscan/${patientId}`);
         },
         'open ecg report': () => {
           const finalText = 'Opening ECG report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/ecgreport');
+          //openFile(`http://localhost:8080/files/ecgreport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ecgreport/${patientId}`);
    
         },
         'open blood test report': () => {
           const finalText = 'Opening blood test report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/bloodtest');
+         // openFile(`http://localhost:8080/files/bloodtest/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/bloodtest/${patientId}`);
         },
         'open x-ray report': () => {
           const finalText = 'Opening X-ray report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/xrayreport');
-        },
+         // openFile(`http://localhost:8080/files/xrayreport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/xrayreport/${patientId}`);
+ 
+         },
         'open mri report': () => {
           const finalText = 'Opening MRI report';
           setTranscript(finalText);
           setTimeout(() => speakThis(finalText), 100);
-          openFile('http://localhost:8080/files/mrispine');
+          //openFile(`http://localhost:8080/files/mrireport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/mrireport/${patientId}`);
+        },
+        'open endoscope report': () => {
+          const finalText = 'Opening endoscope report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/endoscope/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/endoscope/${patientId}`);
+        },
+        'open cell images': () => {
+          const finalText = 'Opening cellimages';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/cellimages/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/cellimages/${patientId}`);
+ 
+        },
+        'open template': () => {
+          const finalText = 'Opening template';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/template/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/template/${patientId}`);
+        },
+        'open skinimages': () => {
+          const finalText = 'Opening skinimages';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/skinimages/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/skinimages/${patientId}`);
+ 
+        },
+        'open skindiseases': () => {
+          const finalText = 'Opening skindiseases';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/skindiseases/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/skindiseases/${patientId}`);
         },
       });
  
@@ -104,16 +176,11 @@ function VoiceRecognition() {
     }
   };
  
-  useEffect(() => {
-    wishMe();
-    setupAnnyang();
- 
-  }, []);
- 
-  const openFile = (url) => {
+   const openFile = (url) => {
    axios
       .get(url)
       .then((response) => {
+        console.log("Response data:", response.data);
         setRecordImage(response.data);
         const imageUrl = `data:${response.data.mimetype};base64,${response.data.data}`;
         const newWindow = window.open();
@@ -121,8 +188,10 @@ function VoiceRecognition() {
       })
       .catch((error) => {
         console.error('Error opening file:', error);
+        console.log('Response data:', error.response.data);
         alert('An error occurred while opening the file. Please try again later.');
       });
+     
   };
  
   const speakThis = (message) => {
@@ -135,6 +204,19 @@ function VoiceRecognition() {
       window.speechSynthesis.speak(speech);
     }
   };
+ 
+  useEffect(() => {
+    if (patientId) {
+      fetchFiles(patientId);
+    }
+ 
+    wishMe();
+    setupAnnyang();
+ 
+    return () => {
+      annyang.abort();
+    };
+  }, [patientId]);
  
   return (
     <>
@@ -163,6 +245,7 @@ function VoiceRecognition() {
  
     </>
   );
-}
+};
+ 
  
 export default VoiceRecognition;
