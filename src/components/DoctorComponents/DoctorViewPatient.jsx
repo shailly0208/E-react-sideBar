@@ -27,6 +27,41 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
 
   const [showContactStaffModal, setShowContactStaffModal] = useState(false);
 
+  const [doctorDetails, setDoctorDetais]= useState({});
+  
+  const handleShowCreatePrescription = ()=>{
+      getDocData()
+      setShowCreatePrescriptionModal(true)
+  }
+    const getDocData = async ()=>{
+      try {
+        //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+        const response = await axios.post(
+          'http://localhost:8080/DoctorProfileInfo',
+          {
+            doctorId,
+          }
+        );
+        const { data } = response;
+        if (data.error) {
+          console.log(JSON.stringify(data.error));
+          console.log('error');
+        } else {
+          console.log("Doctor Info", data)
+          setDoctorDetais(data);
+        }
+      } catch (error) {
+        console.log(
+          `Error With request getting top 5 recent: ${error.message}`
+        );
+      }
+    };
+
+
+
+
+
   const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
   const toggleMedicalHistoryModal = () => {
     setShowMedicalHistoryModal(!showMedicalHistoryModal);
@@ -213,6 +248,30 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
   const handleOpenNewTab = (path) => {
     const url = window.location.origin + path;
     window.open(url, '_blank');
+  };
+
+
+  const [doctorStaffMessage, setDoctorStaffMessage] = useState('');
+  const sendDoctorStaff = async () => {
+    const data = {
+      doctorId,
+      patientId,
+      task: doctorStaffMessage
+    };
+    try {
+       //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+      const response = await axios.post('http://localhost:8080/sendDoctorStaffMessage',data);
+      console.log(response.data);
+      setShowContactStaffModal(false);
+      setSnackbarMessage('Message sent successfully!');
+      setSnackbarOpen(true);
+      setDoctorStaffMessage('');
+
+    } catch (error) {
+      console.error('Error Sending staff message:', error);
+      // Handle error
+    }
   };
 
   return (
@@ -557,27 +616,27 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                   </Card>
                   <Card sx={{mt:2}}>
                     <CardContent>
-                    <Button fullWidth variant='outlined' onClick={() => setShowCreatePrescriptionModal(true)}> Create Prescription</Button>
+                    <Button fullWidth variant='outlined' onClick={handleShowCreatePrescription}> Create Prescription</Button>
                     <Modal open={showCreatePrescriptionModal} onClose={()=>setShowCreatePrescriptionModal(false)} >
                           <Box sx={styleMini}>
                               <Card>
                                   <CardContent>
                                       <Typography variant='h6'>Create Prescription</Typography>
                                       <TextField 
-                                        label="Patient Name:"
-                                        name="patientName"
-                                        value={patientData.FName+" "+patientData.MName+" "+patientData.LName}
+                                        label="Patient First Name:"
+                                        name="patientFName"
+                                        value={patientData.FName}
                                         disabled
                                         variant="standard" 
-                                        fullWidth
+                                        sx={{width: "45%", mx:2}}
                                       />
                                         <TextField 
-                                        label="Patient Address:"
-                                        name="patientAddress"
-                                        value={patientData.Address}
+                                        label="Patient Last Name:"
+                                        name="patientLName"
+                                        value={patientData.LName}
                                         disabled
-                                        variant="standard"
-                                        fullWidth 
+                                        variant="standard" 
+                                        sx={{width: "45%", mx:2}}
                                       />
                                       <TextField 
                                         label="Patient's Phone:"
@@ -585,28 +644,53 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                         value={patientData.MobileNumber}
                                         disabled
                                         variant="standard" 
+                                        sx={{width: "45%", mx:2}}
                                       />
-                                      <TextField 
-                                        label="Doctor:"
-                                        name="doctor"
-                                        fullWidth
+                                        <TextField 
+                                        label="Patient Address:"
+                                        name="patientAddress"
+                                        value={patientData.Address}
                                         disabled
-                                        variant="standard" 
+                                        variant="standard"
+                                        sx={{width: "95%", mx:2}}
                                       />
+                                    
                                       <TextField 
-                                        label="Doctor Office Address:"
-                                        name="doctorOfficeAddress"
-                                       fullWidth
+                                        label="Doctor First Name:"
+                                        name="doctorFN"
+                                        value={doctorDetails.Fname}
+                                        sx={{width: "45%", mx:2}}
                                         disabled
                                         variant="standard" 
                                       />
                                         <TextField 
-                                        label="Doctor's Phone:"
-                                        name="doctorPhone"
-                                       fullWidth
+                                        label="Doctor Last Name:"
+                                        name="doctorLN"
+                                        value={doctorDetails.Lname}
+                                  
                                         disabled
                                         variant="standard" 
+                                        sx={{width: "95%", mx:2}}
                                       />
+                                      <TextField 
+                                        label="Doctor's Phone:"
+                                        name="doctorPhone"
+                                        value={doctorDetails.MobileNumber}
+                                        fullWidth
+                                        disabled
+                                        variant="standard"
+                                        sx={{width: "45%", mx:2}} 
+                                      />
+                                      <TextField 
+                                        label="Doctor Office Address:"
+                                        name="doctorOfficeAddress"
+                                        value={doctorDetails.Location1}
+                                        fullWidth
+                                        disabled
+                                        variant="standard"
+                                        sx={{width: "95%", mx:2}} 
+                                      />
+                                    
                                       <TextField
                                           label="Prescription"
                                           name="prescription"
@@ -614,18 +698,9 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           fullWidth
                                           multiline
                                           rows={4}
-                                          sx={{ mt: 2 }}
+                                          sx={{width: "95%", mx:2, mt:2}}
                                       />
-                                      <TextField
-                                          label="Date of Treatment"
-                                          name="date"
-                                          type="date"
-                                         
-                                          fullWidth
-                                          InputLabelProps={{ shrink: true }}
-                                          sx={{ mt: 2 }}
-                                      />
-                    
+                                 
                                       <Button
                                           variant='contained'
                                           color='success'
@@ -658,6 +733,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                   </Card>
                   <Card sx={{mt:2}}>
           <CardContent>
+            {/* Contact staff here */}
           <Button fullWidth variant='outlined'  onClick={()=>setShowContactStaffModal(true)}> Contact Staff</Button>
           <Modal open={showContactStaffModal} onClose={()=>setShowContactStaffModal(false)} >
           <Box sx={styleMini}>
@@ -669,22 +745,16 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                           name="message"
                           fullWidth
                           multiline
+                          onChange={(e)=>setDoctorStaffMessage(e.target.value)}
+                          value={doctorStaffMessage}
                           rows={4}
                           sx={{ mt: 2 }}
                       />
-                      <TextField
-                          label="Date of Message"
-                          name="date"
-                          type="date"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          sx={{ mt: 2 }}
-                      />
-    
                       <Button
                           variant='contained'
                           color='primary'   
                           sx={{ mt: 2, mx:2, width:'45%' }}
+                          onClick={sendDoctorStaff}
                       >
                           Send
                       </Button>
@@ -708,8 +778,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
             </Paper>
           </CardContent>
         </Card>
-        {/* Contact Staf */}
-
            {/* Past Visits Modal */}
       <Modal open={showPastVisitsModal} onClose={() => setShowPastVisitsModal(false)}>
         <Box sx={styleMini}>

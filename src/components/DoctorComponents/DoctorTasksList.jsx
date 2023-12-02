@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Paper, List, ListItem, ListItemText, TextField, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,22 +7,21 @@ const DoctorTasksList = ({ doctorId }) => {
   const [tasks, setTasks] = useState([]);
   const [newReminder, setNewReminder] = useState('');
 
-  useEffect(() => {
-    const fetchReminders = async () => {
-      try {
-        const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorReminders', { doctorId });
-        setTasks(response.data.map((reminder, index) => ({
-          id: index,
-          text: reminder.reminder_description
-        })));
-      } catch (error) {
-        console.error('Error fetching reminders:', error);
-      }
-    };
-
-    fetchReminders();
+  const fetchReminders = useCallback(async () => {
+    try {
+      const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorReminders', { doctorId });
+      setTasks(response.data.map((reminder) => ({
+        id: reminder.id,
+        text: reminder.reminder_description
+      })));
+    } catch (error) {
+      console.error('Error fetching reminders:', error);
+    }
   }, [doctorId]);
-
+  
+  useEffect(() => {
+    fetchReminders();
+  }, [fetchReminders]);
 
   const handleNewReminderChange = (e) => {
     setNewReminder(e.target.value);
@@ -30,7 +29,7 @@ const DoctorTasksList = ({ doctorId }) => {
 
   const addReminder = async () => {
     try {
-      await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveDoctorReminder', {
+      await axios.post('http://localhost:8080/saveDoctorReminder', {
         doctorId,
         reminderDescription: newReminder
       });
@@ -40,9 +39,16 @@ const DoctorTasksList = ({ doctorId }) => {
       console.error('Error adding new reminder:', error);
     }
   };
-  const deleteReminder = async(reminderId)=>{
 
-  }
+  const deleteReminder = async (reminderId) => {
+    try {
+      await axios.post('http://localhost:8080/deleteReminder', { reminderId, doctorId });
+      fetchReminders();
+    } catch (error) {
+      console.log("Error deleting", error);
+    }
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
       <List>
