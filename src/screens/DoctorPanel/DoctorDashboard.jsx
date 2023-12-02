@@ -4,8 +4,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { useOutletContext } from "react-router-dom";
 import DocRecentPatients from '../../components/DoctorComponents/DocRecentPatients';
-// Additional imports for new components
-import PatientStatisticsChart from '../../components/DoctorComponents/PatientStatisticsChart';
+
 import DoctorTasksList from '../../components/DoctorComponents/DoctorTasksList';
 import QuickAccessTools from '../../components/DoctorComponents/QuickAccessTools';
 
@@ -31,7 +30,7 @@ export default function Dashboard() {
         {/* Tasks List */}
         <Grid item xs={12} md={6}>
           <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-            <h3>Tasks & Reminders</h3>
+            <h3>Reminders</h3>
             <DoctorTasksList doctorId={doctorId}/>
           </Paper>
         </Grid>

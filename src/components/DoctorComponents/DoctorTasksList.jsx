@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Paper, List, ListItem, ListItemText, Checkbox, TextField, Button } from '@mui/material';
-
+import { Paper, List, ListItem, ListItemText, TextField, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 const DoctorTasksList = ({ doctorId }) => {
   const [tasks, setTasks] = useState([]);
   const [newReminder, setNewReminder] = useState('');
@@ -12,8 +13,7 @@ const DoctorTasksList = ({ doctorId }) => {
         const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDoctorReminders', { doctorId });
         setTasks(response.data.map((reminder, index) => ({
           id: index,
-          text: reminder.reminder_description,
-          completed: false // Assuming reminders don't have a 'completed' state initially
+          text: reminder.reminder_description
         })));
       } catch (error) {
         console.error('Error fetching reminders:', error);
@@ -23,11 +23,6 @@ const DoctorTasksList = ({ doctorId }) => {
     fetchReminders();
   }, [doctorId]);
 
-  const handleToggle = (taskId) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ));
-  };
 
   const handleNewReminderChange = (e) => {
     setNewReminder(e.target.value);
@@ -35,7 +30,7 @@ const DoctorTasksList = ({ doctorId }) => {
 
   const addReminder = async () => {
     try {
-      await axios.post('http://localhost:8080/saveDoctorReminder', {
+      await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveDoctorReminder', {
         doctorId,
         reminderDescription: newReminder
       });
@@ -45,20 +40,24 @@ const DoctorTasksList = ({ doctorId }) => {
       console.error('Error adding new reminder:', error);
     }
   };
+  const deleteReminder = async(reminderId)=>{
 
+  }
   return (
     <Paper sx={{ p: 2 }}>
       <List>
         {tasks.map((task) => (
           <ListItem key={task.id} dense>
-            <Checkbox
-              edge="start"
-              checked={task.completed}
-              tabIndex={-1}
-              disableRipple
-              onChange={() => handleToggle(task.id)}
-            />
+  
             <ListItemText primary={task.text} />
+      
+            <IconButton
+              aria-label="delete reminder"
+              color="secondary"
+              onClick={() => deleteReminder(task.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
           </ListItem>
         ))}
       </List>

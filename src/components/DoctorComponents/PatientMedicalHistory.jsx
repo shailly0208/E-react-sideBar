@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Box, Button, Typography, Card, CardContent, Grid, List, ListItem, ListItemText } from '@mui/material';import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { PatientRecordView } from './PatientRecordView';
+
 export function PatientMedicalHistory({ patientId }) {
     const [openRecordModal, setOpenRecordModal] = useState(false);
     const [currentRecordData, setCurrentRecordData] = useState([]);
@@ -37,18 +38,30 @@ export function PatientMedicalHistory({ patientId }) {
       { field: 'disease_type', headerName: 'Disease Type', flex:1 },
       { field: 'Vaxx Status', headerName: 'Status', flex:1 },
   ];
-  const style1 = {
-   position: 'relative',
-   top: '50%',
-   left: '50%',
-   transform: 'translate(-50%, -50%)',
-   width: '100%',
-   minHeight: '100%',
-   boxShadow: 24,
-   pt: 2,
-   pb: 3,
-   overflowY: 'auto',
- };
+   // Style for modal content
+   const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%', // Responsive width
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    bgcolor: '#f5f5f5', // Paper-like background color
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Softer shadow
+    p: 4,
+    borderRadius: 2, // Slight rounding of corners
+  };
+     // Style for the main container to mimic a page
+     const pageStyle = {
+        backgroundColor: '#fff', // White, like a page
+        maxWidth: '8.5in', // Width of a standard US letter paper
+        margin: 'auto', // Center it in the available space
+        padding: '0.1in', // Padding to resemble a page's margins
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Soft shadow for depth
+        overflowY: 'auto', // Allow vertical scrolling
+    };
+  
    // Function to handle viewing of specific test details
    const viewTestDetails = (testType) => {
       // Set the current data based on test type
@@ -73,12 +86,16 @@ export function PatientMedicalHistory({ patientId }) {
   };
      
     return (
-        <Grid container spacing={2}>
+        <Box sx={{ ...pageStyle, maxHeight: '100vh', overflowY: 'auto'}}>
+        <Grid container spacing={2} >
          {/* Total Records */}
-         <Grid item xs={12} sm={6} md={4}>
+         <Grid item xs={12} md={12}>
+            <Card><CardContent><Typography variant='h3' textAlign={'center'} >Medical Records</Typography></CardContent></Card>
+         </Grid>
+         <Grid item xs={12} md={5}>
                 <Card sx={{mt:2,mb:2}}>
-                   <Typography variant='h4'>Total Records</Typography>
-                    <CardContent sx={{ maxHeight: 300, overflow: 'auto' }}>
+                   <Typography variant='h5' sx={{mx:2}} gutterBottom>Total Records</Typography>
+                    <CardContent sx={{ maxHeight:1000, minHeight:'100%' , overflow: 'auto' }}>
                         <List>
                             {Object.entries(medicalHistory.total_records).map(([key, value]) => (
                                 <ListItem key={key}>
@@ -88,13 +105,20 @@ export function PatientMedicalHistory({ patientId }) {
                         </List>
                     </CardContent>
                 </Card>
+                <Card>
+                 {/* CT Scans */}{/* X-Rays */}
+                    <CardContent>
+                        <Button variant='contained' sx={{mx:1}}>CT Scans</Button>
+                        <Button variant='contained'>X-Arrays</Button>
+                    </CardContent>
+                </Card>
             </Grid>
 
             {/* Physical Tests */}
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} md={7}>
                 <Card>
                     <CardContent>
-                        <Typography variant='h2'>Physical Tests</Typography>
+                        <Typography variant='h5' gutterBottom>Physical Tests</Typography>
                         {medicalHistory.physical_test_cad.length > 0 && (
                             <Button onClick={() => viewTestDetails('CAD')}>Physical Tests For CAD</Button>
                         )}
@@ -110,25 +134,19 @@ export function PatientMedicalHistory({ patientId }) {
                         )}
                     </CardContent>
                 </Card>
-            </Grid>
-
-            {/* Lab Results */}
-            <Grid item xs={12} sm={6} md={4}>
+                 {/* Lab Results */}
                 <Card>
                     <CardContent>
-                        <Typography variant='h2'>Lab Results</Typography>
+                        <Typography variant='h5' gutterBottom>Lab Results</Typography>
                         {/* Buttons to view specific lab results */}
                         {/* ... */}
                     </CardContent>
                 </Card>
-            </Grid>
-
-            {/* Vaccines */}
-            <Grid item xs={12} sm={6} md={4}>
-                <Card sx={{ minHeight: 400 }}>
+                {/*Vaccines */}
+                <Card>
                     <CardContent>
-                        <Typography variant='h2'>Vaccines</Typography>
-                        <div style={{ height: 300, width: '100%' }}>
+                        <Typography variant='h5'>Vaccines</Typography>
+                        <Box style={{ height: 300, width: '100%' }}>
                             <DataGrid
                                 rows={medicalHistory.vaccines}
                                 columns={columnsForVaccines}
@@ -136,34 +154,14 @@ export function PatientMedicalHistory({ patientId }) {
                                 rowsPerPageOptions={[5]}
                                 getRowId={(row) => row.id}
                             />
-                        </div>
+                        </Box>
                     </CardContent>
                 </Card>
+   
             </Grid>
-
-            {/* CT Scans */}
-            <Grid item xs={12} sm={6} md={4}>
-                <Card>
-                    <CardContent>
-                        <Typography variant='h2'>CT Scans</Typography>
-                        {/* Display CT scan records */}
-                        {/* ... */}
-                    </CardContent>
-                </Card>
-            </Grid>
-
-            {/* X-Rays */}
-            <Grid item xs={12} sm={6} md={4}>
-                <Card>
-                    <CardContent>
-                        <Typography variant='h2'>X-Rays</Typography>
-                        {/* Display X-Ray records */}
-                        {/* ... */}
-                    </CardContent>
-                </Card>
-            </Grid>
+    
             <Modal open={openRecordModal} onClose={() => setOpenRecordModal(false)}>
-               <Box sx={style1}>
+               <Box sx={modalStyle}>
                   <Card sx={{minHeight:800, overflow:'auto'}}>
                   <PatientRecordView recordData={currentRecordData} />
                   </Card>
@@ -171,5 +169,6 @@ export function PatientMedicalHistory({ patientId }) {
                </Box>
             </Modal>
         </Grid>
+        </Box>
     );
 }
