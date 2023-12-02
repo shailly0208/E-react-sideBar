@@ -16,9 +16,6 @@ const QuickAccessTools = ({ doctorId }) => {
          component={Link} to="/services"> 
         Services
       </Button>
-      <Button variant="contained" color="primary" fullWidth  sx={{ mt: 2 }} >
-        Search Patient Records
-      </Button>
       {/* Add more tools here */}
     </Paper>
   );

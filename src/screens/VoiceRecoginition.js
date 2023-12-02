@@ -1,17 +1,49 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import annyang from 'annyang';
 import axios from 'axios';
-import '../styles/screens/VoiceRecoginition.css'
-function VoiceRecognition() {
-  const [transcript, setTranscript] = useState('Start speaking...');
+import "../styles/screens/VoiceRecoginition.css";
  
-  const speak = (sentence) => {
-    const text_speak = new SpeechSynthesisUtterance(sentence);
-    text_speak.rate = 1;
-    text_speak.pitch = 1;
-    window.speechSynthesis.speak(text_speak);
+const VoiceRecognition = () => {
+  const location = useLocation();
+  const patientId = new URLSearchParams(location.search).get('patientID');
+  const [transcript, setTranscript] = useState('Start speaking...');
+  const [recordImage, setRecordImage] = useState({});
+ 
+  const fetchFiles = async (patientId) => {
+    try {
+      //local backend api link (http://localhost:8080/files/${patientId}
+      const response = await axios.get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/${patientId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+ 
+     
+      if (response.status === 200) {
+        const responseData = response.data;
+        console.log('Data sent to backend successfully:', responseData);
+        // Handle the response or update the UI as needed
+      } else {
+        console.error('Failed to send data to backend. HTTP status:', response.status);
+        // Log the error response for debugging
+        console.error('Error Response:', response.data);
+      }
+    } catch (error) {
+      console.error('Error sending data to backend:', error);
+    }
   };
  
+  const speak = (message) => {
+    console.log('Speaking:', message);
+    if ('speechSynthesis' in window) {
+      const speech = new SpeechSynthesisUtterance(message);
+      speech.volume = 1;
+      speech.pitch = 1;
+      speech.rate = 1;
+      window.speechSynthesis.speak(speech);
+    }
+  };
  
   const setupAnnyang = () => {
     if (annyang) {
@@ -19,42 +51,108 @@ function VoiceRecognition() {
         'hey lava': () => {
           const finalText = 'Hello doc, how can I help you?';
           setTranscript(finalText);
-          speakThis(finalText);
+          setTimeout(() => speakThis(finalText), 100);
         },
-        'how are you': () => {
+        'HOW ARE YOU': () => {
           const finalText = 'I am fine doc, what about you?';
           setTranscript(finalText);
-          speakThis(finalText);
+          setTimeout(() => speakThis(finalText), 100);
         },
         'name': () => {
           const finalText = 'My name is Lava';
           setTranscript(finalText);
-          speakThis(finalText);
+          setTimeout(() => speakThis(finalText), 100);
         },
-        'open medical records': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/medicalhistory/medical%20history%20report.jpg');
-
-        },
+ 
         'open echo report': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/echocardiogram/echocardiogram%20report.jpg');
+          const finalText = 'Opening echo report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/echocardiogram/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/echocardiogram/${patientId}`);
         },
+       
         'open ultrasound scan': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/ultrasoundabdomen/ultrasound%20abdomen%20report.jpg');
+          const finalText = 'Opening ultrasound scan';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/ultrasoundabdomen/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ultrasoundabdomen/${patientId}`);
+ 
         },
         'open ct scan': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/ctscanbrain/ct%20scan%20brain%20report.jpg');
+          const finalText = 'Opening CT scan';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/ctscan/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ctscan/${patientId}`);
         },
         'open ecg report': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/ecgreport/ecg%20report.jpg');
+          const finalText = 'Opening ECG report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/ecgreport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/ecgreport/${patientId}`);
+   
         },
         'open blood test report': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/bloodtest/blood%20test%20report.jpg');
+          const finalText = 'Opening blood test report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/bloodtest/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/bloodtest/${patientId}`);
         },
         'open x-ray report': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/xrayreport/x-ray%20report.jpg');
-        },
+          const finalText = 'Opening X-ray report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/xrayreport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/xrayreport/${patientId}`);
+ 
+         },
         'open mri report': () => {
-          openFile('https://voicerecognition-lava-e75497b3b9be.herokuapp.com/files/mrispine/mri%20spine%20report.jpg');
+          const finalText = 'Opening MRI report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/mrireport/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/mrireport/${patientId}`);
+        },
+        'open endoscope report': () => {
+          const finalText = 'Opening endoscope report';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/endoscope/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/endoscope/${patientId}`);
+        },
+        'open cell images': () => {
+          const finalText = 'Opening cellimages';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/cellimages/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/cellimages/${patientId}`);
+ 
+        },
+        'open template': () => {
+          const finalText = 'Opening template';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/template/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/template/${patientId}`);
+        },
+        'open skinimages': () => {
+          const finalText = 'Opening skinimages';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+         // openFile(`http://localhost:8080/files/skinimages/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/skinimages/${patientId}`);
+ 
+        },
+        'open skindiseases': () => {
+          const finalText = 'Opening skindiseases';
+          setTranscript(finalText);
+          setTimeout(() => speakThis(finalText), 100);
+          //openFile(`http://localhost:8080/files/skindiseases/${patientId}`);
+          openFile(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/files/skindiseases/${patientId}`);
         },
       });
  
@@ -78,22 +176,26 @@ function VoiceRecognition() {
     }
   };
  
-  useEffect(() => {
-    //wishMe();
-    setupAnnyang();
-  }, []);
- 
-  const openFile = (url) => {
-    axios.get(url)
+   const openFile = (url) => {
+   axios
+      .get(url)
       .then((response) => {
-        // Handle the response, e.g., open the file or display a message
+        console.log("Response data:", response.data);
+        setRecordImage(response.data);
+        const imageUrl = `data:${response.data.mimetype};base64,${response.data.data}`;
+        const newWindow = window.open();
+        newWindow.document.write(`<img src="${imageUrl}" alt="Record Image" />`);
       })
       .catch((error) => {
-        // Handle errors, e.g., display an error message
+        console.error('Error opening file:', error);
+        console.log('Response data:', error.response.data);
+        alert('An error occurred while opening the file. Please try again later.');
       });
+     
   };
  
   const speakThis = (message) => {
+    console.log('Speaking:', message);
     if ('speechSynthesis' in window) {
       const speech = new SpeechSynthesisUtterance(message);
       speech.volume = 1;
@@ -103,14 +205,47 @@ function VoiceRecognition() {
     }
   };
  
+  useEffect(() => {
+    if (patientId) {
+      fetchFiles(patientId);
+    }
+ 
+    wishMe();
+    setupAnnyang();
+ 
+    return () => {
+      annyang.abort();
+    };
+  }, [patientId]);
+ 
   return (
+    <>
+     <div className="image-container">
+        <div className="image">
+          <img src="../images/specialities/medical-report.gif" alt="medical" />
+        </div>
+        <h1>OTTAWA E-HOSPITAL</h1>
+        <p>I'm a Virtual Assistant, how can I help you</p>
+      </div>
+     
     <div className="input">
       <button className="talk">
         <i className="fas fa-microphone-alt"></i>
       </button>
       <h1 className="content">{transcript || "Start speaking..."}</h1>
     </div>
+    <div>
+        {recordImage.data && (
+          <img
+            src={`data:${recordImage.mimetype};base64,${recordImage.data}`}
+            alt="recordImage"
+          />
+        )}
+      </div>
+ 
+    </>
   );
-}
+};
+ 
  
 export default VoiceRecognition;

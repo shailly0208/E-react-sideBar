@@ -47,6 +47,7 @@ import { DoctorMessages } from './screens/DoctorPanel/DoctorMessages';
 import { DoctorServices } from './screens/DoctorPanel/DoctorServices';
 import DoctorHelp from './screens/DoctorPanel/DoctorHelp';
 import HeartStroke from './screens/HeartStroke';
+import PsychologyPrediction from './screens/PsychologyPrediction';
 import Tasks from './screens/Tasks';
 import TasksList from './screens/TasksList';
 import TestimonialsPage from './screens/TestimonialsPage'; // Import TestimonialsPage
@@ -226,6 +227,7 @@ class App extends Component {
           <Route path="/Bonecancerml" element={<Bonecancerml />} />
           <Route path="/heartdiseaseml" element={<Heartdiseaseml />} />
           <Route path="/heartstroke" element={<HeartStroke />} />
+          <Route path="/PsychologyPrediction" element={<PsychologyPrediction />} />
           <Route path="/PatientRegistration" element={<PatientRegistration loadUser={this.loadUser} />} />
           <Route path="/DoctorRegistration" element={<DoctorRegistration loadUser={this.loadUser} />} />
           <Route path="/HospitalAdminRegistration" element={<HospitalAdminRegistration loadUser={this.loadUser} />} />
@@ -237,7 +239,7 @@ class App extends Component {
           <Route path="/emergencyLocations" element={<EmergencyLocations />} />
           <Route path="/liverdiseaseML" element={<Liver_disease_ML />} />
           <Route path="/VoiceRecoginition" element={<VoiceRecoginition />} />
-          <Route path="/Chatbot" element={<Chatbot patientInfo={this.state.user} />} />
+          <Route path="/Chatbot" element={<Chatbot userInfo={this.state.user}/>}/>
           <Route path="/doctor" element={<DoctorLayout doctorInfo={this.state.user} />}>
             <Route index element={<Dashboard />} />
             <Route path="/doctor/dashboard" element={<Dashboard />} />
