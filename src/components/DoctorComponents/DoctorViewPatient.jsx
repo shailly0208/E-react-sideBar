@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, Box, Button, Typography, Card, CardContent, TextField, Grid, List, ListItem, ListItemIcon, Paper, Snackbar  } from '@mui/material';
 import FloatingChatWindow from '../FloatingChatWindow';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid'
 import { PatientMedicalHistory } from './PatientMedicalHistory';
 import MedicationLiquidTwoToneIcon from '@mui/icons-material/MedicationLiquidTwoTone';
+import { useReactToPrint }  from "react-to-print";
+
 export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
   // State Initialization
   const [patientData, setPatientData] = React.useState({});
@@ -27,18 +29,24 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
 
   const [showContactStaffModal, setShowContactStaffModal] = useState(false);
 
-  const [doctorDetails, setDoctorDetais]= useState({});
+  const [doctorDetails, setDoctorDetails]= useState({});
+
+  const [prescriptionContent, setPrescriptionContent]= useState('');
+
+  const prescriptionToPrintRef =useRef();
+
+  const [prescriptions, setPrescriptions]= useState([]);
+
   
   const handleShowCreatePrescription = ()=>{
-      getDocData()
       setShowCreatePrescriptionModal(true)
   }
-    const getDocData = async ()=>{
+  const getDocData = async ()=>{
       try {
         //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
         //http://localhost:8080/
         const response = await axios.post(
-          'http://localhost:8080/DoctorProfileInfo',
+          ' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorProfileInfo',
           {
             doctorId,
           }
@@ -49,7 +57,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
           console.log('error');
         } else {
           console.log("Doctor Info", data)
-          setDoctorDetais(data);
+          setDoctorDetails(data);
         }
       } catch (error) {
         console.log(
@@ -57,9 +65,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
         );
       }
     };
-
-
-
 
 
   const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
@@ -89,10 +94,36 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
         console.error('Error fetching past visits:', error);
       }
     };
-
+    
+    
+    // Function to fetch past visits
+  const fetchPrescriptions = async () => {
+          try {
+            const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getPrescriptions', { doctorId, patientId });
+            console.log(response)
+            setPrescriptions(response.data);
+          } catch (error) {
+            console.error('Error fetching prescription:', error);
+          }
+  };
+  const prescriptionColumns = [
+    { field: 'prescription_description', headerName: 'Prescription', flex:1 },
+    {
+      field: 'prescription_creation_time',
+      headerName: 'Created On',
+      flex: 1 , 
+      valueFormatter: params=>new Date(params?.value).toDateString()
+    }
+    // Add other relevant columns here
+  ];
   const handlePastVisits= async () =>{
     await fetchPastVisits();
     setShowPastVisitsModal(true);
+  }
+
+  const handlePrescription= async () =>{
+    await fetchPrescriptions();
+    setShowViewPrescriptionsModal(true);
   }
   const style = {
     position: 'relative',
@@ -120,6 +151,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     pb: 3,
     overflowY: 'auto',
   };
+
   // Fetch treatments function
   const fetchTreatments = async () => {
     try {
@@ -235,6 +267,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
           setPatientData(data.patient_data);
           setTreatments(data.treatments);
           setLoginStatus(data.status);
+          getDocData();
         }
       } catch (error) {
         console.log(
@@ -261,7 +294,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     try {
        //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
         //http://localhost:8080/
-      const response = await axios.post('http://localhost:8080/sendDoctorStaffMessage',data);
+      const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/sendDoctorStaffMessage',data);
       console.log(response.data);
       setShowContactStaffModal(false);
       setSnackbarMessage('Message sent successfully!');
@@ -273,6 +306,37 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
       // Handle error
     }
   };
+  const savePrescription = async () => {
+    const data = {
+      doctorId,
+      patientId,
+      doctorFName: doctorDetails.Fname,
+      doctorLName: doctorDetails.Lname, 
+      doctorPhone: doctorDetails.MobileNumber,
+      doctorOfficeAddress: doctorDetails.Location1,
+      patientFName: patientData.FName, 
+      patientLName: patientData.LName, 
+      patientPhone: patientData.MobileNumber, 
+      patientAddress: patientData.Address,
+      prescription: prescriptionContent
+    };
+    
+    try {
+       //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+      const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/savePrescription',data);
+      console.log(response.data);
+      setSnackbarMessage('Prescription saved successfully!');
+      setSnackbarOpen(true);
+      setPrescriptionContent('');
+
+    } catch (error) {
+      console.error('Error saving Prescription: ', error);
+      // Handle error
+    }
+  };
+  
+  const handlePrescriptionPrint = useReactToPrint({content: ()=> prescriptionToPrintRef.current});
 
   return (
     <Modal
@@ -366,7 +430,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                           </Box>
                       </Modal>
                       <Button fullWidth onClick={() =>handlePastVisits() } variant='outlined' >View Logged Visits</Button>
-                      <Button fullWidth  variant='outlined' onClick={() => setShowViewPrescriptionsModal(true)}>View Prescriptions</Button>
+                      <Button fullWidth  variant='outlined' onClick={handlePrescription}>View Prescriptions</Button>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -462,7 +526,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         type="time"
                         value={startTime}
                         onChange={(e) => setStartTime(e.target.value)}
-                        sx={{ width: '50%' }}
+                        sx={{ width: '45%' , mr:2}}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -474,7 +538,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         type="time"
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)}
-                        sx={{ width: '50%' }}
+                        sx={{ width: '45%', ml:2 }}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -620,8 +684,9 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                     <Modal open={showCreatePrescriptionModal} onClose={()=>setShowCreatePrescriptionModal(false)} >
                           <Box sx={styleMini}>
                               <Card>
-                                  <CardContent>
-                                      <Typography variant='h6'>Create Prescription</Typography>
+                                  <CardContent >
+                                    <div ref={prescriptionToPrintRef}  sx={{color: "black"}}>
+                                      <Typography variant='h6'>New Prescription</Typography>
                                       <TextField 
                                         label="Patient First Name:"
                                         name="patientFName"
@@ -694,17 +759,19 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                       <TextField
                                           label="Prescription"
                                           name="prescription"
-                            
+                                          value={prescriptionContent}
+                                          onChange={(e)=>setPrescriptionContent(e.target.value)}
                                           fullWidth
                                           multiline
                                           rows={4}
                                           sx={{width: "95%", mx:2, mt:2}}
+                                          variant='standard'
                                       />
-                                 
+                                    </div>
                                       <Button
                                           variant='contained'
                                           color='success'
-                                         
+                                          onClick={savePrescription}
                                           sx={{ mt: 2, mx:2, width:'25%' }}
                                       >
                                           Save
@@ -712,7 +779,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                       <Button
                                           variant='contained'
                                           color='primary'
-                                    
+                                          onClick={handlePrescriptionPrint}
                                           sx={{ mt: 2, mx:2 , width:'35%' }}
                                       >
                                           Print
@@ -797,34 +864,18 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
         </Box>
       </Modal>
       
-      {/* Past Visits Modal */}
-      <Modal open={showPastVisitsModal} onClose={() => setShowPastVisitsModal(false)}>
-        <Box sx={styleMini}>
-          <Card>
-            <CardContent>
-              <Typography variant='h6'>Past Visits</Typography>
-              <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                  rows={pastVisits}
-                  columns={columns}
-                  pageSize={5}
-                />
-              </div>
-              <Button variant='contained' onClick={() => setShowPastVisitsModal(false)}>Close</Button>
-            </CardContent>
-          </Card>
-        </Box>
-      </Modal>
-    
       {/* View Prescription */}
-        {/* Past Visits Modal */}
         <Modal open={showViewPrescriptionsModal} onClose={() => setShowViewPrescriptionsModal(false)}>
         <Box sx={styleMini}>
           <Card>
             <CardContent>
               <Typography variant='h6'>Prescriptions</Typography>
               <div style={{ height: 400, width: '100%' }}>
-                {/*Data grid to show prescriptions*/}
+                <DataGrid
+                  rows={prescriptions}
+                  columns={prescriptionColumns}
+                  pageSize={5}
+                />
               </div>
               <Button variant='contained' onClick={() => setShowViewPrescriptionsModal(false)}>Close</Button>
             </CardContent>

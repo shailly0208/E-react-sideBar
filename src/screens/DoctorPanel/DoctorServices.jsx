@@ -42,17 +42,18 @@ export function DoctorServices() {
     const riskAssessmentDetailsRef = useRef(null);
     const postOperativeCarePlanRef = useRef(null);
     const columns = [
-        { field: 'surgery_type', headerName: 'Surgery Type', flex: 1 },
+        { field: 'surgery_type', headerName: 'Surgery Type', flex: 2 },
         { 
           field: 'surgery_date', 
           headerName: 'Date',
           flex: 1,
-          valueFormatter: params=>new Date(params?.value).toDateString() 
+          valueFormatter: params=>new Date(params?.value).toISOString().split('T')[0] 
         },
         // ... other columns
         {
           field: 'view',
           headerName: 'View Details',
+          flex: 2,
           renderCell: (params) => (
             <Button onClick={() => viewSurgeryPlanDetails(params.row)}>View</Button>
           )
@@ -122,7 +123,8 @@ export function DoctorServices() {
     const fetchSurgeryPlans = async () => {
         try {
           console.log("Fetching surgery plans for doctor ID:", doctorId);
-          const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getSurgeryPlan', { doctorId });
+         // https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+          const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getSurgeryPlan', { doctorId });
           setSurgeryPlans(response.data);
         } catch (error) {
           console.error('Error fetching surgery plans:', error);

@@ -29,7 +29,7 @@ const DoctorTasksList = ({ doctorId }) => {
 
   const addReminder = async () => {
     try {
-      await axios.post('http://localhost:8080/saveDoctorReminder', {
+      await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/saveDoctorReminder', {
         doctorId,
         reminderDescription: newReminder
       });
@@ -42,7 +42,7 @@ const DoctorTasksList = ({ doctorId }) => {
 
   const deleteReminder = async (reminderId) => {
     try {
-      await axios.post('http://localhost:8080/deleteReminder', { reminderId, doctorId });
+      await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/deleteReminder', { reminderId, doctorId });
       fetchReminders();
     } catch (error) {
       console.log("Error deleting", error);
