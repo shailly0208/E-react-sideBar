@@ -147,11 +147,12 @@ const ChatComponent = ({ userInfo }) => {
       userInput.value = '';
       try {
         let url;
+        let prefix = "https://48so6vynld.execute-api.ca-central-1.amazonaws.com";
         if (patientData) {
-          url = `http://99.79.170.114:8000/doctor/${userInfo.id}/${patientData.id}/`
+          url = `${prefix}/doctor/${userInfo.id}/${patientData.id}/`
         }
         else {
-          url = `http://99.79.170.114:8000/patient/${userInfo.id}`
+          url = `${prefix}/patient/${userInfo.id}`
         }
         console.log("URL", url);
           const response = await fetch(url, {
@@ -247,7 +248,7 @@ const ChatComponent = ({ userInfo }) => {
     <div className="chat-page-container">
       <div className="chat-container">
         <div className="chat-header">
-          <h1>Personal Chat Assistant</h1>
+          <h1>Medical Chat Assessment</h1>
         </div>
         <div className="chat-output" id="chat-output" ref={chatOutputRef}>
           {messages}
@@ -262,7 +263,8 @@ const ChatComponent = ({ userInfo }) => {
           <button onClick={sendMessage}>Send</button>
           <button
             onClick={toggleSpeechRecognition}
-            style={{ backgroundColor: isListening ? 'red' : 'green' }}
+            style={{ backgroundColor: isListening ? 'gray' : 'green' }}
+            disabled={isListening}
           >
             {isListening ? 'Listening...' : 'Start Speech'}
           </button>

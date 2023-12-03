@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Modal, Box, Button, Typography, Card, CardContent, TextField, Grid, List, ListItem, ListItemIcon, Paper, Snackbar  } from '@mui/material';
-import MedicationIcon from '@mui/icons-material/Medication';
 import FloatingChatWindow from '../FloatingChatWindow';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid'
 import { PatientMedicalHistory } from './PatientMedicalHistory';
+import MedicationLiquidTwoToneIcon from '@mui/icons-material/MedicationLiquidTwoTone';
+import { useReactToPrint }  from "react-to-print";
 
 export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
-
-
   // State Initialization
   const [patientData, setPatientData] = React.useState({});
   const [treatments, setTreatments] = React.useState([]);
@@ -23,6 +22,50 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
 
   const [showPastVisitsModal, setShowPastVisitsModal] = useState(false);
   const [pastVisits, setPastVisits] = useState([]);
+
+  const [showCreatePrescriptionModal, setShowCreatePrescriptionModal] = useState(false);
+
+  const [showViewPrescriptionsModal, setShowViewPrescriptionsModal] = useState(false);
+
+  const [showContactStaffModal, setShowContactStaffModal] = useState(false);
+
+  const [doctorDetails, setDoctorDetails]= useState({});
+
+  const [prescriptionContent, setPrescriptionContent]= useState('');
+
+  const prescriptionToPrintRef =useRef();
+
+  const [prescriptions, setPrescriptions]= useState([]);
+
+  
+  const handleShowCreatePrescription = ()=>{
+      setShowCreatePrescriptionModal(true)
+  }
+  const getDocData = async ()=>{
+      try {
+        //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+        const response = await axios.post(
+          ' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/DoctorProfileInfo',
+          {
+            doctorId,
+          }
+        );
+        const { data } = response;
+        if (data.error) {
+          console.log(JSON.stringify(data.error));
+          console.log('error');
+        } else {
+          console.log("Doctor Info", data)
+          setDoctorDetails(data);
+        }
+      } catch (error) {
+        console.log(
+          `Error With request getting top 5 recent: ${error.message}`
+        );
+      }
+    };
+
 
   const [showMedicalHistoryModal, setShowMedicalHistoryModal] = useState(false);
   const toggleMedicalHistoryModal = () => {
@@ -51,10 +94,36 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
         console.error('Error fetching past visits:', error);
       }
     };
-
+    
+    
+    // Function to fetch past visits
+  const fetchPrescriptions = async () => {
+          try {
+            const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getPrescriptions', { doctorId, patientId });
+            console.log(response)
+            setPrescriptions(response.data);
+          } catch (error) {
+            console.error('Error fetching prescription:', error);
+          }
+  };
+  const prescriptionColumns = [
+    { field: 'prescription_description', headerName: 'Prescription', flex:1 },
+    {
+      field: 'prescription_creation_time',
+      headerName: 'Created On',
+      flex: 1 , 
+      valueFormatter: params=>new Date(params?.value).toDateString()
+    }
+    // Add other relevant columns here
+  ];
   const handlePastVisits= async () =>{
     await fetchPastVisits();
     setShowPastVisitsModal(true);
+  }
+
+  const handlePrescription= async () =>{
+    await fetchPrescriptions();
+    setShowViewPrescriptionsModal(true);
   }
   const style = {
     position: 'relative',
@@ -70,18 +139,6 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     pb: 3,
     overflowY: 'auto',
   };
-  const style1 = {
-    position: 'relative',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '100%',
-    minHeight: '100%',
-    boxShadow: 24,
-    pt: 2,
-    pb: 3,
-    overflowY: 'auto',
-  };
   const styleMini = {
     position: 'relative',
     top: '50%',
@@ -94,6 +151,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     pb: 3,
     overflowY: 'auto',
   };
+
   // Fetch treatments function
   const fetchTreatments = async () => {
     try {
@@ -209,6 +267,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
           setPatientData(data.patient_data);
           setTreatments(data.treatments);
           setLoginStatus(data.status);
+          getDocData();
         }
       } catch (error) {
         console.log(
@@ -223,6 +282,61 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
     const url = window.location.origin + path;
     window.open(url, '_blank');
   };
+
+
+  const [doctorStaffMessage, setDoctorStaffMessage] = useState('');
+  const sendDoctorStaff = async () => {
+    const data = {
+      doctorId,
+      patientId,
+      task: doctorStaffMessage
+    };
+    try {
+       //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+      const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/sendDoctorStaffMessage',data);
+      console.log(response.data);
+      setShowContactStaffModal(false);
+      setSnackbarMessage('Message sent successfully!');
+      setSnackbarOpen(true);
+      setDoctorStaffMessage('');
+
+    } catch (error) {
+      console.error('Error Sending staff message:', error);
+      // Handle error
+    }
+  };
+  const savePrescription = async () => {
+    const data = {
+      doctorId,
+      patientId,
+      doctorFName: doctorDetails.Fname,
+      doctorLName: doctorDetails.Lname, 
+      doctorPhone: doctorDetails.MobileNumber,
+      doctorOfficeAddress: doctorDetails.Location1,
+      patientFName: patientData.FName, 
+      patientLName: patientData.LName, 
+      patientPhone: patientData.MobileNumber, 
+      patientAddress: patientData.Address,
+      prescription: prescriptionContent
+    };
+    
+    try {
+       //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
+        //http://localhost:8080/
+      const response = await axios.post(' https://e-react-node-backend-22ed6864d5f3.herokuapp.com/savePrescription',data);
+      console.log(response.data);
+      setSnackbarMessage('Prescription saved successfully!');
+      setSnackbarOpen(true);
+      setPrescriptionContent('');
+
+    } catch (error) {
+      console.error('Error saving Prescription: ', error);
+      // Handle error
+    }
+  };
+  
+  const handlePrescriptionPrint = useReactToPrint({content: ()=> prescriptionToPrintRef.current});
 
   return (
     <Modal
@@ -297,29 +411,26 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                   <Typography variant='body1'>
                     Weight: <em>{patientData.weight} kg </em>
                   </Typography>
-                  <Typography variant='body1'>
-                    Race: <em> {patientData.race} </em>
-                  </Typography>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <Card>
                     <CardContent>
-                      <Typography variant='h6'>Records</Typography>
-                      <Button fullWidth onClick={toggleMedicalHistoryModal}>
+                      <Button fullWidth onClick={toggleMedicalHistoryModal} variant='outlined'>
                         View Medical History 
                       </Button>
                         {/* Nested Modal for Medical History */}
                         <Modal open={showMedicalHistoryModal} onClose={toggleMedicalHistoryModal}>
-                          <Box sx={style1}>
-                            <Card sx={{width:'100%'}}>
+                          <Box sx={ styleMini}>
+                            <Card>
                                {/* Your modal content here */}
+                               <Button color='secondary' variant='contained'
+                                onClick={toggleMedicalHistoryModal} fullWidth sx={{mt:4}}>Exit</Button>
                                <PatientMedicalHistory patientId={patientId} />
-                               <Button variant='outlined' onClick={toggleMedicalHistoryModal} sx={{ position: 'absolute', top: '80%', right: '50%'} }>Exit</Button>
                             </Card>
                           </Box>
                       </Modal>
-                      <Typography variant='h6'>Visits</Typography>
-                      <Button fullWidth onClick={() =>handlePastVisits() }>View Logged Visits</Button>
+                      <Button fullWidth onClick={() =>handlePastVisits() } variant='outlined' >View Logged Visits</Button>
+                      <Button fullWidth  variant='outlined' onClick={handlePrescription}>View Prescriptions</Button>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -331,7 +442,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3 }}
                         component={Link}
                         to='/searchresult'
                         state={patientData}
@@ -341,7 +452,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3 }}
                         onClick={() =>
                           handleOpenNewTab(
                             `/DoctorVideo?doctorID=${doctorId}&patientID=${patientId}`
@@ -351,21 +462,21 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         Video Call
                       </Button>
                       <Button variant='contained' 
-                      fullWidth sx={{ mt: 2 }}
+                      fullWidth sx={{ mt: 3 }}
                        onClick={() =>
                         handleOpenNewTab(`/VoiceRecoginition?patientID=${patientId}`)
                       }
                       >
                         Voice Recognition
                       </Button>
-                      <Button variant='contained' fullWidth sx={{ mt: 2 }}>
+                      <Button variant='contained' fullWidth sx={{ mt: 3 }}>
                         Send Message
                       </Button>
                       <div>
                         <Button
                           variant='contained'
                           fullWidth
-                          sx={{ mt: 2 }}
+                          sx={{ mt: 3 }}
                           onClick={toggleChatWindow}
                         >
                           Live Text Chat
@@ -382,22 +493,14 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       <Button
                         variant='contained'
                         fullWidth={true}
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 3, mb:1 }}
                         component={Link}
                         to='/Chatbot'
                         state={patientData}
                       >
                         Chatbot
                       </Button>
-                      <Button
-                        variant='contained'
-                        fullWidth={true}
-                        sx={{ mt: 2 }}
-                        component={Link}
-                        to='/contact'
-                      >
-                        Contact Staff
-                      </Button>
+                 
                     </CardContent>
                   </Card>
                 </Grid>
@@ -423,7 +526,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         type="time"
                         value={startTime}
                         onChange={(e) => setStartTime(e.target.value)}
-                        sx={{ width: '50%' }}
+                        sx={{ width: '45%' , mr:2}}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -435,7 +538,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         type="time"
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)}
-                        sx={{ width: '50%' }}
+                        sx={{ width: '45%', ml:2 }}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -485,8 +588,8 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                 <Grid item xs={12} md={4}>
                   <Card>
                     <CardContent>
-                      <Typography variant='h6'>Latest Treatments</Typography>
-                      <Button fullWidth  onClick={() => setShowAddTreatmentModal(true)}> Add Treatment</Button>
+                      <Typography variant='h6'>Treatments</Typography>
+                      <Button fullWidth  onClick={() => setShowAddTreatmentModal(true)} variant='outlined'> Add Treatment</Button>
                       {/* Add Treatment Modal */}
                       <Modal  open={showAddTreatmentModal} onClose={() => setShowAddTreatmentModal(false)}>
                           <Box sx={styleMini}>
@@ -499,6 +602,9 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.treatment}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          rows={3}
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <TextField
@@ -508,6 +614,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.date}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          variant='standard'
                                           InputLabelProps={{ shrink: true }}
                                           sx={{ mt: 2 }}
                                       />
@@ -517,6 +624,8 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.diseaseType}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <TextField
@@ -525,26 +634,36 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                                           value={treatmentDetails.diseaseId}
                                           onChange={handleTreatmentChange}
                                           fullWidth
+                                          multiline
+                                          variant='standard'
                                           sx={{ mt: 2 }}
                                       />
                                       <Button
                                           variant='contained'
                                           color='primary'
                                           onClick={saveTreatment}
-                                          sx={{ mt: 2 }}
+                                          sx={{ mt: 2, mx:2, width:'45%' }}
                                       >
                                           Save Treatment
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='secondary'
+                                          onClick={() => setShowAddTreatmentModal(false)}
+                                          sx={{ mt: 2, mx: 2, width:'45%' }}
+                                      >
+                                          Exit
                                       </Button>
                                   </CardContent>
                               </Card>
                           </Box>
                       </Modal>
                       {treatments.length > 0 ? (
-                        <List style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                        <List style={{ maxHeight: 150, overflowY: 'auto' }}>
                           {treatments.map((treatment, index) => (
                             <ListItem key={index}>
                               <ListItemIcon>
-                                <MedicationIcon />
+                                <MedicationLiquidTwoToneIcon color='primary' />
                               </ListItemIcon>
                               <Typography variant='body1'>
                                 {treatment.treatment} - {formatDateForDisplay(treatment.RecordDate)}
@@ -559,6 +678,168 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                       )}
                     </CardContent>
                   </Card>
+                  <Card sx={{mt:2}}>
+                    <CardContent>
+                    <Button fullWidth variant='outlined' onClick={handleShowCreatePrescription}> Create Prescription</Button>
+                    <Modal open={showCreatePrescriptionModal} onClose={()=>setShowCreatePrescriptionModal(false)} >
+                          <Box sx={styleMini}>
+                              <Card>
+                                  <CardContent >
+                                    <div ref={prescriptionToPrintRef}  sx={{color: "black"}}>
+                                      <Typography variant='h6'>New Prescription</Typography>
+                                      <TextField 
+                                        label="Patient First Name:"
+                                        name="patientFName"
+                                        value={patientData.FName}
+                                        disabled
+                                        variant="standard" 
+                                        sx={{width: "45%", mx:2}}
+                                      />
+                                        <TextField 
+                                        label="Patient Last Name:"
+                                        name="patientLName"
+                                        value={patientData.LName}
+                                        disabled
+                                        variant="standard" 
+                                        sx={{width: "45%", mx:2}}
+                                      />
+                                      <TextField 
+                                        label="Patient's Phone:"
+                                        name="patientPhone"
+                                        value={patientData.MobileNumber}
+                                        disabled
+                                        variant="standard" 
+                                        sx={{width: "45%", mx:2}}
+                                      />
+                                        <TextField 
+                                        label="Patient Address:"
+                                        name="patientAddress"
+                                        value={patientData.Address}
+                                        disabled
+                                        variant="standard"
+                                        sx={{width: "95%", mx:2}}
+                                      />
+                                    
+                                      <TextField 
+                                        label="Doctor First Name:"
+                                        name="doctorFN"
+                                        value={doctorDetails.Fname}
+                                        sx={{width: "45%", mx:2}}
+                                        disabled
+                                        variant="standard" 
+                                      />
+                                        <TextField 
+                                        label="Doctor Last Name:"
+                                        name="doctorLN"
+                                        value={doctorDetails.Lname}
+                                  
+                                        disabled
+                                        variant="standard" 
+                                        sx={{width: "95%", mx:2}}
+                                      />
+                                      <TextField 
+                                        label="Doctor's Phone:"
+                                        name="doctorPhone"
+                                        value={doctorDetails.MobileNumber}
+                                        fullWidth
+                                        disabled
+                                        variant="standard"
+                                        sx={{width: "45%", mx:2}} 
+                                      />
+                                      <TextField 
+                                        label="Doctor Office Address:"
+                                        name="doctorOfficeAddress"
+                                        value={doctorDetails.Location1}
+                                        fullWidth
+                                        disabled
+                                        variant="standard"
+                                        sx={{width: "95%", mx:2}} 
+                                      />
+                                    
+                                      <TextField
+                                          label="Prescription"
+                                          name="prescription"
+                                          value={prescriptionContent}
+                                          onChange={(e)=>setPrescriptionContent(e.target.value)}
+                                          fullWidth
+                                          multiline
+                                          rows={4}
+                                          sx={{width: "95%", mx:2, mt:2}}
+                                          variant='standard'
+                                      />
+                                    </div>
+                                      <Button
+                                          variant='contained'
+                                          color='success'
+                                          onClick={savePrescription}
+                                          sx={{ mt: 2, mx:2, width:'25%' }}
+                                      >
+                                          Save
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='primary'
+                                          onClick={handlePrescriptionPrint}
+                                          sx={{ mt: 2, mx:2 , width:'35%' }}
+                                      >
+                                          Print
+                                      </Button>
+                                      <Button
+                                          variant='contained'
+                                          color='secondary'
+                                          onClick={()=>setShowCreatePrescriptionModal(false)}
+                                          sx={{ mt: 2, mx:2 , width:'25%' }}
+                                      >
+                                          Exit
+                                      </Button>
+                                  </CardContent>
+                              </Card>
+                          </Box>
+                      </Modal>
+                    </CardContent>
+                  </Card>
+                  <Card sx={{mt:2}}>
+          <CardContent>
+            {/* Contact staff here */}
+          <Button fullWidth variant='outlined'  onClick={()=>setShowContactStaffModal(true)}> Contact Staff</Button>
+          <Modal open={showContactStaffModal} onClose={()=>setShowContactStaffModal(false)} >
+          <Box sx={styleMini}>
+              <Card>
+                  <CardContent>
+                      <Typography variant='h6'>Contact Staff</Typography>
+                      <TextField
+                          label="Message"
+                          name="message"
+                          fullWidth
+                          multiline
+                          onChange={(e)=>setDoctorStaffMessage(e.target.value)}
+                          value={doctorStaffMessage}
+                          rows={4}
+                          sx={{ mt: 2 }}
+                      />
+                      <Button
+                          variant='contained'
+                          color='primary'   
+                          sx={{ mt: 2, mx:2, width:'45%' }}
+                          onClick={sendDoctorStaff}
+                      >
+                          Send
+                      </Button>
+              
+                      <Button
+                          variant='contained'
+                          color='secondary'
+                          onClick={()=>setShowContactStaffModal(false)}
+                          sx={{ mt: 2, mx:2 , width:'45%' }}
+                      >
+                          Exit
+                      </Button>
+                  </CardContent>
+              </Card>
+          </Box>
+      </Modal>
+          </CardContent>
+        </Card>
                 </Grid>
               </Grid>
             </Paper>
@@ -582,8 +863,26 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
           </Card>
         </Box>
       </Modal>
+      
+      {/* View Prescription */}
+        <Modal open={showViewPrescriptionsModal} onClose={() => setShowViewPrescriptionsModal(false)}>
+        <Box sx={styleMini}>
+          <Card>
+            <CardContent>
+              <Typography variant='h6'>Prescriptions</Typography>
+              <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                  rows={prescriptions}
+                  columns={prescriptionColumns}
+                  pageSize={5}
+                />
+              </div>
+              <Button variant='contained' onClick={() => setShowViewPrescriptionsModal(false)}>Close</Button>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
       </Box>
-   
       
     </Modal>
   );

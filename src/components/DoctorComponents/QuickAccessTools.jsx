@@ -14,7 +14,7 @@ const QuickAccessTools = ({ doctorId }) => {
       </Button>
       <Button variant="contained" color="primary" fullWidth  sx={{ mt: 2 }}
          component={Link} to="/services"> 
-        Services
+        General Services
       </Button>
       {/* Add more tools here */}
     </Paper>
