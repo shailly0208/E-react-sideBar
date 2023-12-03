@@ -1,34 +1,42 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from 'react-router-dom';
+import backgroundImage from '../assets/images/hospital.jpg';
 
-class Tasks extends Component {
-  constructor() {
-    super();
-    this.state = {
-      id: "",
-      DoctorName: "",
-      FName: "",
-      MName: "",
-      LName: "",
-      Age: "",
-      Plan: "",
-      tasks: [],
-    };
-  }
+function Tasks() {
+  const [state, setState] = useState({
+    id: "",
+    DoctorName: "",
+    FName: "",
+    MName: "",
+    LName: "",
+    Age: "",
+    Plan: "",
+    appointmentTime: "", // Added appointmentTime state
+    tasks: [],
+  });
 
-  handleInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      findTask(id);
+    }
+  }, [id]);
+
+  const handleInputChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  //ok
-  findTask = () => {
+  //https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add
+  //http://localhost:8080/api/users/tasks/${id}
+  const findTask = (id) => {
     axios
-    //find task by id or FName then //put the reponse data into all input fields,if response is null, set the input fields to empty
-      .get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${this.state.id}`)
+      .get(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${id}`)
       //put the reponse data into all input fields,if response is null, set the input fields to empty
       .then((response) => {
         if (response.data.FName != null) {
-          this.setState({
+          setState({
             id: response.data.id,
             DoctorName: response.data.DoctorName,
             FName: response.data.FName,
@@ -36,9 +44,10 @@ class Tasks extends Component {
             LName: response.data.LName,
             Age: response.data.Age,
             Plan: response.data.Plan,
+            appointmentTime: response.data.appointmentTime, // Added appointmentTime state
           });
         } else {
-          this.setState({
+          setState({
             id: "",
             DoctorName: "",
             FName: "",
@@ -46,6 +55,7 @@ class Tasks extends Component {
             LName: "",
             Age: "",
             Plan: "",
+            appointmentTime: "", // Added appointmentTime state
           });
         }
       })
@@ -54,21 +64,19 @@ class Tasks extends Component {
       });
   };
 
-  //create a task by FName then show the FName and id in input fields
-  //ok
-  createTask = () => {
+  const createTask = () => {
     axios
-      .post(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add`, {
-        DoctorName: this.state.DoctorName,
-        FName: this.state.FName,
-        MName: this.state.MName,
-        LName: this.state.LName,
-        Age: this.state.Age,
-        Plan: this.state.Plan,
+      .post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/add', {
+        DoctorName: state.DoctorName,
+        FName: state.FName,
+        MName: state.MName,
+        LName: state.LName,
+        Age: state.Age,
+        Plan: state.Plan,
+        appointmentTime: state.appointmentTime, // Set appointmentTime to current date and time
       })
       .then((response) => {
-        //this.fetchAllTasks();
-        this.setState({
+        setState({
           id: response.data.id,
           DoctorName: response.data.DoctorName,
           FName: response.data.FName,
@@ -76,148 +84,160 @@ class Tasks extends Component {
           LName: response.data.LName,
           Age: response.data.Age,
           Plan: response.data.Plan,
+          appointmentTime: response.data.appointmentTime, // Added appointmentTime state
         });
+        alert("Task added successfully!");
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-
-  //update the task according to the id, and then shouw the task in the input fields
-  //ok
-  updateTask = () => {
+  const updateTask = () => {
     axios
-      .put(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${this.state.id}`, {
-        DoctorName: this.state.DoctorName,
-        FName: this.state.FName,
-        MName: this.state.MName,
-        LName: this.state.LName,
-        Age: this.state.Age,
+      .put(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${id}`, {
+        DoctorName: state.DoctorName,
+        FName: state.FName,
+        MName: state.MName,
+        LName: state.LName,
+        Age: state.Age,
+        Plan: state.Plan,
+        appointmentTime: state.appointmentTime, // Added appointmentTime state
       })
       .then(() => {
-        this.fetchAllTasks();
-        this.setState({
+        setState({
           id: "",
           DoctorName: "",
           FName: "",
           MName: "",
           LName: "",
           Age: "",
+          Plan: "",
+          appointmentTime: "", // Added appointmentTime state
         });
+        alert("Task updated successfully!");
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-
-  //ok
-  deleteTask = () => {
+  const deleteTask = () => {
     axios
-      .delete(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${this.state.id}`)
+      .delete(`https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/tasks/${id}`)
       .then(() => {
-        this.fetchAllTasks();
-        this.setState({
+        setState({
           id: "",
           DoctorName: "",
           FName: "",
           MName: "",
           LName: "",
           Age: "",
+          Plan: "",
+          appointmentTime: "", // Added appointmentTime state
         });
+        alert("Task deleted successfully!");
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  render() {
-    return (
-      <div style={{ margin: "auto", width: "50%", padding: "10px" }}>
+  return (
+    <div style={{ 
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      margin: "auto", 
+      width: "100vw", 
+      height: "100vh",
+      padding: "10px",
+      filter: "brightness(100%)"
+      }}>
+      <div style={{ margin: "auto", width: "50%", padding: "10px" ,}}>
         <h1 style={{ textAlign: "center" }}>Doctor Tasks Management System</h1>
         <div style={{ border: "1px solid #ccc", padding: "10px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-          <label style={{ marginBottom: "5px" }}>id:</label>
-            <input
-                type="number"
-                name="id"
-                placeholder="id"
-                value={this.state.id}
-                onChange={this.handleInputChange}
-                style={{ marginBottom: "10px", padding: "5px" }}
-            />
-            <label style={{ marginBottom: "5px" }}>Doctor Name:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Doctor Name:</label>
             <input
               type="text"
               name="DoctorName"
               placeholder="Doctor Name"
-              value={this.state.DoctorName}
-              onChange={this.handleInputChange}
+              value={state.DoctorName}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
-            <label style={{ marginBottom: "5px" }}>First Name:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>First Name:</label>
             <input
               type="text"
               name="FName"
               placeholder="First Name"
-              value={this.state.FName}
-              onChange={this.handleInputChange}
+              value={state.FName}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
-            <label style={{ marginBottom: "5px" }}>Middle Name:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Middle Name:</label>
             <input
               type="text"
               name="MName"
               placeholder="Middle Name"
-              value={this.state.MName}
-              onChange={this.handleInputChange}
+              value={state.MName}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
-            <label style={{ marginBottom: "5px" }}>Last Name:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Last Name:</label>
             <input
               type="text"
               name="LName"
               placeholder="Last Name"
-              value={this.state.LName}
-              onChange={this.handleInputChange}
+              value={state.LName}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
-            <label style={{ marginBottom: "5px" }}>Age:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Age:</label>
             <input
               type="number"
               name="Age"
               placeholder="Age"
-              value={this.state.Age}
-              onChange={this.handleInputChange}
+              value={state.Age}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
-            <label style={{ marginBottom: "5px" }}>Plan:</label>
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Plan:</label>
             <input
               type="text"
               name="Plan"
               placeholder="Plan"
-              value={this.state.Plan}
-              onChange={this.handleInputChange}
+              value={state.Plan}
+              onChange={handleInputChange}
               style={{ marginBottom: "10px", padding: "5px" }}
             />
+            <label style={{ marginBottom: "5px", fontWeight: "bold" }}>Appointment Time:</label> 
+            <input
+              type="text"
+              name="appointmentTime"
+              placeholder="Appointment Time"
+              value={state.appointmentTime}
+              onChange={handleInputChange}
+              style={{ marginBottom: "10px", padding: "5px" }}
+            /> 
           </div>
-          <button onClick={this.createTask} style={{ marginTop: "10px", padding: "5px" }}>
-            Add Task
+          <button onClick={createTask} style={{ marginTop: "10px", padding: "5px" }}>
+            Create Task
           </button>
-          <button onClick={this.findTask} style={{ marginTop: "10px", padding: "5px" }}>
-            Find Task
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button onClick={updateTask} style={{ marginTop: "10px", padding: "5px" }}>
+            Edit Task
           </button>
-          <button onClick={this.updateTask} style={{ marginTop: "10px", padding: "5px" }}>
-            Update Task
-          </button>
-          <button onClick={this.deleteTask} style={{ marginTop: "10px", padding: "5px" }}>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button onClick={deleteTask} style={{ marginTop: "10px", padding: "5px" }}>
             Delete Task
           </button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Tasks;
