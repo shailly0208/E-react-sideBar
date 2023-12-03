@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 
-const ServicesPage = () => {
-  const { param } = useParams();
+const PatientService = () => {
+  
 
   return (
     
     <div className="services-container1">
-      <h1 className="page-title">{param} Services </h1> 
+      <h1 className="page-title">Patient Services </h1> 
       <center><div class="gradient-line"></div></center>
       <br></br>
       <section className="service-section1">
@@ -69,7 +69,7 @@ const ServicesPage = () => {
         <button className="service-button">Learn More</button>
       </section>
        
-      <Link to="/services" >
+      <Link to="/serviceHome" >
       <section className="service-section1">
         <FontAwesomeIcon icon={faStethoscope} className="service-icon" size="2x" />
         <h2>Diagnostic Services</h2>
@@ -95,4 +95,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default PatientService;
