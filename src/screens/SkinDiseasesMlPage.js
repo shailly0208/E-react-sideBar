@@ -42,7 +42,7 @@ function SkinDiseasesMlPage() {
 
       formData.append("file", blob);
       const { data } = await axios.post(
-        "https://skin-disease-cnn-model-2f8798d0d0a5.herokuapp.com/predict",
+        "https://skindiseasesml-4cf49e08a718.herokuapp.com/predict",
         formData,
         {
           headers: {
