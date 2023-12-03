@@ -9,7 +9,7 @@ export function PatientMedicalHistory({ patientId }) {
     const [medicalHistory, setMedicalHistory] = useState({
         total_records: {},
         physical_test_cad: [],
-        physical_test_ckd: [],
+        physical_test_ck: [],
         physical_test_hd: [],
         physical_test_ms: [],
         vaccines: [],
@@ -22,6 +22,7 @@ export function PatientMedicalHistory({ patientId }) {
     useEffect(() => {
         const fetchMedicalHistory = async () => {
             try {
+                //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
                 const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientMedicalHistory', { patientId });
                 setMedicalHistory(response.data);
             } catch (error) {
@@ -71,7 +72,7 @@ export function PatientMedicalHistory({ patientId }) {
               data = medicalHistory.physical_test_cad;
               break;
           case 'CKD':
-              data = medicalHistory.physical_test_ckd;
+              data = medicalHistory.physical_test_ck;
               break;
           case 'HD':
                data = medicalHistory.physical_test_hd;
@@ -79,7 +80,21 @@ export function PatientMedicalHistory({ patientId }) {
           case 'MS':
                   data = medicalHistory.physical_test_ms;
                   break;
-          // ... handle other cases
+          case 'BT':
+                data = medicalHistory.bloodtests;
+                break;
+           case 'ECG':
+                data = medicalHistory.ecg;
+                break;
+           case 'ET':
+                data = medicalHistory.eye_test;
+                break;
+           case 'TM':
+                data = medicalHistory.tumor;
+                break;
+           default:
+            break;
+        
       }
       setCurrentRecordData(data);
       setOpenRecordModal(true);
@@ -107,10 +122,7 @@ export function PatientMedicalHistory({ patientId }) {
                 </Card>
                 <Card>
                  {/* CT Scans */}{/* X-Rays */}
-                    <CardContent>
-                        <Button variant='contained' sx={{mx:1}}>CT Scans</Button>
-                        <Button variant='contained'>X-Arrays</Button>
-                    </CardContent>
+                    
                 </Card>
             </Grid>
 
@@ -122,7 +134,7 @@ export function PatientMedicalHistory({ patientId }) {
                         {medicalHistory.physical_test_cad.length > 0 && (
                             <Button onClick={() => viewTestDetails('CAD')}>Physical Tests For CAD</Button>
                         )}
-                        {medicalHistory.physical_test_ckd.length > 0 && (
+                        {medicalHistory.physical_test_ck.length > 0 && (
                             <Button onClick={() => viewTestDetails('CKD')}>Physical Tests For CKD</Button>
                         )}
                         {medicalHistory.physical_test_hd.length > 0 && (
@@ -138,8 +150,18 @@ export function PatientMedicalHistory({ patientId }) {
                 <Card>
                     <CardContent>
                         <Typography variant='h5' gutterBottom>Lab Results</Typography>
-                        {/* Buttons to view specific lab results */}
-                        {/* ... */}
+                        {medicalHistory.bloodtests.length > 0 && (
+                            <Button onClick={() => viewTestDetails('BT')}>Blood Tests</Button>
+                        )}
+                        {medicalHistory.ecg.length > 0 && (
+                            <Button onClick={() => viewTestDetails('ECG')}>ECG</Button>
+                        )}
+                        {medicalHistory.eye_test.length > 0 && (
+                            <Button onClick={() => viewTestDetails('ET')}>Eye Test</Button>
+                        )}
+                        {medicalHistory.tumor.length > 0 && (
+                            <Button onClick={() => viewTestDetails('TM')}>Tumor</Button>
+                        )}
                     </CardContent>
                 </Card>
                 {/*Vaccines */}
