@@ -71,14 +71,15 @@ export function DoctorMessages() {
                 const patientLName = selectedPatientData.LName;
     
                 try {
+                    //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
                     await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/sendDoctorPatientMessage', {
                         doctorId,
                         patientId: selectedPatient,
-                        doctorFName: doctorInfo.FName, 
-                        doctorLName: doctorInfo.LName,
+                        doctorFName: doctorInfo.Fname, 
+                        doctorLName: doctorInfo.Lname,
                         patientFName, 
                         patientLName, 
-                        message: "Dr. "+  doctorInfo.LName+" : " +message,
+                        message: "Dr. "+  doctorInfo.Lname+" : " +message,
                         time: new Date().toISOString()
                     });
                     setMessage('');
