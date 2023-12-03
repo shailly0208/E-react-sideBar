@@ -87,7 +87,7 @@ class TasksList extends Component {
                                         <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />
                                     }
                                     title={item.FName}
-                                    description={`Age:${item.Age}`}
+                                    description={`Date:${new Date(item.appointmentTime).getFullYear()}/${new Date(item.appointmentTime).getMonth() + 1}/${new Date(item.appointmentTime).getDate()}`}
                                 />
                             </Link>
                         </List.Item>
