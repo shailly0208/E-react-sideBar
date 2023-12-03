@@ -31,6 +31,7 @@ function Ckdml() {
     const getPatientLatestRecord = async () => {
       try {
         console.log('param found ', patientId);
+        //https://e-react-node-backend-22ed6864d5f3.herokuapp.com
         const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getPhysicaltestCK', {
           patientId
         });
