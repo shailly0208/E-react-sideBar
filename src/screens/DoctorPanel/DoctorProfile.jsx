@@ -67,7 +67,7 @@ export function DocProfile() {
                            label="First Name"
                            size="small" 
                            placeholder="First Name" 
-                           value={ProfileData.FName || ''} 
+                           value={ProfileData.Fname || ''} 
                            fullWidth
                            variant="standard" 
                            />
@@ -77,7 +77,7 @@ export function DocProfile() {
                           label="Last Name"
                           size="small" 
                           placeholder="Last Name" 
-                          value={ProfileData.LName || ''}
+                          value={ProfileData.Lname || ''}
                           sx={{ flexGrow: 1 }}
                           variant="standard" 
                            />
