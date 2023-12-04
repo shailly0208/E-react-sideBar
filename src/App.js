@@ -60,14 +60,11 @@ import PatientCalendar from './screens/Calendar/PatientCalendar';
 import PatientBookTime from './screens/Calendar/PatientBookTime';
 import TimeSegmentDetail from './screens/Calendar/TimeSegmentDetail';
 import ServicesHomePage from './components/services/ServicesHomePage';
-<<<<<<< HEAD
 import HealthServices from './components/services/HealthServices';
 import DoctorService from './components/services/DoctorService';
 import PatientService from './components/services/PatientService';
 
 
-
-=======
 import VoiceRecoginition from "./screens/VoiceRecoginition.js";
 import VideoBackground from './styles/screens/VideoBackground';
 import Chatbot from './screens/Chatbot/Chatbot';
@@ -77,7 +74,7 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
->>>>>>> 244368f2bc36a96d8d0d4e8d1ad2401994f717bb
+ 
 
 class App extends Component {
   constructor() {
@@ -199,6 +196,7 @@ class App extends Component {
         {this.state.isSidebarOpen && (<Sidebar isOpen={this.state.isSidebarOpen} onClose={this.toggleSidebar} />
         )}
         <Header clearUser={this.clearUser} user={this.state.user} />
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/LogIn" element={this.state.user.type === 'NotLoggedIn' ? <LogIn loadUser={this.loadUser} loadTempUser = {this.loadTempUser} /> : <Navigate to={`${this.state.user.startInPage}`} />} />
@@ -241,16 +239,12 @@ class App extends Component {
           <Route path="/LabAdminRegistration" element={<LabAdminRegistration loadUser={this.loadUser} />} />
           <Route path="/LabApp" element={<LabApp />} />
           <Route path="/specialities" element={<Specialities />} />
-<<<<<<< HEAD
-          <Route path="/serviceHome" element={<ServicesHomePage/>} />
-          <Route path="/services" element={<HealthServices/>} />
-
+          <Route path="/serviceHome" element={<ServicesHomePage/>}/>
+          <Route path="/services" element={<HealthServices/>}/>
           <Route path="/doctorServices" element={<DoctorService/>} />
           <Route path="/patientServices" element={<PatientService/>} />
-=======
           <Route path="/services" element={<Services />} />
           <Route path="/serviceshomepage" element={<ServicesHomePage />} />
->>>>>>> 244368f2bc36a96d8d0d4e8d1ad2401994f717bb
           <Route path="/emergencyLocations" element={<EmergencyLocations />} />
           <Route path="/liverdiseaseML" element={<Liver_disease_ML />} />
           <Route path="/VoiceRecoginition" element={<VoiceRecoginition />} />

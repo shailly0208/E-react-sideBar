@@ -1,10 +1,7 @@
 import React from 'react';
 import './ServicePage.css'; // Import your CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faPhone, faCalendar, faAmbulance, faVideo, faStethoscope, faHospital, faDatabase, faUserPlus, faReceipt, faMoneyBill, faMoneyCheckDollar, faBookMedical } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-
-import { useParams } from 'react-router-dom';
+import { faComments, faCalendar, faAmbulance, faStethoscope,faDatabase, faUserPlus, faMoneyCheckDollar, faBookMedical } from '@fortawesome/free-solid-svg-icons';
 
 const DoctorService = () => {
   

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faPhone, faCalendar, faAmbulance, faVideo, faStethoscope, faHospital } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-import { useParams } from 'react-router-dom';
 
 const PatientService = () => {
   

@@ -1,4 +1,7 @@
 /* Service1.css */
+.body{
+  font-family:'Times New Roman', Times, serif;
+}
 .service-container {
     display: flex;
     justify-content: space-around;
