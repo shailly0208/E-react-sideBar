@@ -284,7 +284,7 @@ export function DoctorServices() {
                 <Typography variant="h6"><strong>Consultation Details: </strong>{selectedPlan?.pre_surgery_consultation_details}</Typography>
                 <Typography variant="h6"><strong>Risk Assestment Details: </strong>{selectedPlan?.risk_assessment_details}</Typography>
                 <Typography variant="h6"><strong>Post Operative Care Plan: </strong>{selectedPlan?.post_operative_care_plan}</Typography>
-                <Typography variant="h6"><strong>Surgery Date: </strong> {new Date(selectedPlan?.surgery_date).toDateString()}</Typography>
+                <Typography variant="h6"><strong>Surgery Date: </strong>   {selectedPlan?.surgery_date ? new Date(selectedPlan.surgery_date).toISOString().split('T')[0] : 'Date not set'}</Typography>
                 <Typography variant="h6"><strong>Plan Created on: </strong>{new Date(selectedPlan?.record_time).toLocaleString()}</Typography>
                 <Button onClick={handleDetailsModalClose}>Exit</Button>
               {/* ...other details */}
