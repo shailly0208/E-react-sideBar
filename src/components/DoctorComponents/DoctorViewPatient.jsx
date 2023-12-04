@@ -498,7 +498,7 @@ export function DoctorViewPatient({ open, onClose, patientId, doctorId }) {
                         to='/Chatbot'
                         state={patientData}
                       >
-                        Chatbot
+                        Medical Chatbot
                       </Button>
                  
                     </CardContent>
