@@ -146,6 +146,7 @@ const Contact = () => {
               Submit
             </button>
           </form>
+          <a href="/JoinUs">JoinUs</a>
         </div>
       </div>
     </div>

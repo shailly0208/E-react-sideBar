@@ -4,11 +4,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './screens/LandingPage';
 import DBConnection from './screens/DBConnection';
 import Contact from './screens/Contact';
+import JoinUs from './screens/JoinUs';
 import AdminLayout from './layout/AdminLayout';
 import AdminDashboard from './screens/AdminPanel/AdminDashboard';
 import ContactAdmin from './screens/AdminPanel/ContactAdmin';
-import HelpAdmin from './screens/AdminPanel/HelpAdmin';
+import DocHelpAdmin from './screens/AdminPanel/DocHelpAdmin';
+import JoinUsAdmin from './screens/AdminPanel/JoinUsAdmin';
+import ClinicHelpAdmin from './screens/AdminPanel/ClinicHelpAdmin';
 import ReviewAdmin from './screens/AdminPanel/ReviewAdmin';
+import ClinicalStaffLayout from './layout/ClinicalStaffLayout';
+import ClinicalStaffDashboard from './screens/ClinicalStaffPanel/ClinicalStaffDashboard';
+import StaffHelp from './screens/ClinicalStaffPanel/StaffHelp';
+import DoctorTaskStaff from "./screens/ClinicalStaffPanel/DocTaskStaff";
+import PatientMessageStaff from "./screens/ClinicalStaffPanel/PatientMessageStaff";
 import AboutUs from './screens/AboutUs';
 import Searchpatient from './screens/searchpatient';
 import Searchresult from './screens/searchresult';
@@ -60,6 +68,11 @@ import PatientCalendar from './screens/Calendar/PatientCalendar';
 import PatientBookTime from './screens/Calendar/PatientBookTime';
 import TimeSegmentDetail from './screens/Calendar/TimeSegmentDetail';
 import ServicesHomePage from './components/services/ServicesHomePage';
+import HealthServices from './components/services/HealthServices';
+import DoctorService from './components/services/DoctorService';
+import PatientService from './components/services/PatientService';
+
+
 import VoiceRecoginition from "./screens/VoiceRecoginition.js";
 import VideoBackground from './styles/screens/VideoBackground';
 import Chatbot from './screens/Chatbot/Chatbot';
@@ -69,6 +82,9 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
+ 
+
+
 import Analytic from './screens/analytics.js';
 class App extends Component {
   constructor() {
@@ -190,6 +206,7 @@ class App extends Component {
         {this.state.isSidebarOpen && (<Sidebar isOpen={this.state.isSidebarOpen} onClose={this.toggleSidebar} />
         )}
         <Header clearUser={this.clearUser} user={this.state.user} />
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/LogIn" element={this.state.user.type === 'NotLoggedIn' ? <LogIn loadUser={this.loadUser} loadTempUser = {this.loadTempUser} /> : <Navigate to={`${this.state.user.startInPage}`} />} />
@@ -203,12 +220,24 @@ class App extends Component {
           <Route path="/DBConnection" element={<DBConnection />} />
           <Route path="/testimonial" element={<TestimonialsPage />} /> {/* Use TestimonialsPage */}
           <Route path="/contact" element={<Contact />} />
+          <Route path="/JoinUs" element={<JoinUs />} />
           <Route path="/Admin" element={<AdminLayout adminInfo={this.state.user} />}>
             <Route index element={<AdminDashboard />} />
             <Route path="/Admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/Admin/help" element={<HelpAdmin />} />
+            <Route path="/Admin/dochelp" element={<DocHelpAdmin />} />
+            <Route path="/Admin/clinichelp" element={<ClinicHelpAdmin />} />
             <Route path="/Admin/contact" element={<ContactAdmin />} />
             <Route path="/Admin/review" element={<ReviewAdmin />} />
+            <Route path="/Admin/joinus" element={<JoinUsAdmin />} />
+          </Route>
+          <Route path="/ClinicalStaff" element={<ClinicalStaffLayout adminInfo={this.state.user} />}>
+            <Route index element={<ClinicalStaffDashboard />} />
+            <Route path="/ClinicalStaff/dashboard" element={<ClinicalStaffDashboard />} />
+            <Route path="/ClinicalStaff/NewPatient" element={<PatientRegistration />} />
+            <Route path="/ClinicalStaff/patientmessage" element={<PatientMessageStaff />} />
+            <Route path="/ClinicalStaff/DoctorTask" element={<DoctorTaskStaff />} />
+            <Route path="/ClinicalStaff/calendar" element={<DoctorCalendar />} />
+            <Route path="/ClinicalStaff/techsupport" element={<StaffHelp />} />
           </Route>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/terms" element={<Terms />} />
@@ -232,6 +261,10 @@ class App extends Component {
           <Route path="/LabAdminRegistration" element={<LabAdminRegistration loadUser={this.loadUser} />} />
           <Route path="/LabApp" element={<LabApp />} />
           <Route path="/specialities" element={<Specialities />} />
+          <Route path="/serviceHome" element={<ServicesHomePage/>}/>
+          <Route path="/services" element={<HealthServices/>}/>
+          <Route path="/doctorServices" element={<DoctorService/>} />
+          <Route path="/patientServices" element={<PatientService/>} />
           <Route path="/services" element={<Services />} />
           <Route path="/serviceshomepage" element={<ServicesHomePage />} />
           <Route path="/emergencyLocations" element={<EmergencyLocations />} />

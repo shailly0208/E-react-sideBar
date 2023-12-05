@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import DoctorSideBar from "../components/DoctorComponents/DoctorSidebar";
@@ -13,7 +12,6 @@ function DoctorLayout(userInfo) {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
     const doctor_id = userInfo.doctorInfo.id;
-
 
     if (userInfo.doctorInfo.type !== "Doctor") {
         return <Navigate to="/" />;
@@ -34,13 +32,21 @@ function DoctorLayout(userInfo) {
                         flexGrow: 1,
                         height: '100vh',
                         overflow: 'auto',  
-                        p: 3, // Adds padding inside the box, you can adjust as needed
-                        maxWidth: 'lg', // Set a maximum width (you can use values like 'sm', 'md', 'lg', 'xl', or px values)
-                        margin: 'auto', // This centers the content
-                        width: '100%', // Use the full width available      
+                        p: {
+                          xs: 1, // Padding for extra small devices
+                          sm: 2, // Padding for small devices
+                          md: 2, // Padding for medium devices
+                          lg: 2, // Padding for large devices
+                        },
+                        maxWidth: 'xl',
+                        margin: '0 auto',
+                        width: '100%',
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        justifyContent: 'flex-start',
                     }}
                 >
-                    <Toolbar />
                     <Outlet context={doctor_id} />
                 </Box>
             </Box>

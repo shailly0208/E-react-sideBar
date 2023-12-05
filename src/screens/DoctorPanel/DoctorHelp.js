@@ -28,7 +28,7 @@ const DoctorHelp = () => {
       axios.post("https://e-react-node-backend-22ed6864d5f3.herokuapp.com/doctorhelp", {
         formData
       })
-      alert("Form Submitted successfully")
+      alert("Submitted successfully")
       window.location.href = '/doctor';
     }
     catch (e) {
@@ -59,10 +59,6 @@ const DoctorHelp = () => {
 
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length === 0) {
-      alert("Form Submitted successfully")
-      window.location.href = '/doctor';
-    }
 
 
   }
@@ -77,7 +73,7 @@ const DoctorHelp = () => {
             <div>
               <input
                 type="text"
-                name="helptName"
+                name="helpName"
                 placeholder='Full Name'
                 autoComplete='off'
                 onChange={handleChange}

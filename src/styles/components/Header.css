@@ -126,16 +126,26 @@ header {
   #check{
     display: none;
   }
-  @media (max-width: 952px){
+  @media (max-width: 1328px){
     label.logo{
-      font-size: 30px;
-      padding-left: 50px;
+      font-size: 12px;
+      padding-left: 2px;
     }
     nav ul li a{
-      font-size: 16px;
+      font-size: 10px;
     }
   }
-  @media (max-width: 858px){
+  
+  @media (max-width: 975px){
+    label.logo{
+      font-size: 10px;
+      padding-left: 1px;
+    }
+    nav ul li a{
+      font-size: 8px;
+    }
+  }
+  @media (max-width: 902px){
     .checkbtn{
       display: block;
     }
@@ -150,13 +160,20 @@ header {
       text-align: center;
       transition: all .5s;
     }
+    nav ul {
+      display: flex; /* Using flexbox */
+      flex-direction: column; /* Stack items vertically */
+      align-items: center; /* Center items */
+      /* Other styles */
+    }
     nav ul li{
       display: block;
-      margin: 50px 0;
+      margin: 10px 0;
       line-height: 30px;
     }
     nav ul li a{
-      font-size: 20px;
+      font-size: 16px; /* Adjust font size */
+      white-space: nowrap; /* Prevent text wrapping */
     }
     a:hover,a.active{
       background: none;
