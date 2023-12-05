@@ -1,9 +1,10 @@
 /* Add a background color and some padding around the form */
+
 .contact-admin-container {
-  background-color: #dbf2ff;
-  padding: 20px;
   min-height: 400px;
   height: fit-content;
+  width: fit-content;
+  margin-top: 0px;
 }
 
 .contact-admin-container h1 {
@@ -17,52 +18,28 @@
   margin: 10px;
   color:  rgb(29, 31, 30);
   font-family: 'Poppins', sans-serif!important;
-  text-align: left;
 }
 
+
 .contact-admin-container th {
-background-color: #aee0fa;
-margin: 10px;
-border:1px solid rgb(44, 44, 44);
-color:rgb(44, 44, 44);
-}
+  background-color: #d5eefc;
+  margin: 10px;
+  color:rgb(44, 44, 44);
+  width: fit-content;
+  }
 
 .contact-admin-container tr {
   background-color: white;
   color: rgb(44, 44, 44);
-  border:1px solid rgb(44, 44, 44);
+  border-top:1px solid rgb(44, 44, 44);
+  border-bottom:1px solid rgb(44, 44, 44);
+  width: fit-content;
   }
+
+  
 
   .contact-admin-container table{
     border: 0px;
   }
-
-
-
-
-  .contact-admin-container button[type=refreshContactAdmin] {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: 'Poppins', sans-serif !important;
-  border-radius: 20px;
-  border: 2px solid lightseagreen;
-  background-color: white;
-  color: lightseagreen;
-  padding: 12px 20px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-/* When moving the mouse over the submit button, add a darker green color */
-.contact-admin-container button[type=refreshContactAdmin]:hover {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: 'Poppins', sans-serif !important;
-  border-radius: 20px;
-  border: 2px solid lightseagreen;
-  color: white;
-  background-color: lightseagreen;
-  font-weight: bold;
-}
 
 

@@ -9,10 +9,14 @@ import AdminLayout from './layout/AdminLayout';
 import AdminDashboard from './screens/AdminPanel/AdminDashboard';
 import ContactAdmin from './screens/AdminPanel/ContactAdmin';
 import DocHelpAdmin from './screens/AdminPanel/DocHelpAdmin';
+import JoinUsAdmin from './screens/AdminPanel/JoinUsAdmin';
 import ClinicHelpAdmin from './screens/AdminPanel/ClinicHelpAdmin';
 import ReviewAdmin from './screens/AdminPanel/ReviewAdmin';
 import ClinicalStaffLayout from './layout/ClinicalStaffLayout';
 import ClinicalStaffDashboard from './screens/ClinicalStaffPanel/ClinicalStaffDashboard';
+import StaffHelp from './screens/ClinicalStaffPanel/StaffHelp';
+import DoctorTaskStaff from "./screens/ClinicalStaffPanel/DocTaskStaff";
+import PatientMessageStaff from "./screens/ClinicalStaffPanel/PatientMessageStaff";
 import AboutUs from './screens/AboutUs';
 import Searchpatient from './screens/searchpatient';
 import Searchresult from './screens/searchresult';
@@ -73,6 +77,8 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
+
+
 
 class App extends Component {
   constructor() {
@@ -212,15 +218,19 @@ class App extends Component {
             <Route index element={<AdminDashboard />} />
             <Route path="/Admin/dashboard" element={<AdminDashboard />} />
             <Route path="/Admin/dochelp" element={<DocHelpAdmin />} />
-            <Route path="/Admin/clnichelp" element={<ClinicHelpAdmin />} />
+            <Route path="/Admin/clinichelp" element={<ClinicHelpAdmin />} />
             <Route path="/Admin/contact" element={<ContactAdmin />} />
             <Route path="/Admin/review" element={<ReviewAdmin />} />
+            <Route path="/Admin/joinus" element={<JoinUsAdmin />} />
           </Route>
           <Route path="/ClinicalStaff" element={<ClinicalStaffLayout adminInfo={this.state.user} />}>
             <Route index element={<ClinicalStaffDashboard />} />
             <Route path="/ClinicalStaff/dashboard" element={<ClinicalStaffDashboard />} />
             <Route path="/ClinicalStaff/NewPatient" element={<PatientRegistration />} />
+            <Route path="/ClinicalStaff/patientmessage" element={<PatientMessageStaff />} />
+            <Route path="/ClinicalStaff/DoctorTask" element={<DoctorTaskStaff />} />
             <Route path="/ClinicalStaff/calendar" element={<DoctorCalendar />} />
+            <Route path="/ClinicalStaff/techsupport" element={<StaffHelp />} />
           </Route>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/terms" element={<Terms />} />

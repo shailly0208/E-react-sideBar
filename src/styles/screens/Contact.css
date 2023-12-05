@@ -10,6 +10,7 @@
   height: fit-content;
 }
 
+
 .contact-heading-one h1 {
   font-size: 56px;
   margin: 5px;
@@ -197,5 +198,33 @@
   color: white;
   background-color: #0288d1;
   float: right;
+  font-weight: bold;
+}
+
+.contact-container button[type=scroll] {
+  margin-top: 20px;
+  font-family: 'Poppins', sans-serif !important;
+  border-radius: 20px;
+  border: 2px solid #0288d1;
+  color: white;
+  background-color: #0288d1;
+  padding: 12px 20px;
+  cursor: pointer;
+  margin-left: 900px;
+  margin-bottom: 50px;
+  font-weight: bold;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+.contact-container button[type=scroll]:hover {
+  margin-top: 20px;
+  font-family: 'Poppins', sans-serif !important;
+  border-radius: 20px;
+  border: 2px solid #0288d1;
+  background-color: white;
+  color: #0288d1;
+
+  margin-left: 900px;
+  margin-bottom: 50px;
   font-weight: bold;
 }

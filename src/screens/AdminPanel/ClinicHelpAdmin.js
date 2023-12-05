@@ -10,18 +10,25 @@ function HelpAdmin() {
   const [records, setRecords] = useState([])
   useEffect(()=> {
     //axios.get("https://jsonplaceholder.typicode.com/users")
-    axios.get("https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/doctorhelp")
+    axios.get("https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/clinichelp")
     .then(res => {setRecords(res.data)})
     .catch(err => console.log(err))
   }, [])
   
-  // const handleFetchContactUs = () => {
-  //   // Clear the table and show loading state
-  //   setShowTable(false);
 
-  //   dispatch(fetchContactUs());
-  // };
-  
+  function handleDelete(id) {
+    const confirm =window.confirm("Have you checked this record?");
+    if (confirm){
+      try {
+        axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/clinichelpCheck', {id})
+        .then(res => {alert("Record is checked.")});
+        window.location.href = '/Admin/clinichelp';
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <div className = 'contact-admin-container'>
@@ -29,13 +36,13 @@ function HelpAdmin() {
           <table>
             <thead>
               <tr>
-                <th>No</th>
+                <th style={{width: '50px'}}>No</th>
                 <th>Name</th>
                 <th>Phone</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Time</th>
-                <th>Reply</th>
+                <th style={{width: '180px'}}>Email</th>
+                <th style={{width: '300px'}}>Message</th>
+                <th style={{width: '180px'}}>Time</th>
+                <th style={{width: '120px'}}>Reply</th>
 
                 {/* <th>contact_topic</th>
                 <th>contact_message</th>
@@ -46,13 +53,13 @@ function HelpAdmin() {
               <tbody>
                 {records.map((r,i)=> {                  
                   return <tr key={i}>
-                    <td> {r.id}</td>
+                    <td style={{width: '50px'}}> {r.id}</td>
                     <td> {r.help_name}</td>
                     <td> {r.help_phone}</td>
-                    <td> {r.help_email}</td>
-                    <td> {r.help_message}</td>
-                    <td> {r.help_time}</td>
-                    <td> {r.help_reply}</td>
+                    <td style={{width: '180px'}}> {r.help_email}</td>
+                    <td style={{width: '300px'}}> {r.help_message}</td>
+                    <td style={{width: '180px'}}> {r.help_time}</td>
+                    <td style={{width: '120px'}}> <button className = 'btn' onClick={e =>handleDelete(r.id)}>Check</button></td>
 
 
                     

@@ -28,7 +28,7 @@ export const mainListItems = (
       <ListItemText primary="Doctor Tech Help" />
     </ListItemButton>
 
-    <ListItemButton component={Link} to={"/Admin/clnichelp"}>
+    <ListItemButton component={Link} to={"/Admin/clinichelp"}>
       <ListItemIcon>
         <DeviceUnknownIcon />
       </ListItemIcon>
@@ -58,7 +58,7 @@ export const mainListItems = (
       <ListItemText primary="Reviews"   />
     </ListItemButton>
 
-    <ListItemButton component={Link} to={"/Admin"}>
+    <ListItemButton component={Link} to={"/Admin/joinus"}>
       <ListItemIcon>
        < PeopleIcon />
       </ListItemIcon>

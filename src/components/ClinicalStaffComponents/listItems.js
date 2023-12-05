@@ -14,7 +14,7 @@ export const mainListItems = (
     
 
         
-    <ListItemButton component={Link} to={"/ClinicalStaff"}>
+    <ListItemButton component={Link} to={"/ClinicalStaff/DoctorTask"}>
       <ListItemIcon>
         <MedicalServicesIcon />
       </ListItemIcon>
@@ -29,7 +29,7 @@ export const mainListItems = (
     </ListItemButton>
 
 
-    <ListItemButton component={Link} to={"/ClinicalStaff"}>
+    <ListItemButton component={Link} to={"/ClinicalStaff/patientmessage"}>
       <ListItemIcon>
        < HelpIcon />
       </ListItemIcon>
@@ -46,7 +46,7 @@ export const mainListItems = (
     </ListItemButton>
 
 
-    <ListItemButton component={Link} to={"/ClinicalStaff"}>
+    <ListItemButton component={Link} to={"/ClinicalStaff/techsupport"}>
       <ListItemIcon>
         <SupportAgentIcon />
       </ListItemIcon>

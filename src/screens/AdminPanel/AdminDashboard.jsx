@@ -5,10 +5,7 @@ import Paper from '@mui/material/Paper';
 
 export default function AdminDashboard() {
   return (
-          <Container maxWidth="xl" >
-            <Grid container spacing={12}>
-              {/* Recent Patients */}
-              <Grid item xs={12}>
+            
                 <Paper
                   sx={{
                     p: 2,
@@ -19,9 +16,5 @@ export default function AdminDashboard() {
                 >
                   <h3>Welcome to Admin Page!</h3>
                 </Paper>
-              </Grid>
-              
-            </Grid>
-          </Container>
   );
 }
