@@ -3,16 +3,16 @@ import {  Outlet, Navigate  } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import AdminSideBar from "../components/AdminComponents/AdminSidebar";
+import AdminSideBar from "../components/ClinicalStaffComponents/ClinicalStaffSidebar";
 
 
-function AdminLayout(userInfo) {
+function ClinicalStaffLayout(userInfo) {
     const admin_id =userInfo.adminInfo.id;
-
+/*
     if(userInfo.adminInfo.type!=="Admin"){
         return <Navigate to="/"/>
     }
-    
+ */   
     return(
         <>
         <Box sx={{ display: 'flex' }}>
@@ -26,7 +26,7 @@ function AdminLayout(userInfo) {
                 overflow: 'auto',
                 maxWidth: 'lg', // Set a maximum width (you can use values like 'sm', 'md', 'lg', 'xl', or px values)
                 margin: 'auto', // This centers the content
-                width: '100%', // Use the full width available 
+                width: '100%', // Use the full width available    
             }}
             >
                 <Toolbar />
@@ -39,4 +39,4 @@ function AdminLayout(userInfo) {
 }
 
   
-export default AdminLayout;
+export default ClinicalStaffLayout;

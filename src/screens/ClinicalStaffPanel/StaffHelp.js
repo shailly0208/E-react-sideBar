@@ -3,7 +3,7 @@ import axios from "axios";
 import '../../styles/screens/DoctorHelp.css';
 
 
-const DoctorHelp = () => {
+const StaffHelp = () => {
 
 
   const [formData, setFormData] = useState({
@@ -25,11 +25,11 @@ const DoctorHelp = () => {
   let handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      axios.post("https://e-react-node-backend-22ed6864d5f3.herokuapp.com/doctorhelp", {
+      axios.post("https://e-react-node-backend-22ed6864d5f3.herokuapp.com/stafftechsupport", {
         formData
       })
       alert("Submitted successfully")
-      window.location.href = '/doctor';
+      window.location.href = '/ClinicalStaff';
     }
     catch (e) {
       console.log(e);
@@ -58,7 +58,6 @@ const DoctorHelp = () => {
     }
 
     setErrors(validationErrors)
-
 
 
   }
@@ -121,4 +120,4 @@ const DoctorHelp = () => {
   );
 };
 
-export default DoctorHelp;
+export default StaffHelp;
