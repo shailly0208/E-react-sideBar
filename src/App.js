@@ -82,7 +82,7 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
- 
+import ViewRating from './screens/ViewRating';
 
 
 import Analytic from './screens/analytics.js';
@@ -209,6 +209,7 @@ class App extends Component {
 
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/ViewRating" element={<ViewRating />} />
           <Route path="/LogIn" element={this.state.user.type === 'NotLoggedIn' ? <LogIn loadUser={this.loadUser} loadTempUser = {this.loadTempUser} /> : <Navigate to={`${this.state.user.startInPage}`} />} />
           <Route path="/SignUp" element={this.state.user.type === 'NotLoggedIn' ? <SignUp loadUser={this.loadUser} /> : <Navigate to={`${this.state.user.startInPage}`} />} />
           <Route path="/searchpatient" element={<Searchpatient />} />
@@ -297,7 +298,7 @@ class App extends Component {
           <Route path="/Analytic" element={<Analytic />}/>
           
         </Routes>
-        <Footer />
+        <Footer status ={this.state.user.type} />
       </BrowserRouter>
     );
   }
