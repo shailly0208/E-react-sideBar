@@ -1,7 +1,7 @@
 // src/redux/store.js
 
 import { createStore, applyMiddleware, combineReducers } from "redux";
-import thunk from "redux-thunk";
+import {thunk} from "redux-thunk";
 import userReducer from "./reducers/userReducer";
 import addPatientInfoReducer from "./reducers/addPatientInfoReducer";
 import specialitiesReducer from './reducers/specialitiesReducer';
