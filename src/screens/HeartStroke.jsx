@@ -23,7 +23,7 @@ const ModelDetails = {
 };
 
 const API_ROOT = `https://e-react-node-backend-22ed6864d5f3.herokuapp.com`;  //TODO: Need to replace with the backend server address
-const HEART_STROKE_API_ENDPOINT = `https://heartstrokeml-10f32822d6bb.herokuapp.com/`;
+const HEART_STROKE_API_ENDPOINT = `https://heartstrokeml-10f32822d6bb.herokuapp.com`;
 
 const HeartStroke = () => {
     const location = useLocation();
