@@ -10,6 +10,17 @@
   height: fit-content;
 }
 
+.join-container {
+  background-color: #eaf7ff;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 25px;
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-bottom: 100px;
+  resize: vertical;
+}
+
 
 .contact-heading-one h1 {
   font-size: 56px;

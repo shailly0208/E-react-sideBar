@@ -57,7 +57,7 @@ function DocTaskStaff() {
                     <td style={{width: '360px'}}> {r.message}</td>
                     
                     <td style={{width: '240px'}}> {r.sent_time}</td>
-                    {!r.check_status && <td> <button className = 'button' onClick={e =>handleReply(r.id)}>Reply</button></td>}
+                    {!r.check_status && <td> <button className = 'btn' onClick={e =>handleReply(r.id)}>Reply</button></td>}
 
 
               
