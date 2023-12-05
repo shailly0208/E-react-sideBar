@@ -85,7 +85,7 @@ import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
  
 
 
-
+import Analytic from './screens/analytics.js';
 class App extends Component {
   constructor() {
     super();
@@ -294,6 +294,8 @@ class App extends Component {
           />
           <Route path="/calendar/timesegment/:id" element={<TimeSegmentDetail />} />
           <Route path="/calendar/booktime" element={<PatientBookTime />} />
+          <Route path="/Analytic" element={<Analytic />}/>
+          
         </Routes>
         <Footer />
       </BrowserRouter>

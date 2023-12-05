@@ -13,6 +13,8 @@ const LandingPage = () => {
        <a href="/Tasks">Tasks</a><br></br><br></br>
        <a href="/webform">Surgery Feedback Form</a><br></br><br></br>
        <a href="/HealthcareModels">Hub</a><br></br><br></br>
+       <a href="/Analytic">Analytic</a><br></br><br></br>
+
        <a href="/VoiceRecoginition">VoiceRecoginition</a><br></br><br></br>
 
        <a href="/serviceshomepage">ServicesHomePage</a><br></br><br></br>
