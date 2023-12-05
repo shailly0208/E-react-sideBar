@@ -98,6 +98,25 @@ class PatientRegistration extends Component {
       if(this.state.emailID !== this.state.cEmailID){
         return alert("Emails do not match");
       }
+      if(this.state.gender.toLocaleLowerCase() !== 'male' && this.state.gender.toLocaleLowerCase() !== 'female'){
+        return alert("Please enter a valid gender");
+      }
+      if(this.state.bloodGroup.toLocaleLowerCase() !== 'a+' && this.state.bloodGroup.toLocaleLowerCase() !== 'a-' && 
+      this.state.bloodGroup.toLocaleLowerCase() !== 'b+' && this.state.bloodGroup.toLocaleLowerCase() !== 'b-' && 
+      this.state.bloodGroup.toLocaleLowerCase() !== 'ab+' && this.state.bloodGroup.toLocaleLowerCase() !== 'ab-' && 
+      this.state.bloodGroup.toLocaleLowerCase() !== 'o+' && this.state.bloodGroup.toLocaleLowerCase() !== 'o-' ){
+        return alert("Please enter a valid bloodgroup");
+      }
+      if(this.state.firstName === '' || this.state.middleName ==='' || this.state.lastName === '' || 
+      this.state.gender ==='' || this.state.age === 0 || this.state.bloodGroup ==='' || 
+      this.state.mobileNumber === '' || this.state.drivingLicenseNumber ==='' || this.state.emailID === '' || 
+      this.state.cEmailID ==='' || this.state.password === '' || this.state.cPassword ==='' ||
+      this.state.address1 === '' || this.state.address2 ==='' || this.state.postalCode === '' || 
+      this.state.city ==='' || this.state.province === '' || this.state.healthCardNumber ==='' || 
+      this.state.passportNumber === '' || this.state.prNumber ==='' )
+      {
+        return alert("Please enter all the details");
+      }
       fetch('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/PatientRegistration',{
         method: 'POST',
         headers: {'Content-Type':'application/json'},
@@ -129,10 +148,9 @@ class PatientRegistration extends Component {
         }
       )
       .then(user => {
-        if(user.id){
-          this.props.loadUser(user);
-          window.location.href = '/services';
-        }
+          alert("Successfully registered");
+          this.state = initialState;
+          window.location.href = '/LogIn';
       })
       .catch(error => {
         console.error('There was an error during the fetch:', error);
