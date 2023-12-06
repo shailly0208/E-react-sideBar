@@ -19,6 +19,7 @@ function Searchresult() {
   const goToliverdiseaseML = () => navigate('/liverdiseaseML', { state: dataskin });
   const goToPneumoniaML = () => navigate('/Pneumoniaml', { state: dataskin });
   const goToBonecancerml = () => navigate('/Bonecancerml', { state: dataskin });
+  const goTohepatitisML = () => navigate("/hepatitis", {state: dataskin });
   const goToHeartStroke = () => navigate("/heartstroke", { state: dataskin });
   const goToheartdisease = () => navigate("/Heartdiseaseml", { state: dataskin });
   const goTohPsychologyPrediction = () => navigate("/PsychologyPrediction", { state: dataskin });
@@ -171,6 +172,12 @@ function Searchresult() {
             <h3>Heart Diagnostic</h3>
             <p>Get heart disease results.</p>
             <button className="button button5" onClick={goToheartdisease}>Go</button>
+          </div>
+          <div class="service">
+             <i class="ri-store-3-line"></i>
+             <h3>Hepatitis Prediction Model</h3>
+             <p>Detection using SVM  </p>
+             <button class="button button5" onClick={goTohepatitisML}>Go</button>
           </div>
           <div class="service">
             <i class="ri-macbook-line"></i>
