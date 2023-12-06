@@ -130,8 +130,8 @@ function Searchresult() {
           </div>
           <div class="service">
             <i class="ri-store-3-line"></i>
-            <h3>Liver Disease Prediction Model</h3>
-            <p>Machine learning model</p>
+            <h3>Liver Disease Diagnosis</h3>
+            <p>ML model 99.55% accuracy ~ Random Forest</p>
             <button class="button button5" onClick={goToliverdiseaseML}>Go</button>
           </div>
           <div class="service">
@@ -200,4 +200,3 @@ function Searchresult() {
 }
 
 export default Searchresult;
-
