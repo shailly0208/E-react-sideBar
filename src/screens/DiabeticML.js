@@ -30,7 +30,7 @@ function DiabeticML() {
 
   const getPatientLatestRecord = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/getDiabeticsData', {
+      const response = await axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/getDiabeticsData', {
         patientId
       });
       console.log("response",response);
