@@ -4,7 +4,7 @@ import './Services.css';
 function ServicesHomePage() {
   return (
     <div className="services-container">
-      <h1 className="page-title">Health Care Services </h1> 
+      <h1 className="page-title">Diagnostic Services </h1> 
       <center><div class="gradient-line"></div></center>
       
       <br></br>

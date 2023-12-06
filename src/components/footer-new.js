@@ -1,6 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/components/Footer.css'
-function Footer() {
+function Footer( props) {
+  console.log(props, "From footer")
+  const [IsLoggedIn, setIsLoggedIn] = useState(false)
+  const [isAdmin, setisAdmin] = useState(false)
+
+  useEffect(() => {
+    console.log("UseEffeoce")
+    if(props.status=="NotLoggedIn"){
+      setIsLoggedIn(false)
+    }else{
+
+      if(props.status=="Admin")
+      {
+        setisAdmin(true)
+      }else{
+        setisAdmin(false)
+      }
+      setIsLoggedIn(true)
+    }
+  }, [props.status])
   return (
 
    // <div class="footer-page">
@@ -16,7 +35,12 @@ function Footer() {
 
         <p class="footer-links">
         <a href="terms" class="link-1">Terms and Conditions</a>
+        {IsLoggedIn &&
         <a href="/testimonial">Testimonial</a>
+}
+{isAdmin &&
+        <a href="/ViewRating">View Ratings</a>
+}
         <a href="rights">Patient rights</a>
         </p>
 
