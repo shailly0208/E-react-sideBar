@@ -56,7 +56,7 @@ function DocTaskStaff() {
                     <td style={{width: '260px'}}> {r.task}</td>
                     
                     <td style={{width: '180px'}}> {r.request_time}</td>
-                    <td> <button className = 'button' onClick={e =>handleDelete(r.id)}>Check</button></td>
+                    <td> <button className = 'btn' onClick={e =>handleDelete(r.id)}>Check</button></td>
 
 
               

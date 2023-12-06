@@ -17,11 +17,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Portal" />
     </ListItemButton>
-    <ListItemButton component={Link} to={"/services"}>
+    <ListItemButton component={Link} to={"/bookAppServices"}>
       <ListItemIcon>
         <MedicalServicesIcon />
       </ListItemIcon>
-      <ListItemText primary="Services"  />
+      <ListItemText primary="Book Appointment"  />
     </ListItemButton>
     <ListItemButton component={Link} >
       <ListItemIcon>

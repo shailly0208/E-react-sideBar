@@ -12,7 +12,7 @@
     justify-content: flex-start;
     align-items: center;
     padding-bottom: 10%;
-    background-color: #FAF3E0;
+    background-color: #D8E8D4;
     /* background-color: #D8D8D8; */
     /* background-color: #274156; */
     /* background-color: #5e4b2a; */
@@ -22,7 +22,7 @@
 
 .image-section {
     flex: 70%;
-    background: url('./Login_image.jpg') no-repeat center center;
+    background: url('./Login_image.png') no-repeat center center;
     background-size: cover; 
     height: 90vh;
 }
@@ -31,7 +31,7 @@
     width: 90%; 
     text-align: center; 
     margin-top: 10rem;
-    background-color: #FFEEDD;
+    background-color: #FAF3E0;
     margin-bottom: 10%;
 }
 .login{

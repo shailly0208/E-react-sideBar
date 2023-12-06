@@ -19,6 +19,7 @@ function Searchresult() {
   const goToliverdiseaseML = () => navigate('/liverdiseaseML', { state: dataskin });
   const goToPneumoniaML = () => navigate('/Pneumoniaml', { state: dataskin });
   const goToBonecancerml = () => navigate('/Bonecancerml', { state: dataskin });
+  const goTohepatitisML = () => navigate("/hepatitis", {state: dataskin });
   const goToHeartStroke = () => navigate("/heartstroke", { state: dataskin });
   const goToheartdisease = () => navigate("/Heartdiseaseml", { state: dataskin });
   const goTohPsychologyPrediction = () => navigate("/PsychologyPrediction", { state: dataskin });
@@ -130,8 +131,8 @@ function Searchresult() {
           </div>
           <div class="service">
             <i class="ri-store-3-line"></i>
-            <h3>Liver Disease Prediction Model</h3>
-            <p>Machine learning model</p>
+            <h3>Liver Disease Diagnosis</h3>
+            <p>ML model 99.55% accuracy ~ Random Forest</p>
             <button class="button button5" onClick={goToliverdiseaseML}>Go</button>
           </div>
           <div class="service">
@@ -174,6 +175,12 @@ function Searchresult() {
             <button className="button button5" onClick={goToheartdisease}>Go</button>
           </div>
           <div class="service">
+             <i class="ri-store-3-line"></i>
+             <h3>Hepatitis Prediction Model</h3>
+             <p>Detection using SVM  </p>
+             <button class="button button5" onClick={goTohepatitisML}>Go</button>
+          </div>
+          <div class="service">
             <i class="ri-macbook-line"></i>
             <h3> Bone Cancer Detection</h3>
             <p>Bone Cancer prediction model using CNN </p>
@@ -200,4 +207,3 @@ function Searchresult() {
 }
 
 export default Searchresult;
-

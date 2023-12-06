@@ -28,7 +28,7 @@ export const mainListItems = (
       <ListItemIcon>
         <MedicalServicesIcon />
       </ListItemIcon>
-      <ListItemText primary="Services" />
+      <ListItemText primary="Planning" />
     </ListItemButton>
     <ListItemButton component={Link} to={"/doctor/profile"}>
       <ListItemIcon>

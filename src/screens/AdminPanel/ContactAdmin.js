@@ -39,9 +39,9 @@ function ContactAdmin() {
             <thead>
               <tr>
                 <th style={{width: '50px'}}>No</th>
-                <th style={{width: '100px'}}>Name</th>
+                <th style={{width: '80px'}}>Name</th>
                 <th style={{width: '120px'}}>Phone</th>
-                <th >Email</th>
+                <th style={{width: '180px'}}>Email</th>
                 <th>Topic</th>
                 <th style={{width: '260px'}}>Message</th>
                 <th style={{width: '200px'}}>Time</th>
@@ -73,9 +73,9 @@ function ContactAdmin() {
                   
                   return <tr key={i}>
                     <td style={{width: '50px'}}> {r.id}</td>
-                    <td style={{width: '100px'}}> {r.contact_name}</td>
+                    <td style={{width: '80px'}}> {r.contact_name}</td>
                     <td style={{width: '120px'}}> {r.contact_phone}</td>
-                    <td> {r.contact_email}</td>
+                    <td style={{width: '180px'}}> {r.contact_email}</td>
                     
                     <td> {r.contact_topic}</td>
                     <td style={{width: '260px'}}> {r.contact_message}</td>
