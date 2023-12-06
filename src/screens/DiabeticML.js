@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-
+import  '../styles/screens/DiabeticML.css'
 function DiabeticML() {
   const [diabetesData] = useState({
     "patient_id": 143,
@@ -63,7 +63,7 @@ function DiabeticML() {
       });
 
       const result = response.data;
-      console.log()
+      console.log("result:",result);
       if (response.status === 200) {
         if (result.error) {
           setAlertMessage(JSON.stringify(result.error));
@@ -90,13 +90,13 @@ function DiabeticML() {
     <>
       <div className="diabetic-container">
         <h2 className="title"> Diabetes Prediction</h2>
-        <button className="predict-button" onClick={getPatientLatestRecord}>Get Latest Record</button>
-        <button className="predict-button" onClick={predictDiabetes}>Predict Diabetes</button>
+        {/* <button className="predict-button" onClick={getPatientLatestRecord}>Get Latest Record</button> */}
+        <button className="predict-button" onClick={predictDiabetes}>Predict Diabetes</button><br></br><br></br>
         <div className="prediction-result">
           <strong>Diagnosis:</strong> {diagnosis}
-        </div>
+        </div><br></br><br></br>
         <div className="data-table">
-          <h3>Data Sent to API</h3>
+          <h3>Pateint Data</h3>
           <table>
             <thead>
               <tr>
