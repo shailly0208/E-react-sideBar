@@ -18,13 +18,18 @@ function Heartdiseaseml() {
     { apiName: 'male', displayName: 'Gender' },
     { apiName: 'age', displayName: 'Age' },
     { apiName: 'education', displayName: 'Education' },
-    { apiName: 'currentSmoker', displayName: 'CurrentSmoker' },
-    { apiName: 'cigsPerDay', displayName: 'CigsPerDay' },
-    { apiName: 'BPMeds', displayName: 'BPMeds' },
-    { apiName: 'prevalentStroke', displayName: 'PrevalentStroke' },
-    { apiName: 'prevalentHyp', displayName: 'PrevalentHyp' },
+    { apiName: 'currentSmoker', displayName: 'Current Smoker' },
+    { apiName: 'cigsPerDay', displayName: 'Cigs Per Day' },
+    { apiName: 'BPMeds', displayName: 'BP Medication' },
+    { apiName: 'prevalentStroke', displayName: 'Prevalent Stroke' },
+    { apiName: 'prevalentHyp', displayName: 'Prevalent Hypertension' },
     { apiName: 'diabetes', displayName: 'Diabetes' },
+    { apiName: 'totChol', displayName: 'Cholesterol' },
+    { apiName: 'sysBP', displayName: 'Systolic Blood Pressure' },
+    { apiName: 'diaBP', displayName: 'Diabolic Blood Pressure' },
     { apiName: 'BMI', displayName: 'BMI' },
+    { apiName: 'heartRate', displayName: 'Heart Rate' },
+    { apiName: 'glucose', displayName: 'Glucose' },
   ];
 
   const fetchHeartDiseasePrediction = async () => {
@@ -100,19 +105,13 @@ function Heartdiseaseml() {
           )}
           {showPatientDetails && features && features.length > 0 && (
             <table>
-              <thead>
-                <tr>
-                  {features.map((feature, index) => (
-                    <th key={index}>{feature.key}</th>
-                  ))}
-                </tr>
-              </thead>
               <tbody>
-                <tr>
-                  {features.map((feature, index) => (
-                    <td key={index}>{feature.value}</td>
-                  ))}
-                </tr>
+                {features.map((feature, index) => (
+                  <tr key={index}>
+                    <th>{feature.key}</th>
+                    <td>{feature.value}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
