@@ -121,12 +121,12 @@ function Liver_disease_ML() {
   return (
     <>
         <div className="liver-container">
-            <h2 className="title"> {fname} {lname} - Liver disease results</h2>
-            <button className="diagnose-button" onClick={() => predict({ latestRecord })}>Diagnose</button>
-            <div className="diagnosis-result">
+            <h2 className="liver-title"> {fname} {lname} - Liver disease results</h2>
+            <button className="liver-diagnose-button" onClick={() => predict({ latestRecord })}>Diagnose</button>
+            <div className="liver-diagnosis-result">
                 <strong>Diagnosis:</strong> {prediction}
             </div>
-            <table className="results-table">
+            <table className="liver-results-table">
                 <thead>
                     <tr>
                         <th>Variables</th>
