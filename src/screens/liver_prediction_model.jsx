@@ -1,8 +1,12 @@
 import {useLocation} from 'react-router-dom';
-import '../styles/screens/diagonostic.css';
+import '../styles/screens/Liver.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+const titlesOfData = [
+  "Age", "Total_Bilirubin", "Direct_Bilirubin", "Alkaline_Phosphotase", "Alamine_Aminotransferase",
+  "Aspartate_Aminotransferase", "Total_Protiens", "Albumin", "Albumin_and_Globulin_Ratio", "Gender_Female",
+  "Gender_male"
+];
 
 function Liver_disease_ML() {
   const [prediction, setPrediction] = useState(null);
@@ -11,6 +15,8 @@ function Liver_disease_ML() {
   const [latestRecord, setLatestRecord] = useState();
   const [tableOfData, setTableOfData] = useState([]);
   const patientId =location.state.id;
+  const fname = location.state.FName
+  const lname = location.state.LName
 
   useEffect(() => {
     // Function to retrieve patient records
@@ -61,7 +67,7 @@ function Liver_disease_ML() {
       Gender_Female: record.data[9], 
       Gender_Male: record.data[10]
     }
-
+      //https://livermodelpk1-6b1f7b50410e.herokuapp.com/ -- https://livermlpk-fbdfa9329507.herokuapp.com/predict
     try {
       const response = await axios.post('https://livermlpk-fbdfa9329507.herokuapp.com/predict', dict_data, {
         headers: { 'Content-Type': 'application/json',
@@ -75,7 +81,7 @@ function Liver_disease_ML() {
         alert(JSON.stringify(data.error));
       } else {
         storePrediction(data, record.record_id);
-        setPrediction(response.data.prediction === 1 ? 'Liver Disease' : 'No Liver Disease');
+        setPrediction(response.data.prediction === 1 ? 'High potential of chronic liver failure' : 'Lower chances of chronic liver failure');
       }
     } catch (error) {
       alert(`Error: ${error.message}`);
@@ -112,97 +118,33 @@ function Liver_disease_ML() {
     }
   };
 
-  // adding some CSS to the code
-  const containerStyle = {
-    textAlign: 'center',
-    fontFamily: 'Arial, sans-serif',
-  };
-
-  const formStyle = {
-    padding: '20px',
-    borderRadius: '5px',
-    margin: '20px',
-    backgroundColor: "#cacaca",
-    display: 'inline-block',
-    border: '3px solid #2c2e30',
-  };
-
-  const inputStyle = {
-    margin: '10px',
-  };
-
-  const buttonStyle = {
-    backgroundColor: '#656565',
-    color: 'white',
-    padding: '10px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    display: 'inline-block',
-  };
-
-  const predictionStyle = {
-    fontWeight: 'bold',
-    marginTop: '10px',
-  };
-
   return (
-    <div className="App" style={containerStyle}>
-      <h1>Liver Disease Prediction</h1>
-      <div style={formStyle}>
-        <div style={inputStyle}>
-          <label>Age: </label>
-          <input type="text" name="Age" value={tableOfData[0]} />
+    <>
+        <div className="liver-container">
+            <h2 className="title"> {fname} {lname} - Liver disease results</h2>
+            <button className="diagnose-button" onClick={() => predict({ latestRecord })}>Diagnose</button>
+            <div className="diagnosis-result">
+                <strong>Diagnosis:</strong> {prediction}
+            </div>
+            <table className="results-table">
+                <thead>
+                    <tr>
+                        <th>Variables</th>
+                        <th>Record</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableOfData.map((value, index) => (
+                        <tr key={index}>
+                            <td>{titlesOfData[index]}</td>
+                            <td>{value}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-        <div style={inputStyle}>
-          <label>Total Bilirubin: </label>
-          <input type="text" name="Total_Bilirubin" value={tableOfData[1]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Direct Bilirubine: </label>
-          <input type="text" name="Direct_Bilirubin" value={tableOfData[2]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Alkaline Phosphotase: </label>
-          <input type="text" name="Alkaline_Phosphotase" value={tableOfData[3]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Alamine Aminotransferase: </label>
-          <input type="text" name="Alamine_Aminotransferase" value={tableOfData[4]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Aspartate Aminotransferase: </label>
-          <input type="text" name="Alamine_Aminotransferase" value={tableOfData[5]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Total Protiens: </label>
-          <input type="text" name="Total_Protiens" value={tableOfData[6]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Albumin: </label>
-          <input type="text" name="Albumin" value={tableOfData[7]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Albumin and Globulin_Ratio: </label>
-          <input type="text" name="Albumin_and_Globulin_Ratio" value={tableOfData[8]} />
-        </div>
-        <div style={inputStyle}>
-          <label>Gender: </label>
-          <select name="gender" value={tableOfData[9]}>
-            <option value="0">Male</option>
-            <option value="1">Female</option>
-          </select>
-        </div>
-        <div style={inputStyle}>
-          <button style={buttonStyle} onClick={predict}>Predict</button>
-          <div style={inputStyle}>
-            {prediction && <span className="special-text" style={predictionStyle}>Prediction: {prediction}</span>}
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    </>
   );
-  }
+}
 
 export default Liver_disease_ML;

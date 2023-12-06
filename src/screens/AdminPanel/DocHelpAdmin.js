@@ -40,8 +40,8 @@ function HelpAdmin() {
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th style={{width: '360px'}}>Message</th>
-                <th style={{width: '240px'}}>Time</th>
+                <th style={{width: '280px'}}>Message</th>
+                <th style={{width: '200px'}}>Time</th>
                 <th>Reply</th>
               </tr>
               </thead>

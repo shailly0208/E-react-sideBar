@@ -92,6 +92,17 @@ class HospitalAdminRegistration extends Component {
       if(this.state.emailID !== this.state.cEmailID){
         return alert("Emails do not match");
       }
+      if(this.state.hospitalName === '' || this.state.nPatients === 0 ||
+      this.state.mobileNumber === '' || this.state.country ==='' || this.state.emailID === '' || 
+      this.state.cEmailID ==='' || this.state.password === '' || this.state.cPassword ==='' ||
+      this.state.address1 === '' || this.state.address2 ==='' || this.state.postalCode === '' || 
+      this.state.city ==='' || this.state.province === '' || this.state.taxRegistrationNumber ==='' || 
+      this.state.departments === 0 || this.state.nDoctors === 0 || this.state.nNurses === 0 )
+      {
+        return alert("Please enter all the details");
+      }
+      // http://localhost:8080/api/users/
+      // https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/HospitalAdminRegistration
       fetch('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/HospitalAdminRegistration',{
         method: 'POST',
         headers: {'Content-Type':'application/json'},
@@ -121,10 +132,9 @@ class HospitalAdminRegistration extends Component {
         }
       )
       .then(user => {
-        if(user.id){
-          this.props.loadUser(user);
-          window.location.href = '/services';
-        }
+          alert("Successfully registered");
+          this.state = initialState;
+          window.location.href = '/LogIn';
       })
       .catch(error => {
         console.error('There was an error during the fetch:', error);

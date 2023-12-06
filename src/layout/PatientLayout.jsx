@@ -2,7 +2,6 @@ import React from "react";
 import {  Outlet, Navigate  } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import PatientSideBar from "../components/PatientComponents/PatientSidebar";
 
 
@@ -25,7 +24,6 @@ function PatientLayout(data) {
                 overflow: 'auto',
             }}
             >
-                <Toolbar />
                 <Outlet context={patient_id}/>
             </Box>
         </Box>
