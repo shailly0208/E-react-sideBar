@@ -22,8 +22,12 @@ function AdminLayout(userInfo) {
             component="main"
             sx={{
                 flexGrow: 1,
+                p: 1,
                 height: '100vh',
                 overflow: 'auto',
+                maxWidth: 'lg', // Set a maximum width (you can use values like 'sm', 'md', 'lg', 'xl', or px values)
+                margin: 'auto', // This centers the content
+                width: '100%' // Use the full width available 
             }}
             >
                 <Toolbar />

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios'
+
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import '../../styles/screens/ContactAdmin.css';
 
 
@@ -16,13 +18,19 @@ function ContactAdmin() {
     .catch(err => console.log(err))
   }, [])
   
-  // const handleFetchContactUs = () => {
-  //   // Clear the table and show loading state
-  //   setShowTable(false);
-
-  //   dispatch(fetchContactUs());
-  // };
-  
+   function handleDelete(id) {
+    const confirm =window.confirm("Have you checked this record?");
+    if (confirm){
+      try {
+        axios.post('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/contactCheck', {id})
+        .then(res => {alert("Record is checked.")});
+        window.location.href = '/Admin/contact';
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   return (
     <div className = 'contact-admin-container'>
@@ -30,21 +38,21 @@ function ContactAdmin() {
           <table>
             <thead>
               <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
+                <th style={{width: '50px'}}>No</th>
+                <th style={{width: '80px'}}>Name</th>
+                <th style={{width: '120px'}}>Phone</th>
+                <th style={{width: '180px'}}>Email</th>
                 <th>Topic</th>
-                <th>Message</th>
-                <th>Time</th>
-                <th>Reply</th>
+                <th style={{width: '260px'}}>Message</th>
+                <th style={{width: '200px'}}>Time</th>
+                <th style={{width: '120px'}}>Operation</th>
 
-                {/* <th>contact_topic</th>
-                <th>contact_message</th>
-                <th>contact_time</th>
-                <th>contact_reply</th> */}
               </tr>
+
+
+
               </thead>
+              
               <tbody>
                 {records.map((r,i)=> {
                   if (r.contact_topic == 0) {
@@ -64,22 +72,17 @@ function ContactAdmin() {
                   }
                   
                   return <tr key={i}>
-                    <td> {r.id}</td>
-                    <td> {r.contact_name}</td>
-                    <td> {r.contact_phone}</td>
-                    <td> {r.contact_email}</td>
+                    <td style={{width: '50px'}}> {r.id}</td>
+                    <td style={{width: '80px'}}> {r.contact_name}</td>
+                    <td style={{width: '120px'}}> {r.contact_phone}</td>
+                    <td style={{width: '180px'}}> {r.contact_email}</td>
                     
                     <td> {r.contact_topic}</td>
-                    <td> {r.contact_message}</td>
-                    <td> {r.contact_time}</td>
-                    <td> {r.contact_reply}</td>
+                    <td style={{width: '260px'}}> {r.contact_message}</td>
+                    <td style={{width: '200px'}}> {r.contact_time}</td>
 
-
-                    
-                    {/* <td> {r.topic}</td>
-                    <td> {r.message}</td>
-                    <td> {r.time}</td>
-                    <td> {r.reply}</td> */}
+                    <td style={{width: '120px'}}> <button className = 'btn' onClick={e =>handleDelete(r.id)}>Check</button></td>
+               
                   </tr>
                 })}
               </tbody>
