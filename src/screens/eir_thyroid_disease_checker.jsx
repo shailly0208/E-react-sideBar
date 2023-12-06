@@ -122,9 +122,9 @@ function ThyroidML() {
           </table>
         </div>
       </center> */}
-        <div className="liver-container">
+        <div className="thyroid-container">
             <h2 className="title"> Thyroid Disease Results</h2>
-            <button className="liver-diagnose-button" onClick={() => predict({ latestRecord })}>Diagnose</button>
+            <button className="diagnose-button" onClick={() => predict({ latestRecord })}>Diagnose</button>
             <div className="diagnosis-result">
                 <strong>Diagnosis:</strong> {diagnosis}
             </div>
