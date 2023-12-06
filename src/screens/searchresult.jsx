@@ -25,12 +25,13 @@ function Searchresult() {
   const goTohPsychologyPrediction = () => navigate("/PsychologyPrediction", { state: dataskin });
   const goToDiabeticDetection = () => navigate("/DiabeticML", { state: dataskin });
 
+  const goToBreastDisease = () => navigate('/BreastDisease', { state: dataskin });
 
   return (
 
     <>
       <br></br>
-      <h2>Pateint Basic Information details</h2>
+      <h2>Patient Basic Information details</h2>
       <div class="center">
         <center>
           <table class="my_table">
@@ -118,6 +119,12 @@ function Searchresult() {
           </div>
         </div>
         <div class="row">
+          <div class="service">
+            <i class="ri-macbook-line"></i>
+            <h3>Breast Disease Diagnosis</h3>
+            <p>98% accuracy ~ Random Forest Classifier</p>
+            <button class="button button5" onClick={goToBreastDisease}>Go</button>
+          </div>
           <div class="service">
             <i class="ri-macbook-line"></i>
             <h3>Breast Cancer Diagnosis</h3>
