@@ -23,7 +23,7 @@ const Analytic = () => {
   useEffect(() => {
     const fethPatientData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/patientsRegistration');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientsRegistration');
         setData(response.data);
         processChartData(response.data, selectedFilter);
       } catch (error) {
@@ -32,7 +32,7 @@ const Analytic = () => {
     };
     const fetchDoctorData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/doctorsRegistration');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/doctorsRegistration');
         SetDoctorData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -40,7 +40,7 @@ const Analytic = () => {
     };
     const fetchAlzheimersData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/alzheimers');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/alzheimers');
         setAlzheimersData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -48,7 +48,7 @@ const Analytic = () => {
     };
     const fetchAllDiseaseData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/combinedPredictions');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/combinedPredictions');
         SetAllDiseaseData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

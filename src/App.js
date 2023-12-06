@@ -85,6 +85,7 @@ import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './lo
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
 import ViewRating from './screens/ViewRating';
+import DiabeticML from './screens/DiabeticML.js';
 
 
 import Analytic from './screens/analytics.js';
@@ -301,6 +302,8 @@ class App extends Component {
           <Route path="/calendar/timesegment/:id" element={<TimeSegmentDetail />} />
           <Route path="/calendar/booktime" element={<PatientBookTime />} />
           <Route path="/Analytic" element={<Analytic />}/>
+          <Route path="/DiabeticML" element={<DiabeticML />}/>
+
           
         </Routes>
         <Footer status ={this.state.user.type} />
