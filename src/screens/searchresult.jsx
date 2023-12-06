@@ -31,7 +31,7 @@ function Searchresult() {
 
     <>
       <br></br>
-      <h2>Pateint Basic Information details</h2>
+      <h2>Patient Basic Information details</h2>
       <div class="center">
         <center>
           <table class="my_table">
