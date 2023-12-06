@@ -14,7 +14,6 @@ class Header extends React.Component {
       <label class="logo"><span>e</span>Hospital</label>
       <ul>
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/services">Services</Link></li>
         <li><Link to="/specialities">Specialities</Link></li>
         <li><Link to="/AboutUs">About Us</Link></li>
         <li><Link to="/contact">Contact US</Link></li>
@@ -28,6 +27,7 @@ class Header extends React.Component {
           <li><Link to="/Admin">Admin Home</Link></li>
         </>):(<></>)}
         {type === 'NotLoggedIn'? (<>
+          <li><Link to="/services">Services</Link></li>
           <li><Link to="/LogIn">LogIn</Link></li>
           <li><Link to="/signUp">SignUp</Link></li>
           </> ):( <><li onClick={this.props.clearUser}><Link to="/LogIn">SignOut</Link></li></>)
