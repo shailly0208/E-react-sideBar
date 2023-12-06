@@ -188,10 +188,10 @@ class App extends Component {
       } catch (err) {
         console.error('Error with signing out user', err);
       }
+      e.preventDefault();
+      e.returnValue = '';
+      return 'Are you sure you want to leave? Your changes may not be saved.';
     }
-    e.preventDefault();
-    e.returnValue = '';
-    return 'Are you sure you want to leave? Your changes may not be saved.';
   }
   componentWillUnmount(){
     window.removeEventListener('beforeunload', this.handleBeforeUnload);

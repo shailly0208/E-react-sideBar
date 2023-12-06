@@ -82,6 +82,16 @@ class LabAdminRegistration extends Component {
       if(this.state.emailID !== this.state.cEmailID){
         return alert("Emails do not match");
       }
+      // if(this.state.labName === '' || this.state.taxRegistrationNumber === '' || this.state.country ==='' || this.state.emailID === '' || 
+      // this.state.cEmailID ==='' || this.state.password === '' || this.state.cPassword ==='' ||
+      // this.state.address1 === '' || this.state.address2 ==='' || this.state.postalCode === '' || 
+      // this.state.city ==='' || this.state.province === '' || this.state.referringPhysicianName ==='' || 
+      // this.state.referringPhysicianCI === '' || this.state.insuranceInformation === '' || this.state.paymentMethod === '')
+      // {
+      //   return alert("Please enter all the details");
+      // }
+      // http://localhost:8080/api/users/LabAdminRegistration
+      // https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/LabAdminRegistration
       fetch('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/api/users/LabAdminRegistration',{
         method: 'POST',
         headers: {'Content-Type':'application/json'},
@@ -109,10 +119,9 @@ class LabAdminRegistration extends Component {
         }
       )
       .then(user => {
-        if(user.id){
-          this.props.loadUser(user);
-          window.location.href = '/services';
-        }
+        alert("Successfully registered");
+        this.state = initialState;
+        window.location.href = '/LogIn';
       })
       .catch(error => {
         console.error('There was an error during the fetch:', error);
