@@ -82,7 +82,7 @@ import {PatientPortal} from './screens/PatientPanel/PatientPortal.jsx'
 import { readLoginData, clearLoginData, isTempLogin, writeLoginData } from './loginData.js';
 import "./App.css";
 import SkinDiseasesMlPage from './screens/SkinDiseasesMlPage.js';
- 
+import DiabeticML from './screens/DiabeticML.js';
 
 
 import Analytic from './screens/analytics.js';
@@ -295,6 +295,8 @@ class App extends Component {
           <Route path="/calendar/timesegment/:id" element={<TimeSegmentDetail />} />
           <Route path="/calendar/booktime" element={<PatientBookTime />} />
           <Route path="/Analytic" element={<Analytic />}/>
+          <Route path="/DiabeticML" element={<DiabeticML />}/>
+
           
         </Routes>
         <Footer />

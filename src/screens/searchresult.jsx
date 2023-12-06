@@ -22,6 +22,7 @@ function Searchresult() {
   const goToHeartStroke = () => navigate("/heartstroke", { state: dataskin });
   const goToheartdisease = () => navigate("/Heartdiseaseml", { state: dataskin });
   const goTohPsychologyPrediction = () => navigate("/PsychologyPrediction", { state: dataskin });
+  const goToDiabeticDetection = () => navigate("/DiabeticML", { state: dataskin });
 
 
   return (
@@ -184,6 +185,12 @@ function Searchresult() {
             <h3> Psychology Detection</h3>
             <p>Get Psychology disease results</p>
             <button class="button button5" onClick={goTohPsychologyPrediction}>Go</button>
+          </div>
+          <div class="service">
+            <i class="ri-macbook-line"></i>
+            <h3> Diabetics Detection</h3>
+            <p>Get Diabetic results</p>
+            <button class="button button5" onClick={goToDiabeticDetection}>Go</button>
           </div>
         </div>
       </section >
