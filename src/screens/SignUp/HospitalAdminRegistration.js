@@ -1,6 +1,14 @@
 import React from 'react';
 import  {Component} from 'react';
 import './Registration.css'
+import app from "./firebaseConfig";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
+
+const auth = getAuth(app);
 
 const initialState ={
   hospitalName : '',
@@ -9,6 +17,9 @@ const initialState ={
   password:'',
   cPassword:'',
   mobileNumber : '',
+  verifyButton: true,
+  verifyOtp: false,
+  otp: "",
   address1 : '',
   address2 : '',
   postalCode: '',
@@ -26,7 +37,11 @@ const initialState ={
 class HospitalAdminRegistration extends Component {
     constructor(props){
       super(props);
-      this.state = initialState
+      this.state = initialState;
+      this.onCaptchaVerify = this.onCaptchaVerify.bind(this);
+    this.onSignInSubmit = this.onSignInSubmit.bind(this);
+    this.verifyCode = this.verifyCode.bind(this);
+    this.changeMobile = this.changeMobile.bind(this);
     }
     onHospitalNameChange = (event) =>{
       this.setState({hospitalName: event.target.value})
@@ -84,6 +99,75 @@ class HospitalAdminRegistration extends Component {
     onTaxRegistrationNumberChange = (event) =>{
       this.setState({taxRegistrationNumber: event.target.value})
     }
+
+  onCaptchaVerify() {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          this.onSignInSubmit();
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // ...
+        },
+      }
+    );
+  }
+
+  onSignInSubmit() {
+    this.onCaptchaVerify();
+    const phoneNumber = "+1" + this.state.mobileNumber;
+    const appVerifier = window.recaptchaVerifier;
+
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+        alert("OTP sent successfully");
+        this.setState({ otpInputVisible: true });
+        // ...
+      })
+      .catch((error) => {
+        // Error; SMS not sent
+        // ...
+        console.error("Error sending OTP", error);
+      });
+  }
+
+  verifyCode() {
+    window.confirmationResult
+      .confirm(this.state.otp)
+      .then((result) => {
+        // User signed in successfully.
+        const user = result.user;
+        console.log(user);
+        alert("Verification successful");
+        // ...
+      })
+      .catch((error) => {
+        alert("Invalid OTP. Try again");
+        // User couldn't sign in (bad verification code?)
+        console.error("Error verifying OTP",error);
+      });
+  }
+
+  changeMobile(event) {
+    this.setState({ mobileNumber: event.target.value }, function () {
+      if (this.state.mobileNumber.length == 10) {
+        this.setState({
+          verifyButton: true,
+        });
+      } else {
+        this.setState({
+          verifyButton: false,
+        });
+      }
+    });
+  }
+
+  onCaptchaVerify = this.onCaptchaVerify.bind(this); 
 
     onSubmitRegister = () =>{
       if(this.state.password !== this.state.cPassword){
@@ -147,6 +231,8 @@ class HospitalAdminRegistration extends Component {
         <form className="patient-registration-form shadow-3 b--dark-gray br3 b--black-10 ba b--transparent">
           <h1>Hospital Admin Registration Form</h1>
           <div className='patform'>
+          <div id="recaptcha-container"></div>
+          <div className="patform"></div>
             <div className="input-group-reg">
                 <label>Hospital Name</label>
                 <input placeholder="Enter Your Hospital Name" required onChange={this.onHospitalNameChange} />
@@ -170,7 +256,35 @@ class HospitalAdminRegistration extends Component {
             <div className="input-group-reg">
                 <label>Mobile Number</label>
                 <input placeholder="Enter Your Mobile Number" required onChange={this.onMobileNumberChange}/>
+                <button
+                type="button"
+                onClick={this.onSignInSubmit}
+                disabled={!this.state.verifyButton}
+                style={{ backgroundColor: '#007bff', color: 'white', marginTop: "5px"}}
+              >
+                Verify
+              </button>
             </div>
+            {this.state.otpInputVisible ? (
+              <div className="input-group-reg">
+                <label>OTP</label>
+                <input
+                  placeholder="Enter OTP"
+                  type="number"
+                  className="form-control"
+                  required
+                  onChange={(event) =>
+                    this.setState({ otp: event.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={this.verifyCode}
+                >
+                  Verify OTP
+                </button>
+              </div>
+            ) : null}
             <div className="input-group-reg">
                 <label>Location 1</label>
                 <input placeholder="Enter your Practicing Address" required onChange={this.onAddressChange}/>
