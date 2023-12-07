@@ -23,13 +23,15 @@ function Searchresult() {
   const goToHeartStroke = () => navigate("/heartstroke", { state: dataskin });
   const goToheartdisease = () => navigate("/Heartdiseaseml", { state: dataskin });
   const goTohPsychologyPrediction = () => navigate("/PsychologyPrediction", { state: dataskin });
+  const goToDiabeticDetection = () => navigate("/DiabeticML", { state: dataskin });
 
+  const goToBreastDisease = () => navigate('/BreastDisease', { state: dataskin });
 
   return (
 
     <>
       <br></br>
-      <h2>Pateint Basic Information details</h2>
+      <h2>Patient Basic Information details</h2>
       <div class="center">
         <center>
           <table class="my_table">
@@ -119,6 +121,12 @@ function Searchresult() {
         <div class="row">
           <div class="service">
             <i class="ri-macbook-line"></i>
+            <h3>Breast Disease Diagnosis</h3>
+            <p>98% accuracy ~ Random Forest Classifier</p>
+            <button class="button button5" onClick={goToBreastDisease}>Go</button>
+          </div>
+          <div class="service">
+            <i class="ri-macbook-line"></i>
             <h3>Breast Cancer Diagnosis</h3>
             <p>97% accuracy ~ Linear Logistic Regression</p>
             <button class="button button5" onClick={goToBreastCancerML}>Go</button>
@@ -191,6 +199,12 @@ function Searchresult() {
             <h3> Psychology Detection</h3>
             <p>Get Psychology disease results</p>
             <button class="button button5" onClick={goTohPsychologyPrediction}>Go</button>
+          </div>
+          <div class="service">
+            <i class="ri-macbook-line"></i>
+            <h3> Diabetics Detection</h3>
+            <p>Get Diabetic results</p>
+            <button class="button button5" onClick={goToDiabeticDetection}>Go</button>
           </div>
         </div>
       </section >

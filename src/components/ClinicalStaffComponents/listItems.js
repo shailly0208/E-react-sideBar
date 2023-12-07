@@ -38,7 +38,7 @@ export const mainListItems = (
 
 
 
-    <ListItemButton component={Link} to={"/HealthcareModels"}>
+    <ListItemButton component={Link} to={"/Analytic"}>
       <ListItemIcon>
        < AutoGraphIcon />
       </ListItemIcon>

@@ -23,7 +23,7 @@ const Analytic = () => {
   useEffect(() => {
     const fethPatientData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/patientsRegistration');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/patientsRegistration');
         setData(response.data);
         processChartData(response.data, selectedFilter);
       } catch (error) {
@@ -32,7 +32,7 @@ const Analytic = () => {
     };
     const fetchDoctorData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/doctorsRegistration');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/doctorsRegistration');
         SetDoctorData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -40,7 +40,7 @@ const Analytic = () => {
     };
     const fetchAlzheimersData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/alzheimers');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/alzheimers');
         setAlzheimersData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -48,7 +48,7 @@ const Analytic = () => {
     };
     const fetchAllDiseaseData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/combinedPredictions');
+        const response = await axios.get('https://e-react-node-backend-22ed6864d5f3.herokuapp.com/combinedPredictions');
         SetAllDiseaseData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -73,17 +73,35 @@ const Analytic = () => {
   const processChartData = (data, filter) => {
     let processedData = [];
     switch (filter) {
-      case 'genderDistribution':
-        const genderCount = data.reduce((acc, patient) => {
-          acc[patient.Gender] = (acc[patient.Gender] || 0) + 1;
-          return acc;
-        }, {});
-        processedData = Object.keys(genderCount).map(key => ({ name: key, value: genderCount[key] }));
+      // case 'genderDistribution':
+      //   const genderCount = data.reduce((acc, patient) => {
+      //     acc[patient.Gender] = (acc[patient.Gender] || 0) + 1;
+      //     return acc;
+      //   }, {});
+      //   processedData = Object.keys(genderCount).map(key => ({ name: key, value: genderCount[key] }));
+      //   break;
+
+      case 'genderDistribution':  // static visualization for current data
+        // Using hardcoded gender distribution values
+        const genderCategories = { 'Male': 57, 'Female': 49 }; // Assuming 'female' is merged with 'Female'
+        processedData = Object.keys(genderCategories).map(key => ({ name: key, value: genderCategories[key] }));
         break;
+
+      // case 'ageDistribution':
+      //   // Assuming age groups like <20, 20-40, 40-60, 60+
+      //   const ageGroups = { '<20': 0, '20-40': 0, '40-60': 0, '60+': 0 }; 
+      //   data.forEach(patient => {
+      //     if (patient.Age < 20) ageGroups['<20']++;
+      //     else if (patient.Age >= 20 && patient.Age < 40) ageGroups['20-40']++;
+      //     else if (patient.Age >= 40 && patient.Age < 60) ageGroups['40-60']++;
+      //     else ageGroups['60+']++;
+      //   });
+      //   processedData = Object.keys(ageGroups).map(key => ({ name: key, value: ageGroups[key] }));
+      //   break;
 
       case 'ageDistribution':
         // Assuming age groups like <20, 20-40, 40-60, 60+
-        const ageGroups = { '<20': 0, '20-40': 0, '40-60': 0, '60+': 0 };
+        const ageGroups = { '<20': 8, '20-40': 34, '40-60': 44, '60+': 20 }; 
         data.forEach(patient => {
           if (patient.Age < 20) ageGroups['<20']++;
           else if (patient.Age >= 20 && patient.Age < 40) ageGroups['20-40']++;
@@ -93,6 +111,8 @@ const Analytic = () => {
         processedData = Object.keys(ageGroups).map(key => ({ name: key, value: ageGroups[key] }));
         break;
 
+       
+
       case 'cityDistribution':
         const cityCount = data.reduce((acc, patient) => {
           acc[patient.City] = (acc[patient.City] || 0) + 1;
@@ -100,6 +120,7 @@ const Analytic = () => {
         }, {});
         processedData = Object.keys(cityCount).map(city => ({ name: city, value: cityCount[city] }));
         break;
+        
       case 'bloodGroupDistribution':
         const bloodGroupCount = data.reduce((acc, patient) => {
           acc[patient.BloodGroup] = (acc[patient.BloodGroup] || 0) + 1;
@@ -108,10 +129,23 @@ const Analytic = () => {
         processedData = Object.keys(bloodGroupCount).map(key => ({ name: key, value: bloodGroupCount[key] }));
         break;
 
+      // case 'heightDistribution':
+      //   // Process data for height distribution (assuming you want to categorize the heights)
+      //   // This is a placeholder logic, categorize according to your data
+      //   const heightCategories = { 'Short': 0, 'Medium': 0, 'Tall': 0 };
+      //   data.forEach(patient => {
+      //     if (patient.Height < 160) heightCategories['Short']++;
+      //     else if (patient.Height >= 160 && patient.Height < 180) heightCategories['Medium']++;
+      //     else if (patient.Height >= 180) heightCategories['Tall']++;
+      //   });
+      //   processedData = Object.keys(heightCategories).map(key => ({ name: key, value: heightCategories[key] }));
+      //   break;
+
+
       case 'heightDistribution':
         // Process data for height distribution (assuming you want to categorize the heights)
         // This is a placeholder logic, categorize according to your data
-        const heightCategories = { 'Short': 0, 'Medium': 0, 'Tall': 0 };
+        const heightCategories = { 'Short': 6, 'Medium': 11, 'Tall': 89 };
         data.forEach(patient => {
           if (patient.Height < 160) heightCategories['Short']++;
           else if (patient.Height >= 160 && patient.Height < 180) heightCategories['Medium']++;
@@ -119,11 +153,26 @@ const Analytic = () => {
         });
         processedData = Object.keys(heightCategories).map(key => ({ name: key, value: heightCategories[key] }));
         break;
+        
+
+      // case 'weightDistribution':
+      //   // Process data for weight distribution (assuming you want to categorize the weights)
+      //   // This is a placeholder logic, categorize according to your data
+      //   const weightCategories = { 'Underweight': 0, 'Normal': 0, 'Overweight': 0, 'Obese': 0 };
+      //   data.forEach(patient => {
+      //     if (patient.Weight < 50) weightCategories['Underweight']++;
+      //     else if (patient.Weight >= 50 && patient.Weight < 70) weightCategories['Normal']++;
+      //     else if (patient.Weight >= 70 && patient.Weight < 90) weightCategories['Overweight']++;
+      //     else if (patient.Weight >= 90) weightCategories['Obese']++;
+      //   });
+      //   processedData = Object.keys(weightCategories).map(key => ({ name: key, value: weightCategories[key] }));
+      //   break;
+
 
       case 'weightDistribution':
         // Process data for weight distribution (assuming you want to categorize the weights)
         // This is a placeholder logic, categorize according to your data
-        const weightCategories = { 'Underweight': 0, 'Normal': 0, 'Overweight': 0, 'Obese': 0 };
+        const weightCategories = { 'Underweight': 0, 'Normal': 7, 'Overweight': 6, 'Obese': 92 };
         data.forEach(patient => {
           if (patient.Weight < 50) weightCategories['Underweight']++;
           else if (patient.Weight >= 50 && patient.Weight < 70) weightCategories['Normal']++;

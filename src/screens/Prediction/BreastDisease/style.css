@@ -1,0 +1,45 @@
+.breastDiseaseContainer {
+    padding: 10px 10%;
+    margin-bottom: 250px;
+}
+
+.breastDiseaseContainer .tableContainer {
+    border: none;
+}
+
+.breastDiseaseContainer .tableContainer thead th {
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #ccc;
+    font-size: 18px;
+}
+
+.breastDiseaseContainer .tableContainer th {
+    padding: 10px 20px;
+    font-weight: 500;
+    background-color: #eee;
+    font-size: 12px;
+}
+
+.breastDiseaseContainer .tableContainer td {
+    padding: 10px 20px;
+    font-weight: 400;
+    background-color: #fff;
+    font-size: 12px;
+}
+
+.breastDiseaseContainer .tableContainer tr input {
+    border: none
+}
+
+.breastDiseaseContainer .tableContainer tfoot {
+    padding: 10px 20px;
+    background-color: #ccc;
+}
+
+.breastDiseaseContainer .tableContainer tfoot .tableFooterButton {
+    width: 200px;
+    display: flex;
+    justify-self: flex-end;
+    justify-content: space-between;
+}
