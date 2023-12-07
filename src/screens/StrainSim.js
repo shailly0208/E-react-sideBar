@@ -1,14 +1,19 @@
+/*
+Author: Blake Miller and Zachary Flahaut
+Date: 2023-12-05
+Description: React component for a strain camera with real-time data plotting using Chart.js.
+             It utilizes the Papaparse library to parse CSV data, and includes functionality
+             for toggling the plot display and capturing video from the laparoscopic trainer camera.
+
+*/
+
 import React, {useRef, useEffect, useState} from "react";
-import Plot from 'react-plotly.js';
 import '../styles/screens/StrainSim.css';
-import'./logger.py'
+import'../utilities/LoggerNew.py'
 import Papa from "papaparse"
-import { useCSVReader } from 'react-papaparse';
-import testData from './testData.csv'
-import testData2 from './data.csv'
-import totalData from './total_data.csv'
+import testData2 from '../utilities/data.csv'
+import totalData from '../utilities/total_data.csv'
 import { Bar } from 'react-chartjs-2'
-import {Line} from 'react-chartjs-2'
 import 'chart.js/auto'
 import {
     Chart as ChartJs,
@@ -40,18 +45,13 @@ function StrainCamera() {
         datasets: []
     });
     const [chartOptions, setChartOptions] = useState({})
-
     const [chartDataTotal,setChartDataTotal] = useState({
         datasets: []
     });
     const [chartOptionsTotal, setChartOptionsTotal] = useState({})
-
     const [show,setShow] = useState(true);
-    const [showTotalPlot,setShowTotalPlot] = useState(true);
     // define base variables. By default, they are null
     const videoRef = useRef(null);
-    const photoRef = useRef(null);
-    const [hasPhoto, setHasPhoto] = useState(false);
 
     // setting the default video that we want. Default is a 1080P webcam display
     const getVideo = () => {
@@ -67,7 +67,6 @@ function StrainCamera() {
                 console.error(err);
             })
     }
-
     // collect the current video camera display
     useEffect(() => {
         getVideo();
@@ -83,11 +82,11 @@ function StrainCamera() {
             complete: ((result) =>{
                 console.log(result)
                 // set test value
-                let strainValue = result.data.map((item, index) =>[item['Strain']]).filter(Number)
+                let strainValue = result.data.map((item, index) =>[item['Strain_pin05']]).filter(Number)
                 var colors = []
                 for(var i = 0; i < strainValue.length; i++){
                    var color;
-                   if(strainValue[i] < 600) {
+                   if(strainValue[i] < (700*0.95)) {
                        color = "blue";
                    }else{
                        color = "red";
@@ -95,11 +94,11 @@ function StrainCamera() {
                    colors[i] = color;
                    }
                 setChartData({
-                    labels:result.data.map((item, index) =>[item["Time"]]).filter(String),
+                    labels:result.data.map((item, index) =>[item["time"]]).filter(String),
                     datasets: [
                         {
                             label:"Strain",
-                            data: result.data.map((item, index) =>[item['Strain']]).filter(Number),
+                            data: result.data.map((item, index) =>[item['Strain_pin05']]).filter(Number),
                             borderColor: "black",
                             backgroundColor: colors,
                             yaxisID: 'y'
@@ -114,7 +113,7 @@ function StrainCamera() {
                         },
                         title:{
                             display:true,
-                            text:"Test data"
+                            text:"Test Data"
                         },
                     }
                 })
@@ -133,28 +132,25 @@ function StrainCamera() {
             complete: ((result_total) =>{
                 console.log(result_total)
                 // set test value
-                let strainValue = result_total.data.map((item, index) =>[item['Strain']]).filter(Number)
-                var colors = []
-                for(var i = 0; i < strainValue.length; i++){
-                   var color;
-                   if(strainValue[i] < 600) {
-                       color = "blue";
-                   }else{
-                       color = "red";
-                       }
-                   colors[i] = color;
-                   }
+                let timeValues = [];
+                let strainValues = [];
+                result_total.data.forEach((item) => {
+                    timeValues.push(item['time']);
+                    strainValues.push(item['Strain_pin05']);
+                });                
+                let colors = strainValues.map((value) => (value < 600 ? 'blue' : 'red'));
+
                 setChartDataTotal({
-                    labels:result_total.data.map((item, index) =>[item["Time"]]).filter(String),
+                    labels: timeValues,
                     datasets: [
                         {
-                            label:"Strain",
-                            data: result_total.data.map((item, index) =>[item['Strain']]).filter(Number),
+                            label: "Strain",
+                            data: strainValues,
                             borderColor: "black",
                             backgroundColor: colors,
-                            yaxisID: 'y'
-                        }
-                    ]
+                            yaxisID: 'y',
+                        },
+                    ],
                 });
                 setChartOptionsTotal({
                     //responsive: true,
@@ -164,7 +160,7 @@ function StrainCamera() {
                         },
                         title:{
                             display:true,
-                            text:"Test data"
+                            text:"Test Data"
                         },
                     }
                 })
@@ -173,8 +169,7 @@ function StrainCamera() {
         })
     }, [])
 
-
-
+    console.log("message")
 
     // now for the layout. We want the strain camera, the plot, and a toggle button
     return (
