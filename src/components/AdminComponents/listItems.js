@@ -35,7 +35,7 @@ export const mainListItems = (
       <ListItemText primary="Clinic Tech Help" />
     </ListItemButton>
 
-    <ListItemButton component={Link} to={"/HealthcareModels"}>
+    <ListItemButton component={Link} to={"/Analytic"}>
       <ListItemIcon>
        < AutoGraphIcon />
       </ListItemIcon>
